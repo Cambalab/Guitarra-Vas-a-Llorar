@@ -3,6 +3,17 @@ http://www.elarteylatecnologia.com.ar
 
 Comenzamos a realizar un Proyecto hibrido entre guitarra electrica y diodos emisores de luz basado en GuitArduino originalmente construido por http://guitarduino.blogspot.com  (un proyecto de A TwoGuysOneBit.com)
 
+ShiftLCD Library from 
+http://cjparish.blogspot.com/2010/01/controlling-lcd-display-with-shift.html
+
+Plugin para vim
+http://www.vim.org/scripts/script.php?script_id=2654
+
+Para compilar desde consola usamos arscons 
+http://code.google.com/p/arscons/
+
+cd guitarra_vas_a_llorar
+scons ARDUINO_PORT=tu_puerto_usb_serial  ARDUINO_HOME=tu_instalacion_de_arduino 
 
 
 

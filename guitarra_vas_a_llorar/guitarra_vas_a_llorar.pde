@@ -8,11 +8,8 @@ Names: Andrew Garza  (agarza6)
 Adviser: Robert Becker
 
 Fecha: 29/06/2011
-Nuevas modificaciones para Prueba
-Adrian Pardini (elarteylatecnolgia.com.ar)
-
-ShiftLCD Library from 
-http://cjparish.blogspot.com/2010/01/controlling-lcd-display-with-shift.html
+Nuevas modificaciones para Prueba y compilacion 
+Adrian Pardini y Jose Luis Di Biase (elarteylatecnologia.com.ar)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
