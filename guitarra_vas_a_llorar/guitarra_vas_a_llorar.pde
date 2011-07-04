@@ -171,195 +171,33 @@ unsigned int songMakerLED[8][6];
 //Initialize LCD
 ShiftLCD lcd( LCDSerial, LCDrclk, LCDsrclk);
 
-void setup(){
-  lcd.begin( 16, 2);
-  lcd.clear();
-  
-  //Define pins I/O
-  pinMode( left, INPUT);
-  pinMode( enter, INPUT);
-  pinMode( right, INPUT);
-  
-  pinMode( DCreset, OUTPUT);
-  pinMode( DCclk, OUTPUT);
-  pinMode( SIPOrclk, OUTPUT);
-  pinMode( SIPOserial, OUTPUT);
-  pinMode( SIPOsrclk, OUTPUT);
-  
-  digitalWrite(left,1);
-  digitalWrite(right,1);
-  digitalWrite(enter,1);
-  
-  Serial.begin( 9600);
-}
 
-void loop(){
-  for( int x = 0; x < 4; x++){
-    menu[ x] = 0;
+void LEDMatrix(){
+  digitalWrite( DCreset, HIGH);
+  digitalWrite( DCreset, LOW);
+  
+  
+  for( int y = 0; y < 6; y++){
+    //send to LED Matrix
+    digitalWrite( SIPOrclk, LOW);
+    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, highByte( tempLED[ y]));
+    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST,  lowByte( tempLED[ y]));
+//    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0xFF);
+//    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0xFF);
+    digitalWrite( SIPOrclk, HIGH);
+  
+    delay(1);    
+
+    digitalWrite( SIPOrclk, LOW);
+    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
+    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
+    digitalWrite( SIPOrclk, HIGH);
+ 
+    
+    digitalWrite( DCclk, HIGH);
+    digitalWrite( DCclk, LOW);
+  
   }
-  for( int x = 0; x < 6; x++){
-    tempLED [ x] = 0x0000;
-  }
-  LEDMatrix();
-  getMenu();
-}
-
-//--------------------------------------------------------------------------------
-
-//Determine menu and submenus
-void getMenu(){
-  /*Main menu only has four (4) options to choose
-    Chords, Scales, Capo, Effects*/
-  menu[ 0] = getInput( mainMenuSize, mainMenuLCD, 0, 0);
-  
-  //Main menu determines the submenus to follow
-  switch ( menu[0]){
-    //menu[ 0] =  0, CHORDS
-    case 0:
-      menu[ 1] = getInput( chordSM1Size, chordSM1LCD, 0, 0);
-      menu[ 2] = getInput( SM2Size, notesSM2LCD, 1, 0);
-      menu[ 3] = getInput( chordSM3Size, positionSM3LCD, 0, 1);
-      break;
-    
-    //menu[ 0] =  1, SCALES
-    case 1:
-      menu[ 1] = getInput( scaleSM1Size, scaleSM1LCD, 0, 0);
-      menu[ 2] = getInput( SM2Size, notesSM2LCD, 1, 0);
-      break;
-      
-    //menu[ 0] =  2, CAPO
-//    case 2:
-//      menu[ 1] = getInput( capoSM1Size, capoSM1LCD, 0, 0);
-//      break;
-      
-    //menu[ 0] =  3, Song Maker 
-//    case 3:
-    case 2:
-      songMaker(  getInput( songmakerSM1Size, songmakerSM1LCD, 0, 0));
-      break;
-  }
-}
-
-int getInput( int limit, char** textLCD, int sm2, int sm3){
-  
-  int buttonCounter = 0;
-  byte exitFlag = 0;
-  updateLCD( buttonCounter, textLCD);
-  
-  
-    while( exitFlag == 0){
-     updateLED( buttonCounter, sm2, sm3);
-    
-    //buttonArray = {left, enter, right}
-      buttonArray[ 0] = digitalRead(left);
-      buttonArray[ 1] = digitalRead(enter);
-      buttonArray[ 2] = digitalRead(right);
-      
-      if( buttonArray[ 0] != prevButtonArray[ 0] && buttonArray[ 0] == LOW){
-          while(digitalRead(left) == LOW){
-             updateLED( buttonCounter, sm2, sm3);
-          }
-          if( buttonCounter == 0){
-            buttonCounter = limit;
-          }else{
-            buttonCounter--;
-          } 
-         updateLCD( buttonCounter, textLCD);
-         updateLED( buttonCounter, sm2, sm3);
-        
-         
-      }else if( buttonArray[ 1] != prevButtonArray[ 1] && buttonArray[ 1] == LOW){
-        while(digitalRead(enter) == LOW){
-           updateLED( buttonCounter, sm2, sm3);
-          }
-        exitFlag = 1;
-        updateLED( buttonCounter, sm2, sm3);
-        return buttonCounter;
-          
-      }else if( buttonArray[ 2] != prevButtonArray[ 2] && buttonArray[ 2] == LOW){
-          while(digitalRead(right) == LOW){
-             updateLED( buttonCounter, sm2, sm3);
-          }
-          if( buttonCounter == limit){
-            buttonCounter = 0;
-          }else{
-            buttonCounter++;
-          }
-          updateLCD( buttonCounter, textLCD);
-          updateLED( buttonCounter, sm2, sm3);
-      }
-      
-      
-      prevButtonArray[ 0] = buttonArray[ 0];
-      prevButtonArray[ 1] = buttonArray[ 1];
-      prevButtonArray[ 2] = buttonArray[ 2];
-   
-  }
-}//close getInput
-
-
-void songMaker( int numOfChords){
-  int buttonCounter = 0;
-    
-    for( int x = 0; x < (numOfChords+2)*3; x=x+3){
-      menu[ 1] = getInput( chordSM1Size, chordSM1LCD, 0, 0);
-      menu[ 2] = getInput( SM2Size, notesSM2LCD, 1, 0);
-      menu[ 3] = getInput( chordSM3Size, positionSM3LCD, 0, 1);
-      songMakerMenu[ x] = menu[ 1];  // chord
-      songMakerMenu[ x+1] = menu[ 2]; // note
-      songMakerMenu[ x+2] = menu[ 3]; //led position
-    }
-    for( int x = 0; x < numOfChords+2; x++){
-      songMakerChord[ x] = chordSM1LCD[songMakerMenu[ x*3]];
-      songMakerNote[ x] = notesSM2LCD[songMakerMenu[ x*3+1]];
-      for( int y = 6; y > 0; y--){
-        //tempLED{ TYPE, NOTE, POSITION, unsigned int}
-        songMakerLED[x][ 6-y] = masterChords[ songMakerMenu[ x*3]][ songMakerMenu[ x*3+1]][ songMakerMenu[ x*3+2]][ y-1];
-
-      }
-    }
-    
-    updateLCD( songMakerNote[ buttonCounter], songMakerChord[ buttonCounter]);  
-    for( int z = 0; z < 6; z++){
-       tempLED[ z] = songMakerLED[ buttonCounter][ z];
-     }
-     LEDMatrix();
-
-    //When user hits 'enter' this will break out of the loop
-    while(digitalRead(enter) == LOW){ 
-      buttonArray[ 0] = digitalRead(left);
-      buttonArray[ 2] = digitalRead(right);
-    
-      if( buttonArray[ 0] != prevButtonArray[ 0] && buttonArray[ 0] == LOW){
-          while(digitalRead(left) == LOW){
-          }
-          if( buttonCounter == 0){
-            buttonCounter = numOfChords+1;
-          }else{
-            buttonCounter--;
-          } 
-          updateLCD( songMakerNote[ buttonCounter], songMakerChord[ buttonCounter]);        
-      }else if( buttonArray[ 2] != prevButtonArray[ 2] && buttonArray[ 2] == LOW){
-          while(digitalRead(right) == LOW){
-          }
-          if( buttonCounter == numOfChords+1){
-            buttonCounter = 0;
-          }else{
-            buttonCounter++;
-          }
-          updateLCD( songMakerNote[ buttonCounter], songMakerChord[ buttonCounter]);
-      }
-      prevButtonArray[ 0] = buttonArray[ 0];
-      prevButtonArray[ 2] = buttonArray[ 2];  
-      for( int z = 0; z < 6; z++){
-         tempLED[ z] = songMakerLED[ buttonCounter][ z];
-       }
-       LEDMatrix();
-    }
-    
-    //wait for user to release 'enter'
-    while(digitalRead(enter) == LOW){
-    }
 }
 
 void updateLCD( int counter, char** textLCD){
@@ -430,32 +268,193 @@ void updateLED(int counter, int sm2, int sm3){
   LEDMatrix();
 }
 
-void LEDMatrix(){
-  digitalWrite( DCreset, HIGH);
-  digitalWrite( DCreset, LOW);
+int getInput( int limit, char** textLCD, int sm2, int sm3){
+  
+  int buttonCounter = 0;
+  byte exitFlag = 0;
+  updateLCD( buttonCounter, textLCD);
   
   
-  for( int y = 0; y < 6; y++){
-    //send to LED Matrix
-    digitalWrite( SIPOrclk, LOW);
-    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, highByte( tempLED[ y]));
-    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST,  lowByte( tempLED[ y]));
-//    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0xFF);
-//    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0xFF);
-    digitalWrite( SIPOrclk, HIGH);
-  
-    delay(1);    
-
-    digitalWrite( SIPOrclk, LOW);
-    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
-    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
-    digitalWrite( SIPOrclk, HIGH);
- 
+    while( exitFlag == 0){
+     updateLED( buttonCounter, sm2, sm3);
     
-    digitalWrite( DCclk, HIGH);
-    digitalWrite( DCclk, LOW);
+    //buttonArray = {left, enter, right}
+      buttonArray[ 0] = digitalRead(left);
+      buttonArray[ 1] = digitalRead(enter);
+      buttonArray[ 2] = digitalRead(right);
+      
+      if( buttonArray[ 0] != prevButtonArray[ 0] && buttonArray[ 0] == LOW){
+          while(digitalRead(left) == LOW){
+             updateLED( buttonCounter, sm2, sm3);
+          }
+          if( buttonCounter == 0){
+            buttonCounter = limit;
+          }else{
+            buttonCounter--;
+          } 
+         updateLCD( buttonCounter, textLCD);
+         updateLED( buttonCounter, sm2, sm3);
+        
+         
+      }else if( buttonArray[ 1] != prevButtonArray[ 1] && buttonArray[ 1] == LOW){
+        while(digitalRead(enter) == LOW){
+           updateLED( buttonCounter, sm2, sm3);
+          }
+        exitFlag = 1;
+        updateLED( buttonCounter, sm2, sm3);
+        return buttonCounter;
+          
+      }else if( buttonArray[ 2] != prevButtonArray[ 2] && buttonArray[ 2] == LOW){
+          while(digitalRead(right) == LOW){
+             updateLED( buttonCounter, sm2, sm3);
+          }
+          if( buttonCounter == limit){
+            buttonCounter = 0;
+          }else{
+            buttonCounter++;
+          }
+          updateLCD( buttonCounter, textLCD);
+          updateLED( buttonCounter, sm2, sm3);
+      }
+      
+      
+      prevButtonArray[ 0] = buttonArray[ 0];
+      prevButtonArray[ 1] = buttonArray[ 1];
+      prevButtonArray[ 2] = buttonArray[ 2];
+   
+  }
+}//close getInput
+
+void songMaker( int numOfChords){
+  int buttonCounter = 0;
+    
+    for( int x = 0; x < (numOfChords+2)*3; x=x+3){
+      menu[ 1] = getInput( chordSM1Size, chordSM1LCD, 0, 0);
+      menu[ 2] = getInput( SM2Size, notesSM2LCD, 1, 0);
+      menu[ 3] = getInput( chordSM3Size, positionSM3LCD, 0, 1);
+      songMakerMenu[ x] = menu[ 1];  // chord
+      songMakerMenu[ x+1] = menu[ 2]; // note
+      songMakerMenu[ x+2] = menu[ 3]; //led position
+    }
+    for( int x = 0; x < numOfChords+2; x++){
+      songMakerChord[ x] = chordSM1LCD[songMakerMenu[ x*3]];
+      songMakerNote[ x] = notesSM2LCD[songMakerMenu[ x*3+1]];
+      for( int y = 6; y > 0; y--){
+        //tempLED{ TYPE, NOTE, POSITION, unsigned int}
+        songMakerLED[x][ 6-y] = masterChords[ songMakerMenu[ x*3]][ songMakerMenu[ x*3+1]][ songMakerMenu[ x*3+2]][ y-1];
+
+      }
+    }
+    
+    updateLCD( songMakerNote[ buttonCounter], songMakerChord[ buttonCounter]);  
+    for( int z = 0; z < 6; z++){
+       tempLED[ z] = songMakerLED[ buttonCounter][ z];
+     }
+     LEDMatrix();
+
+    //When user hits 'enter' this will break out of the loop
+    while(digitalRead(enter) == LOW){ 
+      buttonArray[ 0] = digitalRead(left);
+      buttonArray[ 2] = digitalRead(right);
+    
+      if( buttonArray[ 0] != prevButtonArray[ 0] && buttonArray[ 0] == LOW){
+          while(digitalRead(left) == LOW){
+          }
+          if( buttonCounter == 0){
+            buttonCounter = numOfChords+1;
+          }else{
+            buttonCounter--;
+          } 
+          updateLCD( songMakerNote[ buttonCounter], songMakerChord[ buttonCounter]);        
+      }else if( buttonArray[ 2] != prevButtonArray[ 2] && buttonArray[ 2] == LOW){
+          while(digitalRead(right) == LOW){
+          }
+          if( buttonCounter == numOfChords+1){
+            buttonCounter = 0;
+          }else{
+            buttonCounter++;
+          }
+          updateLCD( songMakerNote[ buttonCounter], songMakerChord[ buttonCounter]);
+      }
+      prevButtonArray[ 0] = buttonArray[ 0];
+      prevButtonArray[ 2] = buttonArray[ 2];  
+      for( int z = 0; z < 6; z++){
+         tempLED[ z] = songMakerLED[ buttonCounter][ z];
+       }
+       LEDMatrix();
+    }
+    
+    //wait for user to release 'enter'
+    while(digitalRead(enter) == LOW){
+    }
+}
+
+//Determine menu and submenus
+void getMenu(){
+  /*Main menu only has four (4) options to choose
+    Chords, Scales, Capo, Effects*/
+  menu[ 0] = getInput( mainMenuSize, mainMenuLCD, 0, 0);
   
+  //Main menu determines the submenus to follow
+  switch ( menu[0]){
+    //menu[ 0] =  0, CHORDS
+    case 0:
+      menu[ 1] = getInput( chordSM1Size, chordSM1LCD, 0, 0);
+      menu[ 2] = getInput( SM2Size, notesSM2LCD, 1, 0);
+      menu[ 3] = getInput( chordSM3Size, positionSM3LCD, 0, 1);
+      break;
+    
+    //menu[ 0] =  1, SCALES
+    case 1:
+      menu[ 1] = getInput( scaleSM1Size, scaleSM1LCD, 0, 0);
+      menu[ 2] = getInput( SM2Size, notesSM2LCD, 1, 0);
+      break;
+      
+    //menu[ 0] =  2, CAPO
+//    case 2:
+//      menu[ 1] = getInput( capoSM1Size, capoSM1LCD, 0, 0);
+//      break;
+      
+    //menu[ 0] =  3, Song Maker 
+//    case 3:
+    case 2:
+      songMaker(  getInput( songmakerSM1Size, songmakerSM1LCD, 0, 0));
+      break;
   }
 }
+
+void setup(){
+  lcd.begin( 16, 2);
+  lcd.clear();
+  
+  //Define pins I/O
+  pinMode( left, INPUT);
+  pinMode( enter, INPUT);
+  pinMode( right, INPUT);
+  
+  pinMode( DCreset, OUTPUT);
+  pinMode( DCclk, OUTPUT);
+  pinMode( SIPOrclk, OUTPUT);
+  pinMode( SIPOserial, OUTPUT);
+  pinMode( SIPOsrclk, OUTPUT);
+  
+  digitalWrite(left,1);
+  digitalWrite(right,1);
+  digitalWrite(enter,1);
+  
+  Serial.begin( 9600);
+}
+
+void loop(){
+  for( int x = 0; x < 4; x++){
+    menu[ x] = 0;
+  }
+  for( int x = 0; x < 6; x++){
+    tempLED [ x] = 0x0000;
+  }
+  LEDMatrix();
+  getMenu();
+}
+
 
 
