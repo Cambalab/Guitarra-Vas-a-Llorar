@@ -1,5 +1,5 @@
 /*
-Copyright 2001
+Copyright 2011
 
 GuitArduino
 Date: 4/12/2011
