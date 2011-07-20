@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-//#include <avr/pgmspace.h> // Write constants to Flash
+#include <avr/pgmspace.h> // Write constants to Flash
 #include <ShiftLCD.h>
 
 //#defines
@@ -84,6 +84,60 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define b_minor1  { 0x0002, 0x0006, 0x000A, 0x000A, 0x0002, 0x0000}
 #define b_minor2  { 0x0040, 0x0040, 0x0040, 0x0140, 0x0140, 0x0040}
 
+
+//MAJOR 7
+#define c_major71 { 0x0000, 0x0001, 0x0004, 0x0002, 0x0004, 0x0000}
+#define c_major72 { 0x0080, 0x0080, 0x0180, 0x0080, 0x0280, 0x0080}
+#define db_major71 { 0x0100, 0x0100, 0x0300, 0x0100, 0x0500, 0x0100}
+#define db_major72 { 0x0000, 0x0100, 0x0200, 0x0100, 0x0000, 0x0100}
+#define d_major71  { 0x0002, 0x0001, 0x0002, 0x0000, 0x0000, 0x0000}
+#define d_major72  { 0x0200, 0x0200, 0x0600, 0x0200, 0x0A00, 0x0200}
+#define eb_major71  { 0x0400, 0x0400, 0x0C00, 0x1400, 0x1400, 0x0400}
+#define eb_major72  { 0x0000, 0x0400, 0x0800, 0x0400, 0x0000, 0x0400}
+#define e_major71  { 0x0000, 0x0000, 0x0001, 0x0000, 0x0002, 0x0000}
+#define e_major72  { 0x0800, 0x0800, 0x1800, 0x0800, 0x2800, 0x0800}
+#define f_major71  { 0x0001, 0x0001, 0x0003, 0x0001, 0x0005, 0x0001}
+#define f_major72  { 0x1000, 0x1000, 0x3000, 0x1000, 0x5000, 0x1000}
+#define gb_major71  { 0x0002, 0x0002, 0x0006, 0x0002, 0x000A, 0x0002}
+#define gb_major72  { 0x0000, 0x0002, 0x0004, 0x0002, 0x0000, 0x0002}
+#define g_major71  { 0x0001, 0x0000, 0x0000, 0x0000, 0x0002, 0x0004}
+#define g_major72  { 0x0004, 0x0004, 0x000C, 0x0004, 0x0014, 0x0004}
+#define ab_major71  { 0x0008, 0x0008, 0x0018, 0x0008, 0x0028, 0x0008}
+#define ab_major72  { 0x0000, 0x0008, 0x0010, 0x0008, 0x0000, 0x0008}
+#define a_major71  { 0x0000, 0x0002, 0x0000, 0x0002, 0x0000, 0x0000}
+#define a_major72  { 0x0010, 0x0010, 0x0030, 0x0010, 0x0050, 0x0010}
+#define bb_major71  { 0x0020, 0x0020, 0x0060, 0x0020, 0x00A0, 0x0020}
+#define bb_major72  { 0x0000, 0x0020, 0x0040, 0x0020, 0x0000, 0x0020}
+#define b_major71  { 0x0002, 0x0000, 0x0002, 0x0001, 0x0002, 0x0000}
+#define b_major72  { 0x0040, 0x0040, 0x00C0, 0x0040, 0x0140, 0x0040}
+
+
+//MINOR 7
+#define c_minor71 { 0x0080, 0x0080, 0x0080, 0x0080, 0x0280, 0x0080}
+#define c_minor72 { 0x0000, 0x0080, 0x0080, 0x0080, 0x0000, 0x0080}
+#define db_minor71 { 0x0100, 0x0100, 0x0100, 0x0100, 0x0500, 0x0100}
+#define db_minor72 { 0x0000, 0x0100, 0x0100, 0x0100, 0x0000, 0x0100}
+#define d_minor71  { 0x0001, 0x0001, 0x0002, 0x0000, 0x0000, 0x0000}
+#define d_minor72  { 0x0200, 0x0200, 0x0200, 0x0200, 0x0A00, 0x0200}
+#define eb_minor71  { 0x0400, 0x0400, 0x0400, 0x0400, 0x1400, 0x0400}
+#define eb_minor72  { 0x0000, 0x0400, 0x0400, 0x0400, 0x0000, 0x0400}
+#define e_minor71  { 0x0000, 0x0000, 0x0000, 0x0000, 0x0002, 0x0000}
+#define e_minor72 { 0x0800, 0x0800, 0x0800, 0x0800, 0x2800, 0x0800}
+#define f_minor71  { 0x0001, 0x0001, 0x0001, 0x0001, 0x0005, 0x0001}
+#define f_minor72  { 0x1000, 0x1000, 0x1000, 0x1000, 0x5000, 0x1000}
+#define gb_minor71  { 0x0002, 0x0002, 0x0002, 0x0002, 0x000A, 0x0002}
+#define gb_minor72  { 0x0000, 0x0002, 0x0002, 0x0002, 0x0000, 0x0002}
+#define g_minor71  { 0x0004, 0x0004, 0x0004, 0x0004, 0x0014, 0x0004}
+#define g_minor72  { 0x0000, 0x0004, 0x0004, 0x0004, 0x0000, 0x0004}
+#define ab_minor71  { 0x0008, 0x0008, 0x0018, 0x0028, 0x0028, 0x0008}
+#define ab_minor72  { 0x0000, 0x0008, 0x0008, 0x0008, 0x0000, 0x0008}
+#define a_minor71  { 0x0000, 0x0001, 0x0000, 0x0002, 0x0000, 0x0000}
+#define a_minor72  { 0x0010, 0x0010, 0x0010, 0x0010, 0x0050, 0x0010}
+#define bb_minor71  { 0x0020, 0x0020, 0x0020, 0x0020, 0x00A0, 0x0020}
+#define bb_minor72  { 0x0000, 0x0020, 0x0020, 0x0020, 0x0000, 0x0020}
+#define b_minor71  { 0x0040, 0x0040, 0x0040, 0x0040, 0x0140, 0x0040}
+#define b_minor72  { 0x0000, 0x0040, 0x0040, 0x0040, 0x0000, 0x0040}
+
 //---------SCALES (all scales have C as their root)
 #define major     { 0x5AD5, 0x5AB5, 0xAB5A, 0x6B56, 0x6AD6, 0x5AD5}
 #define harmonic_minor { 0xD6CD, 0xD9AD, 0x9AD9, 0x5B35, 0x66B6, 0xD6CD}
@@ -99,7 +153,7 @@ unsigned int masterScales[3][6] ={major, harmonic_minor, mel_min_asc};
 unsigned int masterRoots[6] = { 0x0080, 0x1001, 0x0010, 0x0200, 0x4004, 0x0080};
 
 //There are 22 chord options total (major,...,maj9)
-unsigned int masterChords[2][12][2][6] = {
+PROGMEM  prog_uint16_t masterChords[4][12][2][6] = {
 {//major
 { c_major1, c_major2},{ db_major1, db_major2},{ d_major1, d_major2},{ eb_major1, eb_major2},
 { e_major1, e_major2},{ f_major1, f_major2},{ gb_major1, gb_major2},{ g_major1, g_major2},
@@ -107,7 +161,15 @@ unsigned int masterChords[2][12][2][6] = {
 {//minor
 { c_minor1, c_minor2},{ db_minor1, db_minor2},{ d_minor1, d_minor2},{ eb_minor1, eb_minor2},
 { e_minor1, e_minor2},{ f_minor1, f_minor2},{ gb_minor1, gb_minor2},{ g_minor1, g_minor2},
-{ ab_minor1, ab_minor2},{ a_minor1, a_minor2},{ bb_minor1, bb_minor2},{ b_minor1, b_minor2}}
+{ ab_minor1, ab_minor2},{ a_minor1, a_minor2},{ bb_minor1, bb_minor2},{ b_minor1, b_minor2}},
+{//major7
+{ c_major71, c_major72},{ db_major71, db_major72},{ d_major71, d_major72},{ eb_major71, eb_major72},
+{ e_major71, e_major72},{ f_major71, f_major72},{ gb_major71, gb_major72},{ g_major71, g_major72},
+{ ab_major71, ab_major72},{ a_major71, a_major72},{ bb_major71, bb_major72},{ b_major71, b_major72}},
+{//minor7
+{ c_minor71, c_minor72},{ db_minor71, db_minor72},{ d_minor71, d_minor72},{ eb_minor71, eb_minor72},
+{ e_minor71, e_minor72},{ f_minor71, f_minor72},{ gb_minor71, gb_minor72},{ g_minor71, g_minor72},
+{ ab_minor71, ab_minor72},{ a_minor71, a_minor72},{ bb_minor71, bb_minor72},{ b_minor71, b_minor72}}
 };
 
 // define the language codes
@@ -121,23 +183,23 @@ unsigned int masterChords[2][12][2][6] = {
 
 // define the language specific strings
 #if (_LANG_ == _EN_)
-char* mainMenuLCD[] = { "Chords", "Scales", "Song Builder", "Key Signature", "More"};
-char* chordSM1LCD[] =  { "Major", "Minor"};
-char* scaleSM1LCD[] =  { "Major", "Harmoic Minor", "Mel. Min. (Asc)"};
-char* songmakerSM1LCD[] = { "# of Chords: 2?", "# of Chords: 3?","# of Chords: 4?", "# of Chords: 5?", "# of Chords: 6?", "# of Chords: 7?", "# of Chords: 8?", "# of Chords: 9?", "# of Chords: 10?", "# of Chords: 11?", "# of Chords: 12?", "# of Chords: 13?", "# of Chords: 14?", "# of Chords: 15?", "# of Chords: 16?", "# of Chords: 17?", "# of Chords: 18?", "# of Chords: 19?", "# of Chords: 20?"};
+    char* mainMenuLCD[] = { "Chords", "Scales", "Song Builder", "Key Signature", "Messages", "Songs"};
+    char* chordSM1LCD[] =  { "Major", "Minor", "Mayor 7", "Minor 7"};
+    char* scaleSM1LCD[] =  { "Major", "Harmoic Minor", "Mel. Min. (Asc)"};
+    char* songmakerSM1LCD[] = { "# of Chords: 2?", "# of Chords: 3?","# of Chords: 4?", "# of Chords: 5?", "# of Chords: 6?", "# of Chords: 7?", "# of Chords: 8?", "# of Chords: 9?", "# of Chords: 10?", "# of Chords: 11?", "# of Chords: 12?", "# of Chords: 13?", "# of Chords: 14?", "# of Chords: 15?", "# of Chords: 16?", "# of Chords: 17?", "# of Chords: 18?", "# of Chords: 19?", "# of Chords: 20?"};
 //char* capoSM1LCD[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
-char* positionSM3LCD[] = {"Variation 1", "Variation 2"};
-char* keysigSM1LCD[] = { "Alphabetic" , "Solmization"};
+    char* positionSM3LCD[] = {"Variation 1", "Variation 2"};
+    char* keysigSM1LCD[] = { "Alphabetic" , "Solmization"};
 #endif
 
 #if (_LANG_ == _ES_)
-char* mainMenuLCD[] = { "Acordes", "Escalas", "Crear Canciones", "Cifrado", "Otros"};
-char* chordSM1LCD[] = { "Mayor", "Menor"};
-char* scaleSM1LCD[] = { "Mayor", "Armonica menor", "Melodica Menor"};
-char* songmakerSM1LCD[] = { "# de acorde: 2?", "# de acorde: 3?","# de acorde: 4?", "# de acorde: 5?", "# de acorde: 6?", "# de acorde: 7?", "# de acorde: 8?", "# de acorde: 9?", "# de acorde: 10?", "# de acorde: 11?", "# de acorde: 12?", "# de acorde: 13?", "# de acorde: 14?", "# de acorde: 15?", "# de acorde: 16?", "# de acorde: 17?", "# de acorde: 18?", "# de acorde: 19?", "# de acorde: 20?"};
+    char* mainMenuLCD[] = { "Acordes", "Escalas", "Crear Canciones", "Cifrado", "Mensajes", "Canciones"};
+    char* chordSM1LCD[] = { "Mayor", "Menor", "Mayor 7", "Menor 7"};
+    char* scaleSM1LCD[] = { "Mayor", "Armonica menor", "Melodica Menor"};
+    char* songmakerSM1LCD[] = { "# de acorde: 2?", "# de acorde: 3?","# de acorde: 4?", "# de acorde: 5?", "# de acorde: 6?", "# de acorde: 7?", "# de acorde: 8?", "# de acorde: 9?", "# de acorde: 10?", "# de acorde: 11?", "# de acorde: 12?", "# de acorde: 13?", "# de acorde: 14?", "# de acorde: 15?", "# de acorde: 16?", "# de acorde: 17?", "# de acorde: 18?", "# de acorde: 19?", "# de acorde: 20?"};
 //char* capoSM1LCD[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
-char* positionSM3LCD[] = {"Variacion 1", "Variacion 2"};                       
-char* keysigSM1LCD[] = { "Americano" , "Tradicional"};
+    char* positionSM3LCD[] = {"Variacion 1", "Variacion 2"};                       
+    char* keysigSM1LCD[] = { "Americano" , "Tradicional"};
 #endif 
 
 char* notesSM2LCD[] ={ "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb","G", "G#/Ab", "A", "A#/Bb", "B"};
@@ -149,8 +211,8 @@ char* notesSM2LCDAlf[] ={ "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb","G", "G#
 char* moreSM1LCD[] = { "Crea", "Puto" };
 
 //constants
-const int mainMenuSize = 4;
-const int chordSM1Size = 1;
+const int mainMenuSize = 5;
+const int chordSM1Size = 3;
 const int scaleSM1Size = 2;
 const int songmakerSM1Size = 18;
 const int SM2Size = 11;
@@ -200,7 +262,6 @@ void LEDMatrix(){
   digitalWrite( DCreset, HIGH);
   digitalWrite( DCreset, LOW);
   
-  
   for( int y = 0; y < 6; y++){
     //send to LED Matrix
     digitalWrite( SIPOrclk, LOW);
@@ -239,7 +300,6 @@ void updateLCD( int counter, char** textLCD){
   lcd.clear();
   lcd.setCursor( 0, 0);
   lcd.print( tempText);
-  
 }
 
 void updateLED(int counter, int sm2, int sm3){
@@ -251,12 +311,12 @@ void updateLED(int counter, int sm2, int sm3){
     if( sm2 == 1){
       for( int x = 6; x > 0; x--){
         //tempLED{ TYPE, NOTE, POSITION, unsigned int}
-        tempLED[ 6-x] = masterChords[ menu[1]][ counter][ menu[3]][ x-1];
+        tempLED[ 6-x] = pgm_read_word_near(&(masterChords[ menu[1]][ counter][ menu[3]][ x-1]));
       }
     }else if( sm3 == 1){
       for( int x = 6; x > 0; x--){
         //tempLED{ TYPE, NOTE, POSITION, unsigned int}
-        tempLED[ 6-x] = masterChords[ menu[1]][ menu[2]][ counter][ x-1];
+        tempLED[ 6-x] = pgm_read_word_near(&(masterChords[ menu[1]][ menu[2]][ counter][ x-1]));
       }
     }
   }else if( menu[ 0] == 1 && sm2 == 1){
@@ -374,7 +434,7 @@ void songMaker( int numOfChords){
       songMakerNote[ x] = notesSM2LCD[songMakerMenu[ x*3+1]];
       for( int y = 6; y > 0; y--){
         //tempLED{ TYPE, NOTE, POSITION, unsigned int}
-        songMakerLED[x][ 6-y] = masterChords[ songMakerMenu[ x*3]][ songMakerMenu[ x*3+1]][ songMakerMenu[ x*3+2]][ y-1];
+        songMakerLED[x][ 6-y] = pgm_read_word_near(&(masterChords[ songMakerMenu[ x*3]][ songMakerMenu[ x*3+1]][ songMakerMenu[ x*3+2]][ y-1]));
 
       }
     }
@@ -428,6 +488,24 @@ void cambio_de_str(char **s, char **t, int nlines) {
         s[i] = t[i];
     }
 }
+/*
+void readSongNotes() {
+    int n;
+    // wait for serial input  
+    if (Serial.available() > 0) {  
+    // read the incoming byte:  
+        n = Serial.read();  
+        for( int x = 0; x < 6; x++) {
+            if((n < ((x+1)*16)) && (n > (x*16))) {
+                tempLED[ x] = ;
+            }
+        }
+        LedMatrix();
+             
+    }
+}
+*/
+
 
 //Determine menu and submenus
 void getMenu(){
@@ -473,11 +551,17 @@ void getMenu(){
 
     case 4:
       menu[ 1] = getInput( moreSM1Size, moreSM1LCD, 0, 0);
+      break;
 
+
+    case 5:
+      //readSongNotes
       break;
 
   }
 }
+
+
 
 void setup(){
   lcd.begin( 16, 2);
@@ -511,6 +595,4 @@ void loop(){
   LEDMatrix();
   getMenu();
 }
-
-
 
