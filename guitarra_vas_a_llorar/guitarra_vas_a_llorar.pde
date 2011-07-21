@@ -191,20 +191,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define b_minor91  { 0x0100, 0x0040, 0x0040, 0x0040, 0x0000, 0x0040}
 #define b_minor92  { 0x0000, 0x0002, 0x0002, 0x0000, 0x0002, 0x0000}
 
-
-
 //---------SCALES (all scales have C as their root)
 #define major     { 0x5AD5, 0x5AB5, 0xAB5A, 0x6B56, 0x6AD6, 0x5AD5}
 #define harmonic_minor { 0xD6CD, 0xD9AD, 0x9AD9, 0x5B35, 0x66B6, 0xD6CD}
 #define mel_min_asc { 0x56D5, 0xDAAD, 0xAADA, 0x5B55, 0x6AB6, 0x56D6}
+#define pentatonic_major { 0x4A94, 0x5295, 0x2952, 0x2A52, 0x4A54, 0x4A94}
+#define minor { 0xD6AD, 0xD5AD, 0x5AD5, 0x5AB5, 0x56B5, 0xD6AD}
+#define pentatonic_minor { 0x54A5, 0x94A9, 0x4A94, 0x5295, 0x52A5, 0x54A5}
 
-//----- delirios
-#define hello { 0xAEAE, 0xA8AA, 0xAEAA, 0xEAAE, 0xAEA0, 0xA0A0}
 #define crea { 0x2736, 0x5151, 0x5351, 0x7331, 0x5151, 0x5756 }
 #define puto { 0x0000, 0xE2E7, 0xAE85, 0xAE85, 0xE2EF, 0x0000 }
 
 unsigned int msg2guitar[2][6] = { crea, puto };
-unsigned int masterScales[3][6] ={major, harmonic_minor, mel_min_asc};
+unsigned int masterScales[6][6] ={major, harmonic_minor, mel_min_asc, pentatonic_major, minor, pentatonic_minor };
 unsigned int masterRoots[6] = { 0x0080, 0x1001, 0x0010, 0x0200, 0x4004, 0x0080};
 
 //There are 22 chord options total (major,...,maj9)
@@ -248,7 +247,7 @@ PROGMEM  prog_uint16_t masterChords[6][12][2][6] = {
 #if (_LANG_ == _EN_)
     char* mainMenuLCD[] = { "Chords", "Scales", "Song Builder", "Key Signature", "Messages", "Songs"};
     char* chordSM1LCD[] =  { "Major", "Minor", "Major 7", "Minor 7", "Major 9", "Minor 9"};
-    char* scaleSM1LCD[] =  { "Major", "Harmoic Minor", "Mel. Min. (Asc)"};
+    char* scaleSM1LCD[] =  { "Major", "Harmoic Minor", "Mel. Min. (Asc)", "Pentatonic Major", "Minor", "Pentatonic Minor"};
 //    char* songmakerSM1LCD[] = { "# of Chords: 2?", "# of Chords: 3?","# of Chords: 4?", "# of Chords: 5?", "# of Chords: 6?", "# of Chords: 7?", "# of Chords: 8?", "# of Chords: 9?", "# of Chords: 10?", "# of Chords: 11?", "# of Chords: 12?", "# of Chords: 13?", "# of Chords: 14?", "# of Chords: 15?", "# of Chords: 16?", "# of Chords: 17?", "# of Chords: 18?", "# of Chords: 19?", "# of Chords: 20?"};
 //char* capoSM1LCD[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
     char* positionSM3LCD[] = {"Variation 1", "Variation 2"};
@@ -258,7 +257,7 @@ PROGMEM  prog_uint16_t masterChords[6][12][2][6] = {
 #if (_LANG_ == _ES_)
     char* mainMenuLCD[] = { "Acordes", "Escalas", "Crear Canciones", "Cifrado", "Mensajes", "Canciones"};
     char* chordSM1LCD[] = { "Mayor", "Menor", "Mayor 7", "Menor 7", "Mayor 9", "Menor 9"};
-    char* scaleSM1LCD[] = { "Mayor", "Armonica menor", "Melodica Menor"};
+    char* scaleSM1LCD[] = { "Mayor", "Armonica menor", "Melodica Menor", "Pentatonica May", "Menor", "Pentatonica Men"};
 //    char* songmakerSM1LCD[] = { "# de acorde: 2?", "# de acorde: 3?","# de acorde: 4?", "# de acorde: 5?", "# de acorde: 6?", "# de acorde: 7?", "# de acorde: 8?", "# de acorde: 9?", "# de acorde: 10?", "# de acorde: 11?", "# de acorde: 12?", "# de acorde: 13?", "# de acorde: 14?", "# de acorde: 15?", "# de acorde: 16?", "# de acorde: 17?", "# de acorde: 18?", "# de acorde: 19?", "# de acorde: 20?"};
 //char* capoSM1LCD[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
     char* positionSM3LCD[] = {"Variacion 1", "Variacion 2"};                       
@@ -299,7 +298,7 @@ char* moreSM1LCD[] = { "Crea", "Puto" };
 //constants
 const int mainMenuSize = 5;
 const int chordSM1Size = 5;
-const int scaleSM1Size = 2;
+const int scaleSM1Size = 5;
 const int songmakerSM1Size = 18;
 const int SM2Size = 11;
 const int chordSM3Size = 1;
