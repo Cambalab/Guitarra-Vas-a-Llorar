@@ -202,11 +202,27 @@ PROGMEM  prog_uint16_t masterChords[4][12][2][6] = {
     char* keysigSM1LCD[] = { "Americano" , "Tradicional"};
 #endif 
 
-char* notesSM2LCD[] ={ "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb","G", "G#/Ab", "A", "A#/Bb", "B"};
 
-char* notesSM2LCDSol[] ={ "Do", "Do#/Reb", "Re", "Re#/Mib", "Mi", "Fa", "Fa#/Solb","Sol", "Sol#/Lab", "La", "La#/Sib", "Si"};
+char *notesSM2LCDAlf[4][12] = {
+{ "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb","G", "G#/Ab", "A", "A#/Bb", "B"},
+{ "Cm", "C#m/Dbm", "Dm", "D#m/Ebm", "Em", "Fm", "F#m/Gbm","Gm", "G#m/Abm", "Am", "A#m/Bbm", "Bm"},
+{ "C7", "C#7/Db7", "D7", "D#7/Eb7", "E7", "F7", "F#7/Gb7","G7", "G#7/Ab7", "A7", "A#7/Bb7", "B7"},
+{ "Cm7", "C#m7/Dbm7", "Dm7", "D#m7/Ebm7", "Em7", "Fm7", "F#m7/Gbm7","Gm7", "G#m7/Abm7", "Am7", "A#m7/Bbm7", "Bm7"}
+};
 
-char* notesSM2LCDAlf[] ={ "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb","G", "G#/Ab", "A", "A#/Bb", "B"};
+char *notesSM2LCDSol[4][12] = {
+{ "Do", "Do#/Reb", "Re", "Re#/Mib", "Mi", "Fa", "Fa#/Solb","Sol", "Sol#/Lab", "La", "La#/Sib", "Si"},
+{ "Dom", "Do#m/Rebm", "Rem", "Re#m/Mibm", "Mim", "Fam", "Fa#m/Solbm","Solm", "Sol#m/Labm", "Lam", "La#m/Sibm", "Sim"},
+{ "Do7", "Do#7/Reb7", "Re7", "Re#7/Mib7", "Mi7", "Fa7", "Fa#7/Solb7","Sol7", "Sol#7/Lab7", "La7", "La#7/Sib7", "Si7"},
+{ "Dom7", "Do#m7/Rebm7", "Rem7", "Re#m7/Mibm7", "Mim7", "Fam7", "Fa#m7/Solbm7","Solm7", "Sol#m7/Labm7", "Lam7", "La#m7/Sibm7", "Sim7"}
+};
+
+char *notesSM2LCD[4][12] = {
+{ "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb","G", "G#/Ab", "A", "A#/Bb", "B"},
+{ "Cm", "C#m/Dbm", "Dm", "D#m/Ebm", "Em", "Fm", "F#m/Gbm","Gm", "G#m/Abm", "Am", "A#m/Bbm", "Bm"},
+{ "C7", "C#7/Db7", "D7", "D#7/Eb7", "E7", "F7", "F#7/Gb7","G7", "G#7/Ab7", "A7", "A#7/Bb7", "B7"},
+{ "Cm7", "C#m7/Dbm7", "Dm7", "D#m7/Ebm7", "Em7", "Fm7", "F#m7/Gbm7","Gm7", "G#m7/Abm7", "Am7", "A#m7/Bbm7", "Bm7"}
+};
 
 char* moreSM1LCD[] = { "Crea", "Puto" };
 
@@ -419,7 +435,8 @@ int getInput( int limit, char** textLCD, int sm2, int sm3){
 }//close getInput
 
 void songMaker( int numOfChords){
-  int buttonCounter = 0;
+/*
+    int buttonCounter = 0;
     
     for( int x = 0; x < (numOfChords+2)*3; x=x+3){
       menu[ 1] = getInput( chordSM1Size, chordSM1LCD, 0, 0);
@@ -480,14 +497,21 @@ void songMaker( int numOfChords){
     //wait for user to release 'enter'
     while(digitalRead(enter) == LOW){
     }
+    */
 }
 
-void cambio_de_str(char **s, char **t, int nlines) {
-    int i = 0;
-    for(i=0;i<nlines;i++) {
-        s[i] = t[i];
-    }
+
+void cambio_de_str(char *(*s)[12], char *(*t)[12], int nlines) {
+     int i,j = 0;
+     for(i=0;i<4;i++) {
+         for(j=0;j<12;j++) {
+            s[i][j] = t[i][j];
+         }
+     }
 }
+
+
+
 /*
 void readSongNotes() {
     int n;
@@ -519,14 +543,14 @@ void getMenu(){
     //menu[ 0] =  0, CHORDS
     case 0:
       menu[ 1] = getInput( chordSM1Size, chordSM1LCD, 0, 0);
-      menu[ 2] = getInput( SM2Size, notesSM2LCD, 1, 0);
+      menu[ 2] = getInput( SM2Size, notesSM2LCD[menu[1]] , 1, 0);
       menu[ 3] = getInput( chordSM3Size, positionSM3LCD, 0, 1);
       break;
     
     //menu[ 0] =  1, SCALES
     case 1:
       menu[ 1] = getInput( scaleSM1Size, scaleSM1LCD, 0, 0);
-      menu[ 2] = getInput( SM2Size, notesSM2LCD, 1, 0);
+      menu[ 2] = getInput( SM2Size, notesSM2LCD[0], 1, 0);
       break;
       
     //menu[ 0] =  2, CAPO
