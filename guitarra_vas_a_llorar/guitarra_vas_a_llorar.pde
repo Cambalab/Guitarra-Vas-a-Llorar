@@ -573,7 +573,7 @@ void songMaker( int numOfChords){
 
 void cambio_de_str(char *(*s)[12], char *(*t)[12], int nlines) {
      int i,j = 0;
-     for(i=0;i<4;i++) {
+     for(i=0;i<6;i++) {
          for(j=0;j<12;j++) {
             s[i][j] = t[i][j];
          }
