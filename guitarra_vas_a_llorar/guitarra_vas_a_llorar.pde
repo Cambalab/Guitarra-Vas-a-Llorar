@@ -581,23 +581,33 @@ void cambio_de_str(char *(*s)[12], char *(*t)[12], int nlines) {
 
 
 
-/*
+
 void readSongNotes() {
-    int n;
-    // wait for serial input  
-    if (Serial.available() > 0) {  
-    // read the incoming byte:  
-        n = Serial.read();  
-        for( int x = 0; x < 6; x++) {
-            if((n < ((x+1)*16)) && (n > (x*16))) {
-                tempLED[ x] = ;
+    int n=0, x=0 , t=0;
+    
+    // Usamos los 96 caracteres luego del 32 dec para mostrar (33 a 127)
+    while(t != 32) { // leemos serial hasta barra espaciadora
+        n = t - 32;
+        for(x = 0; x < 6; x++) {
+            if((n <= ((x+1)*16)) && (n > (x*16))) {
+                tempLED[ x] = 1 << (n - (16*x) - 1);
+                //Serial.println((n-(16*x)));
+            } else {
+                tempLED[ x]= 0;
+                //Serial.println(0);
             }
         }
-        LedMatrix();
-             
+      
+        if (Serial.available() > 0) {  
+            // read the incoming byte:  
+            t = Serial.read();
+            //Serial.println(t);
+            delay(10);
+        }
+        LEDMatrix();
     }
 }
-*/
+
 
 
 //Determine menu and submenus
@@ -650,7 +660,7 @@ void getMenu(){
 
 
     case 5:
-      //readSongNotes
+      readSongNotes();
       break;
 
   }
