@@ -202,9 +202,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define crea { 0x2736, 0x5151, 0x5351, 0x7331, 0x5151, 0x5756 }
 #define puto { 0x0000, 0xE2E7, 0xAE85, 0xAE85, 0xE2EF, 0x0000 }
 
-unsigned int msg2guitar[2][6] = { crea, puto };
-unsigned int masterScales[6][6] ={major, harmonic_minor, mel_min_asc, pentatonic_major, minor, pentatonic_minor };
-unsigned int masterRoots[6] = { 0x0080, 0x1001, 0x0010, 0x0200, 0x4004, 0x0080};
+PROGMEM prog_uint16_t msg2guitar[2][6] = { crea, puto };
+PROGMEM prog_uint16_t masterScales[6][6] ={major, harmonic_minor, mel_min_asc, pentatonic_major, minor, pentatonic_minor };
+PROGMEM prog_uint16_t masterRoots[6] = { 0x0080, 0x1001, 0x0010, 0x0200, 0x4004, 0x0080};
 
 //There are 22 chord options total (major,...,maj9)
 PROGMEM  prog_uint16_t masterChords[6][12][2][6] = {
@@ -407,7 +407,7 @@ void updateLED(int counter, int sm2, int sm3){
   }else if( menu[ 0] == 1 && sm2 == 1){
     for( int x = 6; x > 0; x--){
       
-      tempLED[ 6-x] = (masterScales[ menu[1]][ x-1]);
+      tempLED[ 6-x] = pgm_read_word_near(&(masterScales[ menu[1]][ x-1]));
       if( counter < 4){
         tempLED[ 6-x]  = ((((tempLED[ 6-x]<< counter) & 0xF000) >> 12) | ((tempLED[ 6-x]<< counter) & 0xFFF0));
       }else if(counter < 8){
@@ -416,7 +416,7 @@ void updateLED(int counter, int sm2, int sm3){
         tempLED[ 6-x]  = ((((tempLED[ 6-x]<< (counter-8)) & 0xFFF0) >> 4) | ((tempLED[ 6-x]<< counter) & 0xFFF0));
       }
       
-      tempLED2[ 6-x] = (masterRoots[ x-1]);
+      tempLED2[ 6-x] = pgm_read_word_near(&(masterRoots[ x-1]));
       if( counter < 4){
         tempLED2[ 6-x]  = ((((tempLED2[ 6-x]<< counter) & 0xF000) >> 12) | ((tempLED2[ 6-x]<< counter) & 0xFFF0));
       }else if(counter < 8){
@@ -439,7 +439,7 @@ void updateLED(int counter, int sm2, int sm3){
   
   if( menu[ 0] == 4 ) {
     for( int x = 6; x > 0; x--){
-        tempLED[ 6-x] = (msg2guitar[ counter][ x-1]);
+        tempLED[ 6-x] = pgm_read_word_near(&(msg2guitar[ counter][ x-1]));
     }
   }
     

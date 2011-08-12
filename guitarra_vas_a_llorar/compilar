@@ -1,0 +1,1 @@
+scons ARDUINO_PORT=/dev/ttyACM0  ARDUINO_HOME=/home/josx/Escritorio/arduino-0022/ $1

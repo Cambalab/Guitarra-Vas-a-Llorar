@@ -13,11 +13,9 @@ Para compilar desde consola usamos arscons
 http://code.google.com/p/arscons/
 
 cd guitarra_vas_a_llorar
-scons ARDUINO_PORT=tu_puerto_usb_serial  ARDUINO_HOME=tu_instalacion_de_arduino 
+./compilar
+./compilar upload
 
-
-
-
-
-
+Para subir al arduino agregar upload.
+Arduino UNO specs: http://arduino.cc/en/Main/ArduinoBoardUno
 
