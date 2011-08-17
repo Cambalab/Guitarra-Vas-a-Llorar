@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <avr/pgmspace.h> // Write constants to Flash
 #include <ShiftLCD.h>
+#include <Flash.h>
 
 //#defines
 //---------CHORDS
@@ -243,58 +244,6 @@ PROGMEM  prog_uint16_t masterChords[6][12][2][6] = {
 #define _LANG_ _ES_
 #endif 
 
-// define the language specific strings
-#if (_LANG_ == _EN_)
-    char* mainMenuLCD[] = { "Chords", "Scales", "Song Builder", "Key Signature", "Messages", "Songs"};
-    char* chordSM1LCD[] =  { "Major", "Minor", "Major 7", "Minor 7", "Major 9", "Minor 9"};
-    char* scaleSM1LCD[] =  { "Major", "Harmoic Minor", "Mel. Min. (Asc)", "Pentatonic Major", "Minor", "Pentatonic Minor"};
-//    char* songmakerSM1LCD[] = { "# of Chords: 2?", "# of Chords: 3?","# of Chords: 4?", "# of Chords: 5?", "# of Chords: 6?", "# of Chords: 7?", "# of Chords: 8?", "# of Chords: 9?", "# of Chords: 10?", "# of Chords: 11?", "# of Chords: 12?", "# of Chords: 13?", "# of Chords: 14?", "# of Chords: 15?", "# of Chords: 16?", "# of Chords: 17?", "# of Chords: 18?", "# of Chords: 19?", "# of Chords: 20?"};
-//char* capoSM1LCD[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
-    char* positionSM3LCD[] = {"Variation 1", "Variation 2"};
-    char* keysigSM1LCD[] = { "Alphabetic" , "Solmization"};
-#endif
-
-#if (_LANG_ == _ES_)
-    char* mainMenuLCD[] = { "Acordes", "Escalas", "Crear Canciones", "Cifrado", "Mensajes", "Canciones"};
-    char* chordSM1LCD[] = { "Mayor", "Menor", "Mayor 7", "Menor 7", "Mayor 9", "Menor 9"};
-    char* scaleSM1LCD[] = { "Mayor", "Armonica menor", "Melodica Menor", "Pentatonica May", "Menor", "Pentatonica Men"};
-//    char* songmakerSM1LCD[] = { "# de acorde: 2?", "# de acorde: 3?","# de acorde: 4?", "# de acorde: 5?", "# de acorde: 6?", "# de acorde: 7?", "# de acorde: 8?", "# de acorde: 9?", "# de acorde: 10?", "# de acorde: 11?", "# de acorde: 12?", "# de acorde: 13?", "# de acorde: 14?", "# de acorde: 15?", "# de acorde: 16?", "# de acorde: 17?", "# de acorde: 18?", "# de acorde: 19?", "# de acorde: 20?"};
-//char* capoSM1LCD[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
-    char* positionSM3LCD[] = {"Variacion 1", "Variacion 2"};                       
-    char* keysigSM1LCD[] = { "Americano" , "Tradicional"};
-#endif 
-
-
-char *notesSM2LCDAlf[6][12] = {
-{ "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb","G", "G#/Ab", "A", "A#/Bb", "B"},
-{ "Cm", "C#m/Dbm", "Dm", "D#m/Ebm", "Em", "Fm", "F#m/Gbm","Gm", "G#m/Abm", "Am", "A#m/Bbm", "Bm"},
-{ "C7", "C#7/Db7", "D7", "D#7/Eb7", "E7", "F7", "F#7/Gb7","G7", "G#7/Ab7", "A7", "A#7/Bb7", "B7"},
-{ "Cm7", "C#m7/Dbm7", "Dm7", "D#m7/Ebm7", "Em7", "Fm7", "F#m7/Gbm7","Gm7", "G#m7/Abm7", "Am7", "A#m7/Bbm7", "Bm7"},
-{ "C9", "C#9/Db9", "D9", "D#9/Eb9", "E9", "F9", "F#9/Gb9","G9", "G#9/Ab9", "A9", "A#9/Bb9", "B9"},
-{ "Cm9", "C#m9/Dbm9", "Dm9", "D#m9/Ebm9", "Em9", "Fm9", "F#m9/Gbm9","Gm9", "G#m9/Abm9", "Am9", "A#m9/Bbm9", "Bm9"}
-};
-
-char *notesSM2LCDSol[6][12] = {
-{ "Do", "Do#/Reb", "Re", "Re#/Mib", "Mi", "Fa", "Fa#/Solb","Sol", "Sol#/Lab", "La", "La#/Sib", "Si"},
-{ "Dom", "Do#m/Rebm", "Rem", "Re#m/Mibm", "Mim", "Fam", "Fa#m/Solbm","Solm", "Sol#m/Labm", "Lam", "La#m/Sibm", "Sim"},
-{ "Do7", "Do#7/Reb7", "Re7", "Re#7/Mib7", "Mi7", "Fa7", "Fa#7/Solb7","Sol7", "Sol#7/Lab7", "La7", "La#7/Sib7", "Si7"},
-{ "Dom7", "Do#m7/Rebm7", "Rem7", "Re#m7/Mibm7", "Mim7", "Fam7", "Fa#m7/Solbm7","Solm7", "Sol#m7/Labm7", "Lam7", "La#m7/Sibm7", "Sim7"},
-{ "Do9", "Do#9/Reb9", "Re9", "Re#9/Mib9", "Mi9", "Fa9", "Fa#9/Solb9","Sol9", "Sol#9/Lab9", "La9", "La#9/Sib9", "Si9"},
-{ "Dom9", "Do#m9/Rebm9", "Rem9", "Re#m9/Mibm9", "Mim9", "Fam9", "Fa#m9/Solbm9","Solm9", "Sol#m9/Labm9", "Lam9", "La#m9/Sibm9", "Sim9"}
-};
-
-char *notesSM2LCD[6][12] = {
-{ "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb","G", "G#/Ab", "A", "A#/Bb", "B"},
-{ "Cm", "C#m/Dbm", "Dm", "D#m/Ebm", "Em", "Fm", "F#m/Gbm","Gm", "G#m/Abm", "Am", "A#m/Bbm", "Bm"},
-{ "C7", "C#7/Db7", "D7", "D#7/Eb7", "E7", "F7", "F#7/Gb7","G7", "G#7/Ab7", "A7", "A#7/Bb7", "B7"},
-{ "Cm7", "C#m7/Dbm7", "Dm7", "D#m7/Ebm7", "Em7", "Fm7", "F#m7/Gbm7","Gm7", "G#m7/Abm7", "Am7", "A#m7/Bbm7", "Bm7"},
-{ "C9", "C#9/Db9", "D9", "D#9/Eb9", "E9", "F9", "F#9/Gb9","G9", "G#9/Ab9", "A9", "A#9/Bb9", "B9"},
-{ "Cm9", "C#m9/Dbm9", "Dm9", "D#m9/Ebm9", "Em9", "Fm9", "F#m9/Gbm9","Gm9", "G#m9/Abm9", "Am9", "A#m9/Bbm9", "Bm9"}
-};
-
-
-char* moreSM1LCD[] = { "Crea", "Puto" };
-
 //constants
 const int mainMenuSize = 5;
 const int chordSM1Size = 5;
@@ -339,6 +288,8 @@ char* songMakerChord[ 8];
 char* songMakerNote[ 8];
 unsigned int songMakerLED[8][6];
 
+int keysig = 0; // 0 americano 1 tradicional
+
 //Initialize LCD
 ShiftLCD lcd( LCDSerial, LCDrclk, LCDsrclk);
 
@@ -371,20 +322,19 @@ void LEDMatrix(){
 }
 
 
-void updateLCD( char* text1LCD, char* text2LCD){
+void updateLCD( _FLASH_STRING text1LCD, _FLASH_STRING text2LCD){
   lcd.clear();
   lcd.setCursor( 0, 0);
-  lcd.print( text1LCD);
+  text1LCD.print(lcd);
   lcd.setCursor( 0, 1);
-  lcd.print( text2LCD);
+  text2LCD.print(lcd);
 }
 
 
-void updateLCD( int counter, char** textLCD){
-  char* tempText = textLCD[ counter];
+void updateLCD( int counter, _FLASH_STRING_ARRAY textLCD){
   lcd.clear();
   lcd.setCursor( 0, 0);
-  lcd.print( tempText);
+  textLCD[counter].print(lcd);
 }
 
 void updateLED(int counter, int sm2, int sm3){
@@ -446,7 +396,7 @@ void updateLED(int counter, int sm2, int sm3){
   LEDMatrix();
 }
 
-int getInput( int limit, char** textLCD, int sm2, int sm3){
+int getInput( int limit, _FLASH_STRING_ARRAY textLCD, int sm2, int sm3){
   
   int buttonCounter = 0;
   byte exitFlag = 0;
@@ -617,21 +567,85 @@ void getMenu(){
   
   //updateLCD("..::Crear::..","Guitarduino v1.0");
 
+#if (_LANG_ == _EN_)
+    char* mainMenuLCD[] = { "Chords", "Scales", "Song Builder", "Key Signature", "Messages", "Songs"};
+    char* chordSM1LCD[] =  { "Major", "Minor", "Major 7", "Minor 7", "Major 9", "Minor 9"};
+    char* scaleSM1LCD[] =  { "Major", "Harmoic Minor", "Mel. Min. (Asc)", "Pentatonic Major", "Minor", "Pentatonic Minor"};
+//    char* songmakerSM1LCD[] = { "# of Chords: 2?", "# of Chords: 3?","# of Chords: 4?", "# of Chords: 5?", "# of Chords: 6?", "# of Chords: 7?", "# of Chords: 8?", "# of Chords: 9?", "# of Chords: 10?", "# of Chords: 11?", "# of Chords: 12?", "# of Chords: 13?", "# of Chords: 14?", "# of Chords: 15?", "# of Chords: 16?", "# of Chords: 17?", "# of Chords: 18?", "# of Chords: 19?", "# of Chords: 20?"};
+//char* capoSM1LCD[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
+    char* positionSM3LCD[] = {"Variation 1", "Variation 2"};
+    char* keysigSM1LCD[] = { "Alphabetic" , "Solmization"};
+#endif
+
+#if (_LANG_ == _ES_)
+    FLASH_STRING_ARRAY( mainMenuLCD, PSTR("Acordes"), PSTR( "Escalas"),  PSTR("Crear Canciones"),  PSTR("Cifrado"),  PSTR("Mensajes"),  PSTR("Canciones"));
+    
+    FLASH_STRING_ARRAY(chordSM1LCD,  PSTR("Mayor"),  PSTR("Menor"),  PSTR("Mayor 7"),  PSTR("Menor 7"),  PSTR("Mayor 9"),  PSTR("Menor 9"));
+    
+    FLASH_STRING_ARRAY(scaleSM1LCD,  PSTR("Mayor"),  PSTR("Armonica menor"),  PSTR("Melodica Menor"),  PSTR("Pentatonica May"),  PSTR("Menor"),  PSTR("Pentatonica Men"));
+    
+//    FLASH_STRING_ARRAY( songmakerSM1LCD, PSTR("# de acorde: 2?"),  PSTR("# de acorde: 3?"), PSTR("# de acorde: 4?"), PSTR("# de acorde: 5?"), PSTR("# de acorde: 6?"), PSTR("# de acorde: 7?"), PSTR("# de acorde: 8?"), PSTR("# de acorde: 9?"), PSTR("# de acorde: 10?"), PSTR("# de acorde: 11?"), PSTR("# de acorde: 12?"), PSTR("# de acorde: 13?"), PSTR("# de acorde: 14?"), PSTR("# de acorde: 15?"), PSTR("# de acorde: 16?)", PSTR("# de acorde: 17?"), PSTR("# de acorde: 18?"), PSTR("# de acorde: 19?"), PSTR("# de acorde: 20?"));
+//char* capoSM1LCD[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
+    
+    FLASH_STRING_ARRAY(positionSM3LCD,  PSTR("Variacion 1"),  PSTR("Variacion 2"));
+    
+    FLASH_STRING_ARRAY(keysigSM1LCD ,  PSTR("Americano") ,  PSTR("Tradicional"));
+#endif
+
+//char *notesSM2LCD[6][12] = {
+
+FLASH_STRING_ARRAY(notesSM2LCD1, PSTR("C"), PSTR("C#/Db"), PSTR("D"), PSTR("D#/Eb"), PSTR("E"), PSTR("F"), PSTR("F#/Gb"),PSTR("G"), PSTR("G#/Ab"), PSTR("A"), PSTR("A#/Bb"), PSTR("B"));
+
+FLASH_STRING_ARRAY(notesSM2LCD2, PSTR("Cm"),  PSTR("C#m/Dbm"),  PSTR("Dm"),  PSTR("D#m/Ebm"),  PSTR("Em"),  PSTR("Fm"),  PSTR("F#m/Gbm"), PSTR("Gm"),  PSTR("G#m/Abm"),  PSTR("Am"),  PSTR("A#m/Bbm"),  PSTR("Bm"));
+
+FLASH_STRING_ARRAY(notesSM2LCD3, PSTR("C7"),  PSTR("C#7/Db7"),  PSTR("D7"),  PSTR("D#7/Eb7"),  PSTR("E7"),  PSTR("F7"),  PSTR("F#7/Gb7"), PSTR("G7"),  PSTR("G#7/Ab7"),  PSTR("A7"),  PSTR("A#7/Bb7"),  PSTR("B7"));
+
+FLASH_STRING_ARRAY(notesSM2LCD4, PSTR("Cm7"),  PSTR("C#m7/Dbm7"),  PSTR("Dm7"),  PSTR("D#m7/Ebm7"),  PSTR("Em7"),  PSTR("Fm7"),  PSTR("F#m7/Gbm7"), PSTR("Gm7"),  PSTR("G#m7/Abm7"),  PSTR("Am7"),  PSTR("A#m7/Bbm7"),  PSTR("Bm7"));
+
+FLASH_STRING_ARRAY(notesSM2LCD5, PSTR("C9"),  PSTR("C#9/Db9"),  PSTR("D9"),  PSTR("D#9/Eb9"),  PSTR("E9"),  PSTR("F9"),  PSTR("F#9/Gb9"), PSTR("G9"),  PSTR("G#9/Ab9"),  PSTR("A9"),  PSTR("A#9/Bb9"),  PSTR("B9"));
+
+FLASH_STRING_ARRAY(notesSM2LCD6, PSTR("Cm9"),  PSTR("C#m9/Dbm9"),  PSTR("Dm9"),  PSTR("D#m9/Ebm9"),  PSTR("Em9"),  PSTR("Fm9"),  PSTR("F#m9/Gbm9"), PSTR("Gm9"),  PSTR("G#m9/Abm9"),  PSTR("Am9"),  PSTR("A#m9/Bbm9"),  PSTR("Bm9"));
+
+//char *notesSM2LCDSol[6][12] = {
+FLASH_STRING_ARRAY(notesSM2LCD1t, PSTR("Do"), PSTR("Do#/Reb"), PSTR("Re"), PSTR("Re#/Mib"), PSTR("Mi"), PSTR("Fa"), PSTR("Fa#/Solb"),PSTR("Sol"), PSTR("Sol#/Lab"), PSTR("La"), PSTR("La#/Sib"), PSTR("Si"));
+
+FLASH_STRING_ARRAY(notesSM2LCD2t, PSTR( "Dom"), PSTR("Do#m/Rebm"), PSTR("Rem"), PSTR("Re#m/Mibm"), PSTR("Mim"), PSTR("Fam"), PSTR("Fa#m/Solbm"),PSTR("Solm"), PSTR("Sol#m/Labm"), PSTR("Lam"), PSTR("La#m/Sibm"), PSTR("Sim"));
+
+FLASH_STRING_ARRAY(notesSM2LCD3t, PSTR("Do7"), PSTR("Do#7/Reb7"), PSTR("Re7"), PSTR("Re#7/Mib7"), PSTR("Mi7"), PSTR("Fa7"), PSTR("Fa#7/Solb7"),PSTR("Sol7"), PSTR("Sol#7/Lab7"), PSTR("La7"), PSTR("La#7/Sib7"), PSTR("Si7"));
+
+FLASH_STRING_ARRAY(notesSM2LCD4t, PSTR("Dom7"), PSTR("Do#m7/Rebm7"), PSTR("Rem7"), PSTR("Re#m7/Mibm7"), PSTR("Mim7"), PSTR("Fam7"), PSTR("Fa#m7/Solbm7"),PSTR("Solm7"), PSTR("Sol#m7/Labm7"), PSTR("Lam7"), PSTR("La#m7/Sibm7"), PSTR("Sim7"));
+
+FLASH_STRING_ARRAY(notesSM2LCD5t, PSTR("Do9"), PSTR("Do#9/Reb9"), PSTR("Re9"), PSTR("Re#9/Mib9"), PSTR("Mi9"), PSTR("Fa9"), PSTR("Fa#9/Solb9"),PSTR("Sol9"), PSTR("Sol#9/Lab9"), PSTR("La9"), PSTR("La#9/Sib9"), PSTR("Si9"));
+
+FLASH_STRING_ARRAY(notesSM2LCD6t, PSTR("Dom9"), PSTR("Do#m9/Rebm9"), PSTR("Rem9"), PSTR("Re#m9/Mibm9"), PSTR("Mim9"), PSTR("Fam9"), PSTR("Fa#m9/Solbm9"),PSTR("Solm9"), PSTR("Sol#m9/Labm9"), PSTR("Lam9"), PSTR("La#m9/Sibm9"), PSTR("Sim9"));
+
+FLASH_STRING_ARRAY(moreSM1LCD, PSTR("Crea"), PSTR("Puto"));
+
   menu[ 0] = getInput( mainMenuSize, mainMenuLCD, 0, 0);
   
   //Main menu determines the submenus to follow
-  switch ( menu[0]){
     //menu[ 0] =  0, CHORDS
+switch ( menu[0]) {
     case 0:
+      
       menu[ 1] = getInput( chordSM1Size, chordSM1LCD, 0, 0);
-      menu[ 2] = getInput( SM2Size, notesSM2LCD[menu[1]] , 1, 0);
+      
+      switch(menu[1]) { //Horrible pero con esta libreria no se puede array de array de strings
+        case 0: menu[ 2] = getInput( SM2Size, ((keysig==0)?notesSM2LCD1:notesSM2LCD1t), 1, 0); break;
+        case 1: menu[ 2] = getInput( SM2Size, ((keysig==0)?notesSM2LCD2:notesSM2LCD2t), 1, 0); break;      
+        case 2: menu[ 2] = getInput( SM2Size, ((keysig==0)?notesSM2LCD3:notesSM2LCD3t), 1, 0); break;        
+        case 3: menu[ 2] = getInput( SM2Size, ((keysig==0)?notesSM2LCD4:notesSM2LCD4t), 1, 0); break;        
+        case 4: menu[ 2] = getInput( SM2Size, ((keysig==0)?notesSM2LCD5:notesSM2LCD5t), 1, 0); break;
+        case 5: menu[ 2] = getInput( SM2Size, ((keysig==0)?notesSM2LCD6:notesSM2LCD6t), 1, 0); break;
+        default: menu[ 2] = getInput( SM2Size, ((keysig==0)?notesSM2LCD1:notesSM2LCD1t), 1, 0); break;
+      }
       menu[ 3] = getInput( chordSM3Size, positionSM3LCD, 0, 1);
       break;
     
     //menu[ 0] =  1, SCALES
     case 1:
       menu[ 1] = getInput( scaleSM1Size, scaleSM1LCD, 0, 0);
-      menu[ 2] = getInput( SM2Size, notesSM2LCD[0], 1, 0);
+      menu[ 2] = getInput( SM2Size, ((keysig==0)?notesSM2LCD1:notesSM2LCD1t), 1, 0);
       break;
       
     //menu[ 0] =  2, CAPO
@@ -648,9 +662,9 @@ void getMenu(){
 // conf
     case 3:
       if ( getInput(keysigSM1Size, keysigSM1LCD, 0, 0) == 0  ) {
-        cambio_de_str(notesSM2LCD, notesSM2LCDAlf, SM2Size);
+        keysig = 0;
       } else {
-        cambio_de_str(notesSM2LCD, notesSM2LCDSol, SM2Size);
+        keysig = 1;
       }
       break;
 
