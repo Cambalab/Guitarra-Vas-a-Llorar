@@ -159,10 +159,11 @@ public class GDPPlugin extends TGPluginAdapter implements TGPluginSetup, TGExter
 			if (serial != null && muestro == true ) {
 				//int pos=0;
 				this.serial.writeData('N'); //N ascii char
-				for (int l : ledArray) {
+				//for (int l : ledArray) {
+				for(int i = (ledArray.length-1); i>=0; i--) {	
 					//System.out.println((++pos) + ": " +  l);
-					this.serial.writeData((l>>8)); // highbyte
-					this.serial.writeData((l & 0xff)); //lowbyte
+					this.serial.writeData((ledArray[i]>>8)); // highbyte
+					this.serial.writeData((ledArray[i] & 0xff)); //lowbyte
 				}
 				//this.serial.writeData(GDPSerialCommunicator.NEW_LINE_ASCII);
 				this.serial.flush();

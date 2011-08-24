@@ -20,7 +20,8 @@ cd guitarra_vas_a_llorar
 ./compilar upload
 
 Ojo en el compilar esta hardcoded mi path de la ide de arduino
-
 Para subir al arduino agregar upload.
+
 Arduino UNO specs: http://arduino.cc/en/Main/ArduinoBoardUno
+
 
