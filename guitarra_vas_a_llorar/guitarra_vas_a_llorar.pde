@@ -519,7 +519,7 @@ void songMaker( int numOfChords){
     */
 }
 
-
+/*
 void cambio_de_str(char *(*s)[12], char *(*t)[12], int nlines) {
      int i,j = 0;
      for(i=0;i<6;i++) {
@@ -528,12 +528,12 @@ void cambio_de_str(char *(*s)[12], char *(*t)[12], int nlines) {
          }
      }
 }
-
+*/
 
 
 
 void readSongNotes() {
-    int n=0, x=0 , t=0;
+/*    int n=0, x=0 , t=0;
     
     // Usamos los 96 caracteres luego del 32 dec para mostrar (33 a 127)
     while(t != 32) { // leemos serial hasta barra espaciadora
@@ -548,14 +548,80 @@ void readSongNotes() {
             }
         }
       
-        if (Serial.available() > 0) {  
+        if (Serial.available() >= 13) {  
             // read the incoming byte:  
+            
             t = Serial.read();
             //Serial.println(t);
             delay(10);
         }
         LEDMatrix();
     }
+    */
+    int i=0;
+    unsigned int c1=0,c2=0,c3=0,c4=0,c5=0,c6=0,c7=0;
+    long start_time = millis();
+
+    while(c1 != 32) { 
+        tempLED[0] = c1;
+        tempLED[1] = c2;
+        tempLED[2] = c3;
+        tempLED[3] = c4;
+        tempLED[4] = c5;
+        tempLED[5] = c6;
+    
+        if(Serial.available()) {
+        //delay(100);
+            if( Serial.available() >= 13 ) {       // wait for 1byte header + 12 bytes 
+                if(Serial.read() == 'N') {
+                
+                c1 = Serial.read();
+                if(c1 == 32) break;
+                
+//                delay(20);
+                c1 = word(c1,Serial.read());
+//                delay(20);
+                c2 = Serial.read();
+//                delay(20);
+                c2 = word(c2,Serial.read());
+//                delay(20);
+                c3 = Serial.read();
+//                delay(20);
+                c3 = word(c3,Serial.read());
+//                delay(20);
+                c4 = Serial.read();
+//                delay(20);
+                c4 = word(c4,Serial.read());
+//                delay(20);
+                c5 = Serial.read();
+//                delay(20);
+                c5 = word(c5,Serial.read());
+//                delay(20);
+                c6 = Serial.read();
+//                delay(20);
+                c6 = word(c6,Serial.read());
+//                delay(20);
+                Serial.flush();
+                /*
+                Serial.println(c1);
+                Serial.println(c2);
+                Serial.println(c3);
+                Serial.println(c4);
+                Serial.println(c5);
+                Serial.println(c6);
+                Serial.println("-----");
+                Serial.println("OK");*/
+                } else {
+                 Serial.println("ERROR");
+                }
+            }
+        } else {
+/*            if( (millis() - start_time) > 10000 ) 
+                break;
+*/
+        }
+        LEDMatrix();
+    }        
 }
 
 
