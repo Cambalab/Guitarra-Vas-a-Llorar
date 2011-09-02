@@ -7,8 +7,15 @@ Names: Andrew Garza  (agarza6)
        Mamlook Jendo (mjendo2)
 Adviser: Robert Becker
 
-Fecha: 29/06/2011
+Fecha: 02/09/2011
 Nuevas modificaciones para Prueba y compilacion 
+Acordes: 7, m7, 9, m9
+Escalas: menor, armonica menor, pentatonica mayor, pentatonica menor
+Soporte idioma espanol
+Cambio de cifrado
+Interfaz serial 
+Otros mensaje
+RAM a Flash
 Adrian Pardini y Jose Luis Di Biase (elarteylatecnologia.com.ar)
 
 This program is free software: you can redistribute it and/or modify
@@ -293,31 +300,24 @@ int keysig = 0; // 0 americano 1 tradicional
 //Initialize LCD
 ShiftLCD lcd( LCDSerial, LCDrclk, LCDsrclk);
 
-
 void LEDMatrix(){
   digitalWrite( DCreset, HIGH);
   digitalWrite( DCreset, LOW);
-  
-  for( int y = 0; y < 6; y++){
+
+  for( int y = 5; y >= 0; y--){ 
+//  for( int y = 0; y < 6; y++){
     //send to LED Matrix
     digitalWrite( SIPOrclk, LOW);
     shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, highByte( tempLED[ y]));
     shiftOut( SIPOserial, SIPOsrclk, MSBFIRST,  lowByte( tempLED[ y]));
-//    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0xFF);
-//    shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0xFF);
     digitalWrite( SIPOrclk, HIGH);
-  
     delay(1);    
-
     digitalWrite( SIPOrclk, LOW);
     shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
     shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
     digitalWrite( SIPOrclk, HIGH);
- 
-    
     digitalWrite( DCclk, HIGH);
     digitalWrite( DCclk, LOW);
-  
   }
 }
 
@@ -402,53 +402,51 @@ int getInput( int limit, _FLASH_STRING_ARRAY textLCD, int sm2, int sm3){
   byte exitFlag = 0;
   updateLCD( buttonCounter, textLCD);
   
-  
-    while( exitFlag == 0){
-     updateLED( buttonCounter, sm2, sm3);
+  while( exitFlag == 0){
+    updateLED( buttonCounter, sm2, sm3);
     
     //buttonArray = {left, enter, right}
-      buttonArray[ 0] = digitalRead(left);
-      buttonArray[ 1] = digitalRead(enter);
-      buttonArray[ 2] = digitalRead(right);
-      
-      if( buttonArray[ 0] != prevButtonArray[ 0] && buttonArray[ 0] == LOW){
-          while(digitalRead(left) == LOW){
-             updateLED( buttonCounter, sm2, sm3);
-          }
-          if( buttonCounter == 0){
-            buttonCounter = limit;
-          }else{
-            buttonCounter--;
-          } 
-         updateLCD( buttonCounter, textLCD);
-         updateLED( buttonCounter, sm2, sm3);
-        
-         
-      }else if( buttonArray[ 1] != prevButtonArray[ 1] && buttonArray[ 1] == LOW){
-        while(digitalRead(enter) == LOW){
+    buttonArray[ 0] = digitalRead(left);
+    buttonArray[ 1] = digitalRead(enter);
+    buttonArray[ 2] = digitalRead(right);
+    
+    if( buttonArray[ 0] != prevButtonArray[ 0] && buttonArray[ 0] == LOW){
+        while(digitalRead(left) == LOW){
            updateLED( buttonCounter, sm2, sm3);
         }
-        exitFlag = 1;
-        updateLED( buttonCounter, sm2, sm3);
-        return buttonCounter;
-          
-      }else if( buttonArray[ 2] != prevButtonArray[ 2] && buttonArray[ 2] == LOW){
-          while(digitalRead(right) == LOW){
-             updateLED( buttonCounter, sm2, sm3);
-          }
-          if( buttonCounter == limit){
-            buttonCounter = 0;
-          }else{
-            buttonCounter++;
-          }
-          updateLCD( buttonCounter, textLCD);
-          updateLED( buttonCounter, sm2, sm3);
+        if( buttonCounter == 0){
+          buttonCounter = limit;
+        }else{
+          buttonCounter--;
+        } 
+       updateLCD( buttonCounter, textLCD);
+       updateLED( buttonCounter, sm2, sm3);
+      
+       
+    }else if( buttonArray[ 1] != prevButtonArray[ 1] && buttonArray[ 1] == LOW){
+      while(digitalRead(enter) == LOW){
+         updateLED( buttonCounter, sm2, sm3);
       }
-      
-      
-      prevButtonArray[ 0] = buttonArray[ 0];
-      prevButtonArray[ 1] = buttonArray[ 1];
-      prevButtonArray[ 2] = buttonArray[ 2];
+      exitFlag = 1;
+      updateLED( buttonCounter, sm2, sm3);
+      return buttonCounter;
+        
+    }else if( buttonArray[ 2] != prevButtonArray[ 2] && buttonArray[ 2] == LOW){
+        while(digitalRead(right) == LOW){
+           updateLED( buttonCounter, sm2, sm3);
+        }
+        if( buttonCounter == limit){
+          buttonCounter = 0;
+        }else{
+          buttonCounter++;
+        }
+        updateLCD( buttonCounter, textLCD);
+        updateLED( buttonCounter, sm2, sm3);
+    }
+    
+    prevButtonArray[ 0] = buttonArray[ 0];
+    prevButtonArray[ 1] = buttonArray[ 1];
+    prevButtonArray[ 2] = buttonArray[ 2];
    
   }
 }//close getInput
@@ -519,45 +517,7 @@ void songMaker( int numOfChords){
     */
 }
 
-/*
-void cambio_de_str(char *(*s)[12], char *(*t)[12], int nlines) {
-     int i,j = 0;
-     for(i=0;i<6;i++) {
-         for(j=0;j<12;j++) {
-            s[i][j] = t[i][j];
-         }
-     }
-}
-*/
-
-
-
 void readSongNotes() {
-/*    int n=0, x=0 , t=0;
-    
-    // Usamos los 96 caracteres luego del 32 dec para mostrar (33 a 127)
-    while(t != 32) { // leemos serial hasta barra espaciadora
-        n = t - 32;
-        for(x = 0; x < 6; x++) {
-            if((n <= ((x+1)*16)) && (n > (x*16))) {
-                tempLED[ x] = 1 << (n - (16*x) - 1);
-                //Serial.println((n-(16*x)));
-            } else {
-                tempLED[ x]= 0;
-                //Serial.println(0);
-            }
-        }
-      
-        if (Serial.available() >= 13) {  
-            // read the incoming byte:  
-            
-            t = Serial.read();
-            //Serial.println(t);
-            delay(10);
-        }
-        LEDMatrix();
-    }
-    */
     int i=0;
     unsigned int c1=0,c2=0,c3=0,c4=0,c5=0,c6=0,c7=0;
     long start_time = millis();
@@ -571,48 +531,24 @@ void readSongNotes() {
         tempLED[5] = c6;
     
         if(Serial.available()) {
-        //delay(100);
             if( Serial.available() >= 13 ) {       // wait for 1byte header + 12 bytes 
                 if(Serial.read() == 'N') {
-                
-                c1 = Serial.read();
-                if(c1 == 32) break;
-                
-//                delay(20);
-                c1 = word(c1,Serial.read());
-//                delay(20);
-                c2 = Serial.read();
-//                delay(20);
-                c2 = word(c2,Serial.read());
-//                delay(20);
-                c3 = Serial.read();
-//                delay(20);
-                c3 = word(c3,Serial.read());
-//                delay(20);
-                c4 = Serial.read();
-//                delay(20);
-                c4 = word(c4,Serial.read());
-//                delay(20);
-                c5 = Serial.read();
-//                delay(20);
-                c5 = word(c5,Serial.read());
-//                delay(20);
-                c6 = Serial.read();
-//                delay(20);
-                c6 = word(c6,Serial.read());
-//                delay(20);
-                Serial.flush();
-                /*
-                Serial.println(c1);
-                Serial.println(c2);
-                Serial.println(c3);
-                Serial.println(c4);
-                Serial.println(c5);
-                Serial.println(c6);
-                Serial.println("-----");
-                Serial.println("OK");*/
+                    c1 = Serial.read();
+                    if(c1 == 32) break;
+                    c1 = word(c1,Serial.read());
+                    c2 = Serial.read();
+                    c2 = word(c2,Serial.read());
+                    c3 = Serial.read();
+                    c3 = word(c3,Serial.read());
+                    c4 = Serial.read();
+                    c4 = word(c4,Serial.read());
+                    c5 = Serial.read();
+                    c5 = word(c5,Serial.read());
+                    c6 = Serial.read();
+                    c6 = word(c6,Serial.read());
+                    Serial.flush();
                 } else {
-                 Serial.println("ERROR");
+                    Serial.println("ERROR");
                 }
             }
         } else {
@@ -634,13 +570,18 @@ void getMenu(){
   //updateLCD("..::Crear::..","Guitarduino v1.0");
 
 #if (_LANG_ == _EN_)
-    char* mainMenuLCD[] = { "Chords", "Scales", "Song Builder", "Key Signature", "Messages", "Songs"};
-    char* chordSM1LCD[] =  { "Major", "Minor", "Major 7", "Minor 7", "Major 9", "Minor 9"};
-    char* scaleSM1LCD[] =  { "Major", "Harmoic Minor", "Mel. Min. (Asc)", "Pentatonic Major", "Minor", "Pentatonic Minor"};
-//    char* songmakerSM1LCD[] = { "# of Chords: 2?", "# of Chords: 3?","# of Chords: 4?", "# of Chords: 5?", "# of Chords: 6?", "# of Chords: 7?", "# of Chords: 8?", "# of Chords: 9?", "# of Chords: 10?", "# of Chords: 11?", "# of Chords: 12?", "# of Chords: 13?", "# of Chords: 14?", "# of Chords: 15?", "# of Chords: 16?", "# of Chords: 17?", "# of Chords: 18?", "# of Chords: 19?", "# of Chords: 20?"};
+    FLASH_STRING_ARRAY( mainMenuLCD, PSTR("Chords"), PSTR( "Scales"),  PSTR("Song Builder"),  PSTR("Key Signature"),  PSTR("Messages"),  PSTR("Songs"));
+    
+    FLASH_STRING_ARRAY(chordSM1LCD,  PSTR("Major"),  PSTR("Minor"),  PSTR("Major 7"),  PSTR("Minor 7"),  PSTR("Major 9"),  PSTR("Minor 9"));
+    
+    FLASH_STRING_ARRAY(scaleSM1LCD,  PSTR("Major"),  PSTR("Harmonic minor"),  PSTR("Melodic Minor"),  PSTR("Pentatonic Maj"),  PSTR("Minor"),  PSTR("Pentatonic Min"));
+    
+//    FLASH_STRING_ARRAY( songmakerSM1LCD, PSTR("# de acorde: 2?"),  PSTR("# de acorde: 3?"), PSTR("# de acorde: 4?"), PSTR("# de acorde: 5?"), PSTR("# de acorde: 6?"), PSTR("# de acorde: 7?"), PSTR("# de acorde: 8?"), PSTR("# de acorde: 9?"), PSTR("# de acorde: 10?"), PSTR("# de acorde: 11?"), PSTR("# de acorde: 12?"), PSTR("# de acorde: 13?"), PSTR("# de acorde: 14?"), PSTR("# de acorde: 15?"), PSTR("# de acorde: 16?)", PSTR("# de acorde: 17?"), PSTR("# de acorde: 18?"), PSTR("# de acorde: 19?"), PSTR("# de acorde: 20?"));
 //char* capoSM1LCD[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
-    char* positionSM3LCD[] = {"Variation 1", "Variation 2"};
-    char* keysigSM1LCD[] = { "Alphabetic" , "Solmization"};
+    
+    FLASH_STRING_ARRAY(positionSM3LCD,  PSTR("Variation 1"),  PSTR("Variation 2"));
+    
+    FLASH_STRING_ARRAY(keysigSM1LCD ,  PSTR("Alphabetic") ,  PSTR("Solmization"));
 #endif
 
 #if (_LANG_ == _ES_)
