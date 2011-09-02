@@ -1,0 +1,6 @@
+refdes	footprint	value	description	
+Q1	TO92_DGS	BST72A	MOSFET, n-channel	
+CONN1	HEADER6_1	XXX	connector, 2 col., 6pin	
+R11	trimmer_steh	XXX	trimmer, through hole	
+U1	DIP16	74HC595	8-Bit serial-in shift register	
+X11	JUMPER16	unknown	LCD-display connector for HD44780 and compatible display controllers	

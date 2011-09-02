@@ -1,0 +1,7 @@
+schematics shift_lcd1.sch
+output-name shift_lcd1
+skip-m4
+verbose
+elements-dir /home/pardo/geda/footprints
+use-files
+

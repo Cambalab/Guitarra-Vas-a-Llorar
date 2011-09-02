@@ -1,0 +1,54 @@
+v 20090328 2
+T 100 2600 5 8 0 0 0 0 1
+device=trimmer
+T 100 2400 5 8 0 0 0 0 1
+description=trimmer, through hole
+T 300 600 8 8 1 1 0 0 1
+footprint=trimmer_lang
+T 100 2200 5 8 0 0 0 0 1
+documentation=none
+T 100 2000 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 100 1800 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 100 1600 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 300 1000 8 10 1 1 0 0 1
+refdes=R?
+T 100 1400 5 8 0 0 0 0 1
+numslots=0
+T 300 800 8 10 1 1 0 0 1
+value=XXX
+P 100 800 100 700 1 0 0
+{
+T 150 950 5 8 0 1 0 0 1
+pinnumber=1
+T 150 950 5 8 0 1 0 0 1
+pinseq=1
+T 150 800 5 8 0 1 0 0 1
+pintype=pas
+}
+P 100 200 100 300 1 0 0
+{
+T 125 50 5 8 0 1 0 0 1
+pinnumber=3
+T 125 50 5 8 0 1 0 0 1
+pinseq=3
+T 225 100 5 8 0 1 0 0 1
+pintype=pas
+}
+B 0 300 200 400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 150 300 200 350 3 0 0 0 -1 -1
+P 400 500 300 500 1 0 0
+{
+T 300 400 5 8 0 1 0 0 1
+pintype=pas
+T 100 500 5 8 0 1 0 0 1
+pinnumber=2
+T 100 500 5 8 0 1 0 0 1
+pinseq=2
+}
+L 200 500 280 540 3 0 0 0 -1 -1
+L 200 500 280 460 3 0 0 0 -1 -1
+L 300 500 200 500 3 0 0 0 -1 -1
+L 280 540 280 460 3 0 0 0 -1 -1

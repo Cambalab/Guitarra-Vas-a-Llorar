@@ -1,0 +1,7 @@
+schematics interfaz_shiftreg.sch
+output-name interfaz_shiftreg
+skip-m4
+verbose
+elements-dir /home/pardo/geda/footprints
+use-files
+

@@ -1,0 +1,40 @@
+v 20080127 1
+T 200 2200 5 8 0 0 0 0 1
+description=power pins for 74** parts in 16 pin package
+T 200 2000 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 200 1800 5 8 0 0 0 0 1
+dist-license=GPL, see http://www.gnu.org/licenses/gpl.txt
+T 200 1600 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 200 1400 5 8 0 0 0 0 1
+numslots=0
+T 400 450 9 8 1 0 0 3 1
+74XX
+T 400 350 9 8 1 0 0 4 1
+16 pin
+T 500 900 8 10 1 1 0 1 1
+refdes=U?
+P 400 900 400 800 1 0 0
+{
+T 300 900 5 8 0 1 0 7 1
+pinseq=16
+T 300 900 5 8 1 1 0 7 1
+pinnumber=16
+T 400 1000 5 8 0 1 0 6 1
+pintype=pwr
+T 350 700 5 8 1 1 0 4 1
+pinlabel=Vcc
+}
+P 400 0 400 100 1 0 0
+{
+T 300 0 5 8 0 1 0 7 1
+pinseq=8
+T 300 0 5 8 1 1 0 7 1
+pinnumber=8
+T 700 0 5 8 0 1 0 6 1
+pintype=pwr
+T 425 200 5 8 1 1 0 4 1
+pinlabel=GND
+}
+B 100 100 600 700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1

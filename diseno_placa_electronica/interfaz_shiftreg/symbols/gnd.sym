@@ -1,0 +1,27 @@
+v 20110619 2
+P 100 200 100 300 1 0 1
+{
+T 200 100 5 8 0 1 0 0 1
+pinnumber=1
+T 200 100 5 8 0 1 0 0 1
+pinlabel=1
+T 158 261 5 8 0 1 0 0 1
+pintype=pwr
+}
+L 0 200 200 200 3 10 0 0 -1 -1
+L 55 150 145 150 3 10 0 0 -1 -1
+L 80 110 120 110 3 10 0 0 -1 -1
+T 100 600 5 8 0 0 0 0 1
+net=GND:1
+T 100 1200 5 8 0 0 0 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 100 1800 5 8 0 0 0 0 1
+description=ground symbol
+T 100 1000 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl.txt
+T 100 800 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 100 1400 5 8 0 0 0 0 1
+symversion=1.0
+T 100 1600 5 8 0 0 0 0 1
+footprint=none

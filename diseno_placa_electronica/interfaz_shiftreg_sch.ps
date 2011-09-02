@@ -1,0 +1,3744 @@
+%!PS-Adobe-3.0
+%%Creator: gEDA gschem 1.7.0-20110116-66-gfdd787a
+%%CreationDate: Fri Sep  2 11:05:33 2011
+%%Title: /home/pardo/proyectos/elarteylatecnologia/disenios_subir/interfaz_shiftreg/interfaz_shiftreg.sch
+%%Author: (null)
+%%BoundingBox: 0 0 595 841
+%%Orientation: Landscape
+%%Pages: 1
+%%Endcomments
+%%BeginProlog
+% Prolog for gEDA, define all the functions needed for rendering
+% schematics on Postscript devices
+
+
+% Draw a line from the second coordinate to the first
+% x2 y2 x1 y1 width line -
+/line {
+    setlinewidth
+    % pop off first element and moveto
+    moveto
+    % pop off remaining elements and draw a line segment
+    lineto
+    % draw it
+    stroke
+} bind def
+
+
+% Draw a dot
+% x y r dot -
+/dot {
+    0 360 arc fill
+} bind def
+
+% Draw a dot-dashed line, a bunch of lined segments,
+% if the array element only has length two, draw a dot.
+% [ [x2 y2 x1 y1] [x4 y4 x3 y3] [x5 y5] ... ] width dashed -
+/width 0 def
+/dashed {
+    dup 2.0 div /width exch def
+    setlinewidth
+    % pop off each line segment and draw it as a dot or as a line
+    {
+	aload length 2 gt
+	{ moveto lineto stroke}
+	{ width dot } ifelse
+    } forall
+} bind def
+
+% Draw an arc segment
+% x y r ang1 ang2 width darc -
+/darc {
+    setlinewidth
+    arc stroke
+} bind def
+
+% Draw a series of arc segment bits, if the array element only has a single
+% element in it, draw a dot.
+% [ [sa1 ea1] [sa2 ea2] ... ] x y r width dashedarc -
+/x 0 def
+/y 0 def
+/dashedarc {
+    dup /width exch def
+    setlinewidth
+    /r exch def  
+    /y exch def
+    /x exch def
+    { aload length 1 gt
+	{
+	    % this element had two angles in it
+	    % extract start and stop angles
+	    x y r   % drop x y and r onto stack
+		    % at this point we have: sa ea x y r
+		    % we need                      x y r sa ea
+		    % so..
+	    5 -2 roll
+	    % and add it to the current path, and draw it
+	    arc stroke
+	} {
+	    % this element only had one angle in it, place a
+	    % filled dot at the appropriate place
+	    % compute center point of the arc using the angle
+	    % that is on the top of the stack
+	    dup   		% angle angle
+	    cos r mul x add 	% angle x
+	    exch		% x angle
+	    sin r mul y add	% x y
+	    width		% x y width/2
+	    dot			% draw the dot
+	} ifelse
+    } forall
+
+    % Now draw it
+    stroke
+} bind def
+
+% Draw a box
+% width height x y linethickness box -
+/box {
+    setlinewidth
+    moveto
+    exch dup 0 rlineto	 % w h, h w w 0      -- Draw bottom line
+    exch 0 exch rlineto	 % h w, w h 0, w 0 h -- Draw right line 
+    neg 0 rlineto	 % w, -w 0           -- Draw Top line
+    closepath		 % finish and draw it
+    stroke
+} bind def			     
+
+% Draw a filled box
+% width height x y fbox -
+/fbox {
+    moveto
+    exch dup 0 rlineto	
+    exch 0 exch rlineto	
+    neg 0 rlineto		
+    closepath			
+    fill			
+} bind def
+
+% Font reincoding utilities
+
+% ISOLatin1Encoding, extended with remaining uncoded glyphs
+/ISOLatin1Extended [
+    /.notdef /Lslash /lslash /OE /oe /Scaron /scaron /Zcaron /zcaron
+    /Ydieresis /trademark /bullet /dagger /daggerdbl /ellipsis /emdash
+    /endash /fi /fl /florin /fraction /guilsinglleft /guilsinglright
+    /perthousand /quotedblbase /quotedblleft /quotedblright
+    /quotesinglbase /quotesingle /.notdef /.notdef /.notdef /space
+    /exclam /quotedbl /numbersign /dollar /percent /ampersand
+    /quoteright /parenleft /parenright /asterisk /plus /comma /minus
+    /period /slash /zero /one /two /three /four /five /six /seven /eight
+    /nine /colon /semicolon /less /equal /greater /question /at /A /B /C
+    /D /E /F /G /H /I /J /K /L /M /N /O /P /Q /R /S /T /U /V /W /X /Y /Z
+    /bracketleft /backslash /bracketright /asciicircum /underscore
+    /quoteleft /a /b /c /d /e /f /g /h /i /j /k /l /m /n /o /p /q /r /s
+    /t /u /v /w /x /y /z /braceleft /bar /braceright /asciitilde
+    /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+    /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+    /.notdef /.notdef /.notdef /dotlessi /grave /acute /circumflex
+    /tilde /macron /breve /dotaccent /dieresis /.notdef /ring /cedilla
+    /.notdef /hungarumlaut /ogonek /caron /space /exclamdown /cent
+    /sterling /currency /yen /brokenbar /section /dieresis /copyright
+    /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron
+    /degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph
+    /periodcentered /cedilla /onesuperior /ordmasculine /guillemotright
+    /onequarter /onehalf /threequarters /questiondown /Agrave /Aacute
+    /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla /Egrave /Eacute
+    /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis /Eth
+    /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply
+    /Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn
+    /germandbls /agrave /aacute /acircumflex /atilde /adieresis /aring
+    /ae /ccedilla /egrave /eacute /ecircumflex /edieresis /igrave
+    /iacute /icircumflex /idieresis /eth /ntilde /ograve /oacute
+    /ocircumflex /otilde /odieresis /divide /oslash /ugrave /uacute
+    /ucircumflex /udieresis /yacute /thorn /ydieresis
+] def
+
+% `new-font-name' `encoding-vector' `old-font-name' RE -
+/RE {
+    findfont
+    dup maxlength dict begin {
+        1 index /FID ne { def } { pop pop } ifelse
+    } forall
+    /Encoding exch def
+    dup /FontName exch def
+    currentdict end definefont pop
+} bind def
+
+% Text handling functions, select the font and scale it, then we need
+% only to apply the appropriate transformations to get the text
+% justified into the right spots.  The bad thing here is that we don't
+% do any kerning, so the output may look a bit strange.
+
+% compute the height of one character and return lly and ury
+% (char) charheight lly ury
+/charheight {
+    gsave			% push graphics state
+	newpath			% clear current path
+	0 0 moveto		% Set current point
+	false charpath		% get path
+	flattenpath		% flatten path
+	pathbbox		% stack = llx lly urx ury
+	exch pop		% stack = llx lly ury
+	3 -1 roll pop		% stack = lly ury
+    grestore			% pop graphics state
+} bind def
+
+% compute the height of a string, one character at a time
+% (string) stringheight lly ury
+/lly 0.0 def
+/ury 0.0 def
+
+/stringheight {
+    /lly 0.0 def			% initial value of heightmin
+    /ury 0.0 def			% initial value of heightmax
+    {				% work through string
+	( ) dup 0 4 -1 roll put	% create one character string
+	charheight		% measure it's height
+	dup ury gt {		% if ury gt heightmax
+	    /ury exch def	% update with new value
+	} {
+	    pop			% else discard ury
+	} ifelse
+	dup lly lt {		% if lly lt heightmin
+	    /lly exch def	% update with new value
+	} {
+	    pop			% else discard lly
+	} ifelse
+    } forall
+    lly ury			% Return the results
+} bind def
+
+% calculate the string width taking into account the escapes.
+/mystrx 0.0 def
+/mystry 0.0 def
+/mystresc false def
+
+/mystringwidth {
+    /mystrx 0.0 def
+    /mystry 0.0 def
+    /mystresc false def
+    {				% work through string
+	% did we process the escape character last?
+	mystresc {
+	    % last character was escape
+	    % handle the escape
+	    % is it an _ = 95?
+	    dup 95 eq {
+		pop  % we don't need the character anymore
+		% toggle drawing overbars
+		0.0 0.0 % make it like it never happened...
+	    } {
+		% otherwise measure the character 
+		(\\ ) dup 1 4 -1 roll put % count a \ and the character
+		stringwidth
+	    } ifelse
+	    % and reset the flag
+	    /mystresc false def
+	} {
+	    % last character was not escape
+	    % is this escape
+	    dup 92 eq {
+		% yes, escape character, set flag
+		/mystresc true def
+		pop % drop character
+		0.0 0.0 % make like this character has no width and height
+	    } {
+		( ) dup 0 4 -1 roll put	% create one character string
+		stringwidth		% measure it's height/width
+	    } ifelse
+	} ifelse
+	% accumulate x and y movements
+	mystry add /mystry exch def
+	mystrx add /mystrx exch def
+    } forall
+    mystrx mystry % drop results on stack
+} bind def
+
+% Render a string with overbars
+%
+/escaped false def
+/drawoverbar false def
+/fontsize 0.0 def
+
+%string1 string2 append -
+/append {
+    2 copy length exch length add % find new length
+    string dup % string1 string2 string string
+    4 2 roll % string string string1 string2
+    2 index 0 3 index
+    % string string string1 string2 string 0 string1
+    putinterval % string string string1 string2
+    exch length exch putinterval
+} bind def
+
+% If drawoverbar is set, draw a line of the same length as the given string
+% string overbarshowline -
+/overbarshowline {
+    % print overbar if necessary
+    stringwidth pop 0
+    drawoverbar {
+        rlineto
+        gsave stroke grestore
+    } {
+        rmoveto
+    } ifelse
+} bind def
+
+% Draws overbars for the given string, then shows the string itself
+% string overbarshow
+/overbarshow {
+    /overbarshowacc () def
+    /overbarshowtxt () def
+
+    gsave
+    fontsize 10.0 div setlinewidth
+    0 fontsize rmoveto  % move to (0,overbarheight)
+
+    {				% work through string
+	escaped {
+	    % the last character was the escape
+	    % handle the escape
+	    % is it an _ = 95?
+	    dup 95 eq {
+		pop  % we don't need the character anymore
+                overbarshowacc overbarshowline
+                % toggle drawing overbars
+		/drawoverbar drawoverbar not def
+
+                % Append the contents off the accumulator to the text
+                % string we're eventually going to show
+                /overbarshowtxt overbarshowtxt overbarshowacc append def
+
+                % clear accumulator
+                /overbarshowacc () def
+	    } {
+                % add to accumulator
+                (\\ ) dup 1 4 -1 roll put
+                overbarshowacc exch append
+                /overbarshowacc exch def
+	    } ifelse
+	    % and reset the flag
+	    /escaped false def
+	} {
+	    % check for escape character \ = 92
+	    dup 92 eq {
+		% yes, escape character, set flag
+		/escaped true def
+		pop % drop character
+	    } {
+                % add to accumulator
+                ( ) dup 0 4 -1 roll put
+                overbarshowacc exch append
+                /overbarshowacc exch def
+	    } ifelse
+	} ifelse
+    } forall
+    % Catch any leftovers
+    overbarshowacc overbarshowline
+    overbarshowtxt overbarshowacc append
+
+    grestore
+    show
+} bind def
+
+% 
+% hcenter rjustify vcenter vjustify spacing [(line1) (line2) ... ] rot x y size text -
+/stringw 0.0 def
+/stringh 0.0 def
+/spacing 0.0 def
+/strings [ ] def
+/stringtxt ( ) def
+/stringcount 0 def
+/rot 0.0 def
+
+/text {
+    gsave	        % save state for later
+    /drawoverbar false def      % start by not drawing overbars
+
+    dup /fontsize exch def  % save font size for corrections later
+    % do font selection 
+    /gEDAFont findfont
+    exch scalefont
+    setfont
+
+    % set up coordinates
+    translate           % move origin to given point
+    rotate		% rotate so that text is drawn
+    0 0 moveto
+    dup length /stringcount exch def			% Get number of strings
+    /strings exch def     				% save strings
+    /spacing exch def
+    % do we have more than 1 string to render?
+    stringcount 1 eq {
+	/stringtxt strings aload pop def		% get the string 
+	/stringw stringtxt mystringwidth pop neg def	% get the -width
+	/stringh stringtxt stringheight exch pop neg def% get the -height
+
+	% First do vertical calculations
+	% hcenter rjustify vcenter vjustify 
+	% vertical justification
+	{ 0 stringh rmoveto } if 
+	% vertical center
+	{ 0 stringh 0.3571425 mul rmoveto } if  % not 0.5, so that
+						% it looks nicer
+	% Then do horizontal calculations
+	% right justify
+	{ stringw 0 rmoveto } if
+	% center
+	{ stringw 2.0 div 0 rmoveto } if
+	% Draw the text
+	stringtxt overbarshow
+    } {
+	% More than one line, compute bounding box for the text
+
+	% vertical height, don't use the actual hieght of the characters
+	% assume that the user wants to make the baselines line up with two
+	% text boxes placed side by side
+	/stringh stringcount spacing mul neg def
+	% Now figure out horizontal size, this amounts to keeping track
+	% of the longest string
+	/stringw 0.0 def
+	strings {
+	    mystringwidth pop
+	    dup stringw gt {
+		/stringw exch def
+	    } {
+		pop
+	    } ifelse
+	} forall
+	/stringw stringw neg def 	% get the -width
+	
+	% First do vertical calculations
+	% hcenter rjustify vcenter vjustify 
+	% vertical justification
+	{ 0 stringh fontsize add rmoveto } if 
+	% vertical center
+	{ 0 stringh 0.5 mul rmoveto } if 
+	% Then do horizontal calculations
+	% right justify
+	{ stringw 0 rmoveto } if
+	% center
+	{ stringw 2.0 div 0 rmoveto } if
+	% now move up to the first line and begin rendering
+	0 stringcount 1 sub spacing mul rmoveto
+	strings {
+	    gsave		% Save starting point
+	    overbarshow		% render the text
+	    grestore
+	    0 spacing neg rmoveto
+	} forall
+    } ifelse
+    grestore 	% Restore old state
+} bind def
+
+
+%%EndProlog
+%%Page: 1 1
+/gEDAFont ISOLatin1Extended /Helvetica RE
+2 setlinecap
+0.072000 0.072000 scale
+0.000 0.000 0.000 setrgbcolor
+8269 11689 0 0 fbox
+7893 1840 translate 90 rotate
+0.328070 0.328070 scale
+-33588 -28800 translate
+gsave
+0.745 0.745 0.745 setrgbcolor
+50500 29500 56700 29500 10 line
+56700 30600 56700 29500 10 line
+57650 29150 57550 28900 10 line
+56700 29250 58000 29250 10 line
+56700 29900 58000 29900 10 line
+50500 28800 58000 28800 10 line
+58000 28800 58000 30600 10 line
+58000 30600 50500 30600 10 line
+50500 30600 50500 28800 10 line
+gsave
+false false false false 161.777776 [(TITLE) ] 0 50600 29600 144.444443 text
+grestore
+gsave
+false false false false 161.777776 [(FILE:) ] 0 50600 28900 144.444443 text
+grestore
+gsave
+false false false false 161.777776 [(REV.:) ] 0 56800 30000 144.444443 text
+grestore
+gsave
+false false false false 161.777776 [(PAGE:) ] 0 56800 28900 144.444443 text
+grestore
+gsave
+false false false false 161.777776 [(DATE:) ] 0 56800 29350 144.444443 text
+grestore
+gsave
+false false false false 161.777776 [(DRAWN BY: ) ] 0 55100 28900 144.444443 text
+grestore
+56700 29500 56700 28800 10 line
+55000 29500 55000 28800 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 606.666689 [(interfaz_shiftreg) ] 0 53800 30100 541.666687 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 323.555552 [(interfaz_shiftreg.sch) ] 0 52900 29100 288.888885 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 323.555552 [(0.1) ] 0 57350 30300 288.888885 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 323.555552 [(1) ] 0 57550 28900 288.888885 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 323.555552 [(1) ] 0 57700 28900 288.888885 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 242.666672 [(05.08.11) ] 0 57350 29650 216.666672 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 323.555552 [(A. Pardini) ] 0 55950 29250 288.888885 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+43100 47400 42800 47400 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(15) ] 0 42900 47450 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q0) ] 0 42750 47400 144.444443 text
+grestore
+43100 47100 42800 47100 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(1) ] 0 42900 47150 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q1) ] 0 42750 47100 144.444443 text
+grestore
+43100 46800 42800 46800 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(2) ] 0 42900 46850 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q2) ] 0 42750 46800 144.444443 text
+grestore
+43100 46500 42800 46500 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(3) ] 0 42900 46550 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q3) ] 0 42750 46500 144.444443 text
+grestore
+43100 46200 42800 46200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(4) ] 0 42900 46250 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q4) ] 0 42750 46200 144.444443 text
+grestore
+43100 45900 42800 45900 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(5) ] 0 42900 45950 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q5) ] 0 42750 45900 144.444443 text
+grestore
+43100 45600 42800 45600 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(6) ] 0 42900 45650 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q6) ] 0 42750 45600 144.444443 text
+grestore
+43100 45300 42800 45300 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(7) ] 0 42900 45350 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q7) ] 0 42750 45300 144.444443 text
+grestore
+40900 47400 41200 47400 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(14) ] 0 41100 47450 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(DS) ] 0 41250 47400 144.444443 text
+grestore
+40900 47100 41200 47100 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(11) ] 0 41100 47150 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(SH_CP) ] 0 41325 47100 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+41300 47100 41200 47175 10 line
+41300 47100 41200 47025 10 line
+1.000 1.000 1.000 setrgbcolor
+40900 46800 41200 46800 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(12) ] 0 41100 46850 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(ST_CP) ] 0 41325 46800 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+41300 46800 41200 46875 10 line
+41300 46800 41200 46725 10 line
+1.000 1.000 1.000 setrgbcolor
+40900 46200 41200 46200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(10) ] 0 41100 46250 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(\\_MR\\_) ] 0 41250 46200 144.444443 text
+grestore
+40900 45900 41200 45900 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(13) ] 0 41100 45950 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(\\_OE\\_) ] 0 41250 45900 144.444443 text
+grestore
+40900 45300 41200 45300 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(9) ] 0 41100 45350 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(Q7') ] 0 41250 45300 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+41200 45000 42800 45000 10 line
+42800 45000 42800 47700 10 line
+42800 47700 41200 47700 10 line
+41200 47700 41200 45000 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(U1) ] 0 42800 47800 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(74HC595) ] 0 41200 47800 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 45300 44400 45300 10 line
+43700 45300 44000 45300 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 45200 44400 45200 10 line
+44400 45200 44400 45400 10 line
+44400 45400 44000 45400 10 line
+44000 45400 44000 45200 10 line
+44000 45250 44050 45200 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R1) ] 0 44400 45300 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 45300 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 45600 44400 45600 10 line
+43700 45600 44000 45600 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 45500 44400 45500 10 line
+44400 45500 44400 45700 10 line
+44400 45700 44000 45700 10 line
+44000 45700 44000 45500 10 line
+44000 45550 44050 45500 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R2) ] 0 44400 45600 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 45600 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 45900 44400 45900 10 line
+43700 45900 44000 45900 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 45800 44400 45800 10 line
+44400 45800 44400 46000 10 line
+44400 46000 44000 46000 10 line
+44000 46000 44000 45800 10 line
+44000 45850 44050 45800 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R3) ] 0 44400 45900 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 45900 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 46200 44400 46200 10 line
+43700 46200 44000 46200 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 46100 44400 46100 10 line
+44400 46100 44400 46300 10 line
+44400 46300 44000 46300 10 line
+44000 46300 44000 46100 10 line
+44000 46150 44050 46100 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R4) ] 0 44400 46200 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 46200 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 46500 44400 46500 10 line
+43700 46500 44000 46500 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 46400 44400 46400 10 line
+44400 46400 44400 46600 10 line
+44400 46600 44000 46600 10 line
+44000 46600 44000 46400 10 line
+44000 46450 44050 46400 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R5) ] 0 44400 46500 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 46500 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 46800 44400 46800 10 line
+43700 46800 44000 46800 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 46700 44400 46700 10 line
+44400 46700 44400 46900 10 line
+44400 46900 44000 46900 10 line
+44000 46900 44000 46700 10 line
+44000 46750 44050 46700 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R6) ] 0 44400 46800 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 46800 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 47100 44400 47100 10 line
+43700 47100 44000 47100 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 47000 44400 47000 10 line
+44400 47000 44400 47200 10 line
+44400 47200 44000 47200 10 line
+44000 47200 44000 47000 10 line
+44000 47050 44050 47000 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R7) ] 0 44400 47100 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 47100 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 47400 44400 47400 10 line
+43700 47400 44000 47400 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 47300 44400 47300 10 line
+44400 47300 44400 47500 10 line
+44400 47500 44000 47500 10 line
+44000 47500 44000 47300 10 line
+44000 47350 44050 47300 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R8) ] 0 44400 47400 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 47400 180.555557 text
+grestore
+0.000 0.000 1.000 setrgbcolor
+43700 47400 43100 47400 10 line
+43100 47100 43700 47100 10 line
+43700 46800 43100 46800 10 line
+43100 46500 43700 46500 10 line
+43100 46200 43700 46200 10 line
+43700 45900 43100 45900 10 line
+43100 45600 43700 45600 10 line
+43700 45300 43100 45300 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+40800 45700 40800 45800 10 line
+0.000 1.000 0.000 setrgbcolor
+40700 45700 40900 45700 10 line
+40755 45650 40845 45650 10 line
+40780 45610 40820 45610 10 line
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+40800 46450 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+40800 46400 40800 46300 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false false false 202.222224 [(Vcc) ] 0 40800 46550 180.555557 text
+grestore
+grestore
+40800 45800 40800 45900 10 line
+40800 45900 40900 45900 10 line
+40800 46300 40800 46200 10 line
+40800 46200 40900 46200 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+43100 43700 42800 43700 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(15) ] 0 42900 43750 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q0) ] 0 42750 43700 144.444443 text
+grestore
+43100 43400 42800 43400 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(1) ] 0 42900 43450 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q1) ] 0 42750 43400 144.444443 text
+grestore
+43100 43100 42800 43100 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(2) ] 0 42900 43150 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q2) ] 0 42750 43100 144.444443 text
+grestore
+43100 42800 42800 42800 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(3) ] 0 42900 42850 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q3) ] 0 42750 42800 144.444443 text
+grestore
+43100 42500 42800 42500 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(4) ] 0 42900 42550 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q4) ] 0 42750 42500 144.444443 text
+grestore
+43100 42200 42800 42200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(5) ] 0 42900 42250 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q5) ] 0 42750 42200 144.444443 text
+grestore
+43100 41900 42800 41900 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(6) ] 0 42900 41950 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q6) ] 0 42750 41900 144.444443 text
+grestore
+43100 41600 42800 41600 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(7) ] 0 42900 41650 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Q7) ] 0 42750 41600 144.444443 text
+grestore
+40900 43700 41200 43700 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(14) ] 0 41100 43750 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(DS) ] 0 41250 43700 144.444443 text
+grestore
+40900 43400 41200 43400 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(11) ] 0 41100 43450 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(SH_CP) ] 0 41325 43400 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+41300 43400 41200 43475 10 line
+41300 43400 41200 43325 10 line
+1.000 1.000 1.000 setrgbcolor
+40900 43100 41200 43100 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(12) ] 0 41100 43150 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(ST_CP) ] 0 41325 43100 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+41300 43100 41200 43175 10 line
+41300 43100 41200 43025 10 line
+1.000 1.000 1.000 setrgbcolor
+40900 42500 41200 42500 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(10) ] 0 41100 42550 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(\\_MR\\_) ] 0 41250 42500 144.444443 text
+grestore
+40900 42200 41200 42200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(13) ] 0 41100 42250 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(\\_OE\\_) ] 0 41250 42200 144.444443 text
+grestore
+40900 41600 41200 41600 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(9) ] 0 41100 41650 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(Q7') ] 0 41250 41600 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+41200 41300 42800 41300 10 line
+42800 41300 42800 44000 10 line
+42800 44000 41200 44000 10 line
+41200 44000 41200 41300 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(U2) ] 0 42800 44100 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(74HC595) ] 0 41200 44100 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 41600 44400 41600 10 line
+43700 41600 44000 41600 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 41500 44400 41500 10 line
+44400 41500 44400 41700 10 line
+44400 41700 44000 41700 10 line
+44000 41700 44000 41500 10 line
+44000 41550 44050 41500 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R9) ] 0 44400 41600 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 41600 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 41900 44400 41900 10 line
+43700 41900 44000 41900 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 41800 44400 41800 10 line
+44400 41800 44400 42000 10 line
+44400 42000 44000 42000 10 line
+44000 42000 44000 41800 10 line
+44000 41850 44050 41800 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R10) ] 0 44400 41900 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 41900 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 42200 44400 42200 10 line
+43700 42200 44000 42200 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 42100 44400 42100 10 line
+44400 42100 44400 42300 10 line
+44400 42300 44000 42300 10 line
+44000 42300 44000 42100 10 line
+44000 42150 44050 42100 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R11) ] 0 44400 42200 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 42200 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 42500 44400 42500 10 line
+43700 42500 44000 42500 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 42400 44400 42400 10 line
+44400 42400 44400 42600 10 line
+44400 42600 44000 42600 10 line
+44000 42600 44000 42400 10 line
+44000 42450 44050 42400 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R12) ] 0 44400 42500 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 42500 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 42800 44400 42800 10 line
+43700 42800 44000 42800 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 42700 44400 42700 10 line
+44400 42700 44400 42900 10 line
+44400 42900 44000 42900 10 line
+44000 42900 44000 42700 10 line
+44000 42750 44050 42700 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R13) ] 0 44400 42800 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 42800 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 43100 44400 43100 10 line
+43700 43100 44000 43100 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 43000 44400 43000 10 line
+44400 43000 44400 43200 10 line
+44400 43200 44000 43200 10 line
+44000 43200 44000 43000 10 line
+44000 43050 44050 43000 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R14) ] 0 44400 43100 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 43100 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 43400 44400 43400 10 line
+43700 43400 44000 43400 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 43300 44400 43300 10 line
+44400 43300 44400 43500 10 line
+44400 43500 44000 43500 10 line
+44000 43500 44000 43300 10 line
+44000 43350 44050 43300 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R15) ] 0 44400 43400 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 43400 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 43700 44400 43700 10 line
+43700 43700 44000 43700 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 43600 44400 43600 10 line
+44400 43600 44400 43800 10 line
+44400 43800 44000 43800 10 line
+44000 43800 44000 43600 10 line
+44000 43650 44050 43600 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R16) ] 0 44400 43700 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100) ] 0 43700 43700 180.555557 text
+grestore
+43700 43700 43100 43700 10 line
+43100 43400 43700 43400 10 line
+43700 43100 43100 43100 10 line
+43100 42800 43700 42800 10 line
+43100 42500 43700 42500 10 line
+43700 42200 43100 42200 10 line
+43100 41900 43700 41900 10 line
+43700 41600 43100 41600 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+40800 42000 40800 42100 10 line
+0.000 1.000 0.000 setrgbcolor
+40700 42000 40900 42000 10 line
+40755 41950 40845 41950 10 line
+40780 41910 40820 41910 10 line
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+40800 42750 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+40800 42700 40800 42600 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false false false 202.222224 [(Vcc) ] 0 40800 42850 180.555557 text
+grestore
+grestore
+40800 42100 40800 42200 10 line
+40800 42200 40900 42200 10 line
+40800 42600 40800 42500 10 line
+40800 42500 40900 42500 10 line
+40900 45300 40900 43700 10 line
+40900 46800 40200 46800 10 line
+40200 46800 40200 43100 10 line
+40200 43100 40900 43100 10 line
+40500 47100 40500 43400 10 line
+40500 43400 40900 43400 10 line
+gsave
+gsave
+0.000 1.000 0.000 setrgbcolor
+true false false false 161.777776 [(74XX) ] 0 37000 50550 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+true false true false 161.777776 [(16 pin) ] 0 37000 50450 144.444443 text
+grestore
+1.000 1.000 1.000 setrgbcolor
+37000 51000 37000 50900 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true true false 161.777776 [(16) ] 0 36900 51000 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 161.777776 [(Vcc) ] 0 36950 50800 144.444443 text
+grestore
+37000 50100 37000 50200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true true false 161.777776 [(8) ] 0 36900 50100 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 161.777776 [(GND) ] 0 37025 50300 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+36700 50200 37300 50200 10 line
+37300 50200 37300 50900 10 line
+37300 50900 36700 50900 10 line
+36700 50900 36700 50200 10 line
+1.000 1.000 0.000 setrgbcolor
+newpath
+37000 50100
+25
+0 360 arc
+fill
+newpath
+37000 50100
+25
+0 360 arc
+fill
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false true false 202.222224 [(U3) ] 0 37100 51000 180.555557 text
+grestore
+gsave
+gsave
+0.000 1.000 0.000 setrgbcolor
+true false false false 161.777776 [(74XX) ] 0 35800 50550 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+true false true false 161.777776 [(16 pin) ] 0 35800 50450 144.444443 text
+grestore
+1.000 1.000 1.000 setrgbcolor
+35800 51000 35800 50900 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true true false 161.777776 [(16) ] 0 35700 51000 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 161.777776 [(Vcc) ] 0 35750 50800 144.444443 text
+grestore
+35800 50100 35800 50200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true true false 161.777776 [(8) ] 0 35700 50100 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 161.777776 [(GND) ] 0 35825 50300 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+35500 50200 36100 50200 10 line
+36100 50200 36100 50900 10 line
+36100 50900 35500 50900 10 line
+35500 50900 35500 50200 10 line
+1.000 1.000 0.000 setrgbcolor
+newpath
+35800 50100
+25
+0 360 arc
+fill
+newpath
+35800 50100
+25
+0 360 arc
+fill
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false true false 202.222224 [(U2) ] 0 35900 51000 180.555557 text
+grestore
+gsave
+gsave
+0.000 1.000 0.000 setrgbcolor
+true false false false 161.777776 [(74XX) ] 0 34800 50550 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+true false true false 161.777776 [(16 pin) ] 0 34800 50450 144.444443 text
+grestore
+1.000 1.000 1.000 setrgbcolor
+34800 51000 34800 50900 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true true false 161.777776 [(16) ] 0 34700 51000 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 161.777776 [(Vcc) ] 0 34750 50800 144.444443 text
+grestore
+34800 50100 34800 50200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true true false 161.777776 [(8) ] 0 34700 50100 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false true false 161.777776 [(GND) ] 0 34825 50300 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+34500 50200 35100 50200 10 line
+35100 50200 35100 50900 10 line
+35100 50900 34500 50900 10 line
+34500 50900 34500 50200 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false true false 202.222224 [(U1) ] 0 34900 51000 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+34800 49800 34800 49900 10 line
+0.000 1.000 0.000 setrgbcolor
+34700 49800 34900 49800 10 line
+34755 49750 34845 49750 10 line
+34780 49710 34820 49710 10 line
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+34800 51450 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+34800 51400 34800 51300 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false false false 202.222224 [(Vcc) ] 0 34800 51550 180.555557 text
+grestore
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+37800 51100 37800 50800 10 line
+37800 50100 37800 50400 10 line
+0.000 1.000 0.000 setrgbcolor
+38000 50650 37600 50650 10 line
+38000 50550 37600 50550 10 line
+37800 50550 37800 50400 10 line
+37800 50650 37800 50800 10 line
+37800 50700 37750 50650 10 line
+1.000 1.000 0.000 setrgbcolor
+newpath
+37800 51100
+25
+0 360 arc
+fill
+newpath
+37800 51100
+25
+0 360 arc
+fill
+newpath
+37800 50100
+25
+0 360 arc
+fill
+newpath
+37800 50100
+25
+0 360 arc
+fill
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100n) ] 270 37400 50500 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(C1) ] 270 37600 50500 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+40200 51100 40200 50800 10 line
+40200 50100 40200 50400 10 line
+0.000 1.000 0.000 setrgbcolor
+40400 50650 40000 50650 10 line
+40400 50550 40000 50550 10 line
+40200 50550 40200 50400 10 line
+40200 50650 40200 50800 10 line
+40200 50700 40150 50650 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(10u) ] 270 39800 50500 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(C4) ] 270 40000 50500 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+38600 51100 38600 50800 10 line
+38600 50100 38600 50400 10 line
+0.000 1.000 0.000 setrgbcolor
+38800 50650 38400 50650 10 line
+38800 50550 38400 50550 10 line
+38600 50550 38600 50400 10 line
+38600 50650 38600 50800 10 line
+38600 50700 38550 50650 10 line
+1.000 1.000 0.000 setrgbcolor
+newpath
+38600 51100
+25
+0 360 arc
+fill
+newpath
+38600 51100
+25
+0 360 arc
+fill
+newpath
+38600 50100
+25
+0 360 arc
+fill
+newpath
+38600 50100
+25
+0 360 arc
+fill
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100n) ] 270 38200 50500 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(C3) ] 270 38400 50500 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+39400 51100 39400 50800 10 line
+39400 50100 39400 50400 10 line
+0.000 1.000 0.000 setrgbcolor
+39600 50650 39200 50650 10 line
+39600 50550 39200 50550 10 line
+39400 50550 39400 50400 10 line
+39400 50650 39400 50800 10 line
+39400 50700 39350 50650 10 line
+1.000 1.000 0.000 setrgbcolor
+newpath
+39400 51100
+25
+0 360 arc
+fill
+newpath
+39400 51100
+25
+0 360 arc
+fill
+newpath
+39400 50100
+25
+0 360 arc
+fill
+newpath
+39400 50100
+25
+0 360 arc
+fill
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(100n) ] 270 39000 50500 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(C2) ] 270 39200 50500 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+39400 35800 39700 35800 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(15) ] 0 39600 35850 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(Reset) ] 0 39750 35800 144.444443 text
+grestore
+39400 36200 39700 36200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(13) ] 0 39600 36250 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(Inhibit) ] 0 39750 36200 144.444443 text
+grestore
+39400 37800 39700 37800 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(14) ] 0 39600 37850 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(CLK) ] 0 39800 37800 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+39800 37800 39700 37875 10 line
+39800 37800 39700 37725 10 line
+1.000 1.000 1.000 setrgbcolor
+41000 35800 40700 35800 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(12) ] 0 40800 35850 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(Carry) ] 0 40650 35800 144.444443 text
+grestore
+41000 36200 40700 36200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(11) ] 0 40800 36250 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(9) ] 0 40650 36200 144.444443 text
+grestore
+41000 36600 40700 36600 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(9) ] 0 40800 36650 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(8) ] 0 40650 36600 144.444443 text
+grestore
+41000 37000 40700 37000 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(6) ] 0 40800 37050 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(7) ] 0 40650 37000 144.444443 text
+grestore
+41000 37400 40700 37400 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(5) ] 0 40800 37450 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(6) ] 0 40650 37400 144.444443 text
+grestore
+41000 37800 40700 37800 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(1) ] 0 40800 37850 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(5) ] 0 40650 37800 144.444443 text
+grestore
+41000 38200 40700 38200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(10) ] 0 40800 38250 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(4) ] 0 40650 38200 144.444443 text
+grestore
+41000 38600 40700 38600 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(7) ] 0 40800 38650 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(3) ] 0 40650 38600 144.444443 text
+grestore
+41000 39000 40700 39000 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(4) ] 0 40800 39050 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(2) ] 0 40650 39000 144.444443 text
+grestore
+41000 39400 40700 39400 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(2) ] 0 40800 39450 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(1) ] 0 40650 39400 144.444443 text
+grestore
+41000 39800 40700 39800 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(3) ] 0 40800 39850 144.444443 text
+grestore
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(0) ] 0 40650 39800 144.444443 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+39700 35400 40700 35400 10 line
+40700 35400 40700 40200 10 line
+40700 40200 39700 40200 10 line
+39700 40200 39700 35400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(4017) ] 0 39700 35150 180.555557 text
+grestore
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(U3) ] 0 39900 40300 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+39100 36000 39100 36100 10 line
+0.000 1.000 0.000 setrgbcolor
+39000 36000 39200 36000 10 line
+39055 35950 39145 35950 10 line
+39080 35910 39120 35910 10 line
+grestore
+39100 36100 39100 36200 10 line
+39100 36200 39400 36200 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 39800 44400 39800 10 line
+43700 39800 44000 39800 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 39700 44400 39700 10 line
+44400 39700 44400 39900 10 line
+44400 39900 44000 39900 10 line
+44000 39900 44000 39700 10 line
+44000 39750 44050 39700 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R17) ] 0 44400 39800 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(1k) ] 0 43700 39800 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 40300 45500 40100 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(C) ] 0 45400 40150 108.333336 text
+grestore
+45500 39500 45500 39300 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(E) ] 0 45400 39350 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45400 39801 316 0 360 10 darc
+45500 39500 45300 39700 10 line
+45500 40100 45300 39900 10 line
+45300 40000 45300 39600 10 line
+1.000 1.000 1.000 setrgbcolor
+44900 39800 45100 39800 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(B) ] 0 45000 39850 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45300 39800 45084 39800 10 line
+45500 39500 45464 39572 10 line
+45500 39500 45428 39536 10 line
+45428 39536 45464 39572 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(Q1) ] 0 45800 39900 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(TO92_CBE) ] 0 45800 39500 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(BC548) ] 0 45800 39700 180.555557 text
+grestore
+44700 39800 44900 39800 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 39100 45500 39200 10 line
+0.000 1.000 0.000 setrgbcolor
+45400 39100 45600 39100 10 line
+45455 39050 45545 39050 10 line
+45480 39010 45520 39010 10 line
+grestore
+45500 39200 45500 39300 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 38200 44400 38200 10 line
+43700 38200 44000 38200 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 38100 44400 38100 10 line
+44400 38100 44400 38300 10 line
+44400 38300 44000 38300 10 line
+44000 38300 44000 38100 10 line
+44000 38150 44050 38100 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R18) ] 0 44400 38200 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(1k) ] 0 43700 38200 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 38700 45500 38500 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(C) ] 0 45400 38550 108.333336 text
+grestore
+45500 37900 45500 37700 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(E) ] 0 45400 37750 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45400 38201 316 0 360 10 darc
+45500 37900 45300 38100 10 line
+45500 38500 45300 38300 10 line
+45300 38400 45300 38000 10 line
+1.000 1.000 1.000 setrgbcolor
+44900 38200 45100 38200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(B) ] 0 45000 38250 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45300 38200 45084 38200 10 line
+45500 37900 45464 37972 10 line
+45500 37900 45428 37936 10 line
+45428 37936 45464 37972 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(Q2) ] 0 45800 38300 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(TO92_CBE) ] 0 45800 37900 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(BC548) ] 0 45800 38100 180.555557 text
+grestore
+44700 38200 44900 38200 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 37500 45500 37600 10 line
+0.000 1.000 0.000 setrgbcolor
+45400 37500 45600 37500 10 line
+45455 37450 45545 37450 10 line
+45480 37410 45520 37410 10 line
+grestore
+45500 37600 45500 37700 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 36600 44400 36600 10 line
+43700 36600 44000 36600 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 36500 44400 36500 10 line
+44400 36500 44400 36700 10 line
+44400 36700 44000 36700 10 line
+44000 36700 44000 36500 10 line
+44000 36550 44050 36500 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R19) ] 0 44400 36600 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(1k) ] 0 43700 36600 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 37100 45500 36900 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(C) ] 0 45400 36950 108.333336 text
+grestore
+45500 36300 45500 36100 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(E) ] 0 45400 36150 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45400 36601 316 0 360 10 darc
+45500 36300 45300 36500 10 line
+45500 36900 45300 36700 10 line
+45300 36800 45300 36400 10 line
+1.000 1.000 1.000 setrgbcolor
+44900 36600 45100 36600 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(B) ] 0 45000 36650 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45300 36600 45084 36600 10 line
+45500 36300 45464 36372 10 line
+45500 36300 45428 36336 10 line
+45428 36336 45464 36372 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(Q3) ] 0 45800 36700 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(TO92_CBE) ] 0 45800 36300 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(BC548) ] 0 45800 36500 180.555557 text
+grestore
+44700 36600 44900 36600 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 35900 45500 36000 10 line
+0.000 1.000 0.000 setrgbcolor
+45400 35900 45600 35900 10 line
+45455 35850 45545 35850 10 line
+45480 35810 45520 35810 10 line
+grestore
+45500 36000 45500 36100 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 35000 44400 35000 10 line
+43700 35000 44000 35000 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 34900 44400 34900 10 line
+44400 34900 44400 35100 10 line
+44400 35100 44000 35100 10 line
+44000 35100 44000 34900 10 line
+44000 34950 44050 34900 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R20) ] 0 44400 35000 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(1k) ] 0 43700 35000 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 35500 45500 35300 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(C) ] 0 45400 35350 108.333336 text
+grestore
+45500 34700 45500 34500 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(E) ] 0 45400 34550 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45400 35001 316 0 360 10 darc
+45500 34700 45300 34900 10 line
+45500 35300 45300 35100 10 line
+45300 35200 45300 34800 10 line
+1.000 1.000 1.000 setrgbcolor
+44900 35000 45100 35000 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(B) ] 0 45000 35050 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45300 35000 45084 35000 10 line
+45500 34700 45464 34772 10 line
+45500 34700 45428 34736 10 line
+45428 34736 45464 34772 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(Q4) ] 0 45800 35100 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(TO92_CBE) ] 0 45800 34700 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(BC548) ] 0 45800 34900 180.555557 text
+grestore
+44700 35000 44900 35000 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 34300 45500 34400 10 line
+0.000 1.000 0.000 setrgbcolor
+45400 34300 45600 34300 10 line
+45455 34250 45545 34250 10 line
+45480 34210 45520 34210 10 line
+grestore
+45500 34400 45500 34500 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 33400 44400 33400 10 line
+43700 33400 44000 33400 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 33300 44400 33300 10 line
+44400 33300 44400 33500 10 line
+44400 33500 44000 33500 10 line
+44000 33500 44000 33300 10 line
+44000 33350 44050 33300 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R21) ] 0 44400 33400 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(1k) ] 0 43700 33400 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 33900 45500 33700 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(C) ] 0 45400 33750 108.333336 text
+grestore
+45500 33100 45500 32900 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(E) ] 0 45400 32950 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45400 33401 316 0 360 10 darc
+45500 33100 45300 33300 10 line
+45500 33700 45300 33500 10 line
+45300 33600 45300 33200 10 line
+1.000 1.000 1.000 setrgbcolor
+44900 33400 45100 33400 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(B) ] 0 45000 33450 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45300 33400 45084 33400 10 line
+45500 33100 45464 33172 10 line
+45500 33100 45428 33136 10 line
+45428 33136 45464 33172 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(Q5) ] 0 45800 33500 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(TO92_CBE) ] 0 45800 33100 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(BC548) ] 0 45800 33300 180.555557 text
+grestore
+44700 33400 44900 33400 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 32700 45500 32800 10 line
+0.000 1.000 0.000 setrgbcolor
+45400 32700 45600 32700 10 line
+45455 32650 45545 32650 10 line
+45480 32610 45520 32610 10 line
+grestore
+45500 32800 45500 32900 10 line
+41000 39800 43700 39800 10 line
+41000 39400 43700 39400 10 line
+43700 39400 43700 38200 10 line
+43700 36600 43300 36600 10 line
+43300 36600 43300 39000 10 line
+43300 39000 41000 39000 10 line
+41000 38600 42900 38600 10 line
+42900 38600 42900 35000 10 line
+42900 35000 43700 35000 10 line
+41000 38200 42500 38200 10 line
+42500 38200 42500 33400 10 line
+42500 33400 43700 33400 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+44700 31700 44400 31700 10 line
+43700 31700 44000 31700 10 line
+0.000 1.000 0.000 setrgbcolor
+44000 31600 44400 31600 10 line
+44400 31600 44400 31800 10 line
+44400 31800 44000 31800 10 line
+44000 31800 44000 31600 10 line
+44000 31650 44050 31600 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(R22) ] 0 44400 31700 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(1k) ] 0 43700 31700 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 32200 45500 32000 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(C) ] 0 45400 32050 108.333336 text
+grestore
+45500 31400 45500 31200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(E) ] 0 45400 31250 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45400 31701 316 0 360 10 darc
+45500 31400 45300 31600 10 line
+45500 32000 45300 31800 10 line
+45300 31900 45300 31500 10 line
+1.000 1.000 1.000 setrgbcolor
+44900 31700 45100 31700 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 121.333336 [(B) ] 0 45000 31750 108.333336 text
+grestore
+0.000 1.000 0.000 setrgbcolor
+45300 31700 45084 31700 10 line
+45500 31400 45464 31472 10 line
+45500 31400 45428 31436 10 line
+45428 31436 45464 31472 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(Q6) ] 0 45800 31800 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(TO92_CBE) ] 0 45800 31400 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(BC548) ] 0 45800 31600 180.555557 text
+grestore
+44700 31700 44900 31700 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+45500 31000 45500 31100 10 line
+0.000 1.000 0.000 setrgbcolor
+45400 31000 45600 31000 10 line
+45455 30950 45545 30950 10 line
+45480 30910 45520 30910 10 line
+grestore
+45500 31100 45500 31200 10 line
+43700 31700 42000 31700 10 line
+42000 31700 42000 37800 10 line
+42000 37800 41000 37800 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+50400 47400 50600 47400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(1) ] 0 50750 47400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 47400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 47000 50600 47000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(2) ] 0 50750 47000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 47000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 46600 50600 46600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(3) ] 0 50750 46600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 46600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 46200 50600 46200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(4) ] 0 50750 46200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 46200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 45800 50600 45800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(5) ] 0 50750 45800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 45800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 45400 50600 45400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(6) ] 0 50750 45400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 45400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 45000 50600 45000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(7) ] 0 50750 45000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 45000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 44600 50600 44600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(8) ] 0 50750 44600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 44600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 44200 50600 44200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(9) ] 0 50750 44200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 44200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 43800 50600 43800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(10) ] 0 50750 43800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 43800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 43400 50600 43400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(11) ] 0 50750 43400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 43400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 43000 50600 43000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(12) ] 0 50750 43000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 43000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 42600 50600 42600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(13) ] 0 50750 42600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 42600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 42200 50600 42200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(14) ] 0 50750 42200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 42200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 41800 50600 41800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(15) ] 0 50750 41800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 41800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 41400 50600 41400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(16) ] 0 50750 41400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 41400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 41000 50600 41000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(17) ] 0 50750 41000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 41000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 40600 50600 40600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(18) ] 0 50750 40600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 40600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 40200 50600 40200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(19) ] 0 50750 40200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 40200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 39800 50600 39800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(20) ] 0 50750 39800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 39800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 39400 50600 39400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(21) ] 0 50750 39400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 39400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 39000 50600 39000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(22) ] 0 50750 39000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 39000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 38600 50600 38600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(23) ] 0 50750 38600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 38600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 38200 50600 38200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(24) ] 0 50750 38200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 38200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 37800 50600 37800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(25) ] 0 50750 37800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 37800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+50400 37400 50600 37400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(26) ] 0 50750 37400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+50650 37400 50 0 360 10 darc
+0.000 1.000 0.000 setrgbcolor
+50700 37000 51100 37000 10 line
+51100 37000 51100 47800 10 line
+51100 47800 50700 47800 10 line
+50700 47800 50700 37000 10 line
+1.000 1.000 0.000 setrgbcolor
+newpath
+50400 47400
+25
+0 360 arc
+fill
+newpath
+50400 47400
+25
+0 360 arc
+fill
+newpath
+50400 47000
+25
+0 360 arc
+fill
+newpath
+50400 47000
+25
+0 360 arc
+fill
+newpath
+50400 46200
+25
+0 360 arc
+fill
+newpath
+50400 46200
+25
+0 360 arc
+fill
+newpath
+50400 45800
+25
+0 360 arc
+fill
+newpath
+50400 45800
+25
+0 360 arc
+fill
+newpath
+50400 45400
+25
+0 360 arc
+fill
+newpath
+50400 45400
+25
+0 360 arc
+fill
+newpath
+50400 45000
+25
+0 360 arc
+fill
+newpath
+50400 45000
+25
+0 360 arc
+fill
+newpath
+50400 44600
+25
+0 360 arc
+fill
+newpath
+50400 44600
+25
+0 360 arc
+fill
+newpath
+50400 44200
+25
+0 360 arc
+fill
+newpath
+50400 44200
+25
+0 360 arc
+fill
+newpath
+50400 43800
+25
+0 360 arc
+fill
+newpath
+50400 43800
+25
+0 360 arc
+fill
+newpath
+50400 43400
+25
+0 360 arc
+fill
+newpath
+50400 43400
+25
+0 360 arc
+fill
+newpath
+50400 42600
+25
+0 360 arc
+fill
+newpath
+50400 42600
+25
+0 360 arc
+fill
+newpath
+50400 42200
+25
+0 360 arc
+fill
+newpath
+50400 42200
+25
+0 360 arc
+fill
+newpath
+50400 41000
+25
+0 360 arc
+fill
+newpath
+50400 41000
+25
+0 360 arc
+fill
+newpath
+50400 40600
+25
+0 360 arc
+fill
+newpath
+50400 40600
+25
+0 360 arc
+fill
+newpath
+50400 40200
+25
+0 360 arc
+fill
+newpath
+50400 40200
+25
+0 360 arc
+fill
+newpath
+50400 39800
+25
+0 360 arc
+fill
+newpath
+50400 39800
+25
+0 360 arc
+fill
+newpath
+50400 39400
+25
+0 360 arc
+fill
+newpath
+50400 39400
+25
+0 360 arc
+fill
+newpath
+50400 39000
+25
+0 360 arc
+fill
+newpath
+50400 39000
+25
+0 360 arc
+fill
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(CONN1) ] 0 51100 47900 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+51800 47400 52000 47400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(1) ] 0 52150 47400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 47400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 47000 52000 47000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(2) ] 0 52150 47000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 47000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 46600 52000 46600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(3) ] 0 52150 46600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 46600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 46200 52000 46200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(4) ] 0 52150 46200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 46200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 45800 52000 45800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(5) ] 0 52150 45800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 45800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 45400 52000 45400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(6) ] 0 52150 45400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 45400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 45000 52000 45000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(7) ] 0 52150 45000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 45000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 44600 52000 44600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(8) ] 0 52150 44600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 44600 50 0 360 10 darc
+0.000 1.000 0.000 setrgbcolor
+52100 44200 52500 44200 10 line
+52500 44200 52500 47800 10 line
+52500 47800 52100 47800 10 line
+52100 47800 52100 44200 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(CONN2) ] 0 52500 47900 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+52400 44200 52600 44200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(1) ] 0 52750 44200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52650 44200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+52400 43800 52600 43800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(2) ] 0 52750 43800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52650 43800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+52400 43400 52600 43400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(3) ] 0 52750 43400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52650 43400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+52400 43000 52600 43000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(4) ] 0 52750 43000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52650 43000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+52400 42600 52600 42600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(5) ] 0 52750 42600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52650 42600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+52400 42200 52600 42200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(6) ] 0 52750 42200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52650 42200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+52400 41800 52600 41800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(7) ] 0 52750 41800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52650 41800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+52400 41400 52600 41400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(8) ] 0 52750 41400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52650 41400 50 0 360 10 darc
+0.000 1.000 0.000 setrgbcolor
+52700 41000 53100 41000 10 line
+53100 41000 53100 44600 10 line
+53100 44600 52700 44600 10 line
+52700 44600 52700 41000 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(CONN3) ] 0 53900 44200 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+51800 41000 52000 41000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(1) ] 0 52150 41000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 41000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 40600 52000 40600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(2) ] 0 52150 40600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 40600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 40200 52000 40200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(3) ] 0 52150 40200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 40200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 39800 52000 39800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(4) ] 0 52150 39800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 39800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 39400 52000 39400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(5) ] 0 52150 39400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 39400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+51800 39000 52000 39000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false false false false 161.777776 [(6) ] 0 52150 39000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+52050 39000 50 0 360 10 darc
+0.000 1.000 0.000 setrgbcolor
+52100 38600 52500 38600 10 line
+52500 38600 52500 41400 10 line
+52500 41400 52100 41400 10 line
+52100 41400 52100 38600 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(CONN4) ] 0 53200 40700 180.555557 text
+grestore
+51800 46600 50400 46600 10 line
+49700 46200 51800 46200 10 line
+49500 45800 51800 45800 10 line
+49000 45400 51800 45400 10 line
+48700 45000 51800 45000 10 line
+48400 44600 51800 44600 10 line
+44700 44200 52400 44200 10 line
+49400 43800 52400 43800 10 line
+50400 43400 52400 43400 10 line
+52400 43000 50400 43000 10 line
+44700 42600 52400 42600 10 line
+44700 42200 52400 42200 10 line
+50400 41800 52400 41800 10 line
+44700 47400 51800 47400 10 line
+45500 41000 51800 41000 10 line
+47100 40600 51800 40600 10 line
+47600 40200 51800 40200 10 line
+48100 39800 51800 39800 10 line
+48500 39400 51800 39400 10 line
+49000 39000 51800 39000 10 line
+44700 46800 50400 46800 10 line
+50400 46800 50400 46600 10 line
+44700 47000 51800 47000 10 line
+44700 47000 44700 47100 10 line
+49700 46200 49700 46500 10 line
+49700 46500 44700 46500 10 line
+44700 46200 49500 46200 10 line
+49500 46200 49500 45800 10 line
+49000 45400 49000 45900 10 line
+49000 45900 44700 45900 10 line
+48700 45000 48700 45600 10 line
+48700 45600 44700 45600 10 line
+44700 45300 48400 45300 10 line
+48400 45300 48400 44600 10 line
+44700 44200 44700 43700 10 line
+44700 43400 49400 43400 10 line
+49400 43400 49400 43800 10 line
+49700 43400 50500 43400 10 line
+49700 43400 49700 43100 10 line
+49700 43100 44700 43100 10 line
+44700 42800 50400 42800 10 line
+50400 42800 50400 43000 10 line
+44700 42600 44700 42500 10 line
+44700 41900 50400 41900 10 line
+50400 41900 50400 41800 10 line
+44700 41600 50400 41600 10 line
+50400 41600 50400 41400 10 line
+52400 41400 50400 41400 10 line
+45500 40300 45500 41000 10 line
+45500 38700 47100 38700 10 line
+47100 38700 47100 40600 10 line
+45500 37100 47600 37100 10 line
+47600 37100 47600 40200 10 line
+48100 39800 48100 35500 10 line
+48100 35500 45500 35500 10 line
+48500 39400 48500 33900 10 line
+48500 33900 45500 33900 10 line
+49000 39000 49000 32200 10 line
+49000 32200 45500 32200 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+35300 48200 35100 48200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(1) ] 0 34950 48200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 48200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+35300 47800 35100 47800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(2) ] 0 34950 47800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 47800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+35300 47400 35100 47400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(3) ] 0 34950 47400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 47400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+35300 47000 35100 47000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(4) ] 0 34950 47000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 47000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+35300 46600 35100 46600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(5) ] 0 34950 46600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 46600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+35300 46200 35100 46200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(6) ] 0 34950 46200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 46200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+35300 45800 35100 45800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(7) ] 0 34950 45800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 45800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+35300 45400 35100 45400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(8) ] 0 34950 45400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 45400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+35300 45000 35100 45000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(9) ] 0 34950 45000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 45000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+35300 44600 35100 44600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(10) ] 0 34950 44600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+35050 44600 50 0 360 10 darc
+0.000 1.000 0.000 setrgbcolor
+34600 44400 35000 44400 10 line
+35000 44400 35000 48400 10 line
+35000 48400 34600 48400 10 line
+34600 48400 34600 44400 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(CONN5) ] 0 34500 48300 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(HEADER10_2) ] 0 34500 47900 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(XXXX) ] 0 34500 48100 180.555557 text
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+37100 48200 36900 48200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(1) ] 0 36750 48200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 48200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37100 47800 36900 47800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(2) ] 0 36750 47800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 47800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37100 47400 36900 47400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(3) ] 0 36750 47400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 47400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37100 47000 36900 47000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(4) ] 0 36750 47000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 47000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37100 46600 36900 46600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(5) ] 0 36750 46600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 46600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37100 46200 36900 46200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(6) ] 0 36750 46200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 46200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37100 45800 36900 45800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(7) ] 0 36750 45800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 45800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37100 45400 36900 45400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(8) ] 0 36750 45400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 45400 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37100 45000 36900 45000 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(9) ] 0 36750 45000 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 45000 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37100 44600 36900 44600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(10) ] 0 36750 44600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+36850 44600 50 0 360 10 darc
+0.000 1.000 0.000 setrgbcolor
+36400 44400 36800 44400 10 line
+36800 44400 36800 48400 10 line
+36800 48400 36400 48400 10 line
+36400 48400 36400 44400 10 line
+1.000 1.000 0.000 setrgbcolor
+newpath
+37100 48200
+25
+0 360 arc
+fill
+newpath
+37100 48200
+25
+0 360 arc
+fill
+newpath
+37100 47800
+25
+0 360 arc
+fill
+newpath
+37100 47800
+25
+0 360 arc
+fill
+newpath
+37100 46200
+25
+0 360 arc
+fill
+newpath
+37100 46200
+25
+0 360 arc
+fill
+newpath
+37100 45800
+25
+0 360 arc
+fill
+newpath
+37100 45800
+25
+0 360 arc
+fill
+newpath
+37100 45400
+25
+0 360 arc
+fill
+newpath
+37100 45400
+25
+0 360 arc
+fill
+newpath
+37100 45000
+25
+0 360 arc
+fill
+newpath
+37100 45000
+25
+0 360 arc
+fill
+newpath
+37100 44600
+25
+0 360 arc
+fill
+newpath
+37100 44600
+25
+0 360 arc
+fill
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(CONN6) ] 0 36300 48300 180.555557 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(JUMPER10) ] 0 36300 47900 144.444443 text
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false true false false 202.222224 [(XXXX) ] 0 36300 48100 180.555557 text
+grestore
+35300 48200 37400 48200 10 line
+35300 47800 37400 47800 10 line
+37100 47000 35300 47000 10 line
+35300 46200 39000 46200 10 line
+35300 45800 38400 45800 10 line
+35300 45400 40200 45400 10 line
+35300 45000 40500 45000 10 line
+35300 44600 37400 44600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+37400 48350 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+37400 48300 37400 48200 10 line
+gsave
+1.000 1.000 0.000 setrgbcolor
+true false false false 202.222224 [(Vcc) ] 0 37400 48450 180.555557 text
+grestore
+grestore
+gsave
+1.000 1.000 1.000 setrgbcolor
+37400 47700 37400 47800 10 line
+0.000 1.000 0.000 setrgbcolor
+37300 47700 37500 47700 10 line
+37355 47650 37445 47650 10 line
+37380 47610 37420 47610 10 line
+grestore
+39400 37800 39000 37800 10 line
+39000 37800 39000 46200 10 line
+38400 45800 38400 35800 10 line
+38400 35800 39400 35800 10 line
+gsave
+1.000 1.000 1.000 setrgbcolor
+49900 38600 49700 38600 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(1) ] 0 49550 38600 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+49650 38600 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+49900 38200 49700 38200 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(2) ] 0 49550 38200 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+49650 38200 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+49900 37800 49700 37800 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(3) ] 0 49550 37800 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+49650 37800 50 0 360 10 darc
+1.000 1.000 1.000 setrgbcolor
+49900 37400 49700 37400 10 line
+gsave
+0.000 1.000 0.000 setrgbcolor
+false true false false 161.777776 [(4) ] 0 49550 37400 144.444443 text
+grestore
+0.000 1.000 1.000 setrgbcolor
+49650 37400 50 0 360 10 darc
+0.000 1.000 0.000 setrgbcolor
+49200 37000 49600 37000 10 line
+49600 37000 49600 39000 10 line
+49600 39000 49200 39000 10 line
+49200 39000 49200 37000 10 line
+grestore
+gsave
+1.000 1.000 0.000 setrgbcolor
+false false false false 202.222224 [(CONN7) ] 0 49100 36700 180.555557 text
+grestore
+49900 38600 50400 38600 10 line
+34800 51100 40200 51100 10 line
+37000 51000 37000 51100 10 line
+35800 51000 35800 51100 10 line
+34800 51000 34800 51300 10 line
+34800 50100 40200 50100 10 line
+34800 50100 34800 49900 10 line
+49900 38000 50400 38000 10 line
+50400 38000 50400 37800 10 line
+50100 38200 50400 38200 10 line
+49900 37800 50300 37800 10 line
+50300 37800 50300 37400 10 line
+50300 37400 50400 37400 10 line
+49900 38000 49900 38200 10 line
+50100 38200 50100 37400 10 line
+50100 37400 49900 37400 10 line
+35300 47400 37100 47400 10 line
+37400 44600 37400 47400 10 line
+37400 47400 40900 47400 10 line
+37100 46600 35300 46600 10 line
+40900 47100 40500 47100 10 line
+1.000 1.000 0.000 setrgbcolor
+newpath
+40200 45400
+25
+0 360 arc
+fill
+newpath
+40500 45000
+25
+0 360 arc
+fill
+newpath
+37000 50100
+25
+0 360 arc
+fill
+newpath
+37000 50100
+25
+0 360 arc
+fill
+newpath
+35800 50100
+25
+0 360 arc
+fill
+newpath
+35800 50100
+25
+0 360 arc
+fill
+newpath
+37800 51100
+25
+0 360 arc
+fill
+newpath
+37800 51100
+25
+0 360 arc
+fill
+newpath
+37800 50100
+25
+0 360 arc
+fill
+newpath
+37800 50100
+25
+0 360 arc
+fill
+newpath
+38600 51100
+25
+0 360 arc
+fill
+newpath
+38600 51100
+25
+0 360 arc
+fill
+newpath
+38600 50100
+25
+0 360 arc
+fill
+newpath
+38600 50100
+25
+0 360 arc
+fill
+newpath
+39400 51100
+25
+0 360 arc
+fill
+newpath
+39400 51100
+25
+0 360 arc
+fill
+newpath
+39400 50100
+25
+0 360 arc
+fill
+newpath
+39400 50100
+25
+0 360 arc
+fill
+newpath
+50400 47400
+25
+0 360 arc
+fill
+newpath
+50400 47400
+25
+0 360 arc
+fill
+newpath
+50400 47000
+25
+0 360 arc
+fill
+newpath
+50400 47000
+25
+0 360 arc
+fill
+newpath
+50400 46200
+25
+0 360 arc
+fill
+newpath
+50400 46200
+25
+0 360 arc
+fill
+newpath
+50400 45800
+25
+0 360 arc
+fill
+newpath
+50400 45800
+25
+0 360 arc
+fill
+newpath
+50400 45400
+25
+0 360 arc
+fill
+newpath
+50400 45400
+25
+0 360 arc
+fill
+newpath
+50400 45000
+25
+0 360 arc
+fill
+newpath
+50400 45000
+25
+0 360 arc
+fill
+newpath
+50400 44600
+25
+0 360 arc
+fill
+newpath
+50400 44600
+25
+0 360 arc
+fill
+newpath
+50400 44200
+25
+0 360 arc
+fill
+newpath
+50400 44200
+25
+0 360 arc
+fill
+newpath
+50400 43800
+25
+0 360 arc
+fill
+newpath
+50400 43800
+25
+0 360 arc
+fill
+newpath
+50400 43400
+25
+0 360 arc
+fill
+newpath
+50400 43400
+25
+0 360 arc
+fill
+newpath
+50400 42600
+25
+0 360 arc
+fill
+newpath
+50400 42600
+25
+0 360 arc
+fill
+newpath
+50400 42200
+25
+0 360 arc
+fill
+newpath
+50400 42200
+25
+0 360 arc
+fill
+newpath
+50400 41000
+25
+0 360 arc
+fill
+newpath
+50400 41000
+25
+0 360 arc
+fill
+newpath
+50400 40600
+25
+0 360 arc
+fill
+newpath
+50400 40600
+25
+0 360 arc
+fill
+newpath
+50400 40200
+25
+0 360 arc
+fill
+newpath
+50400 40200
+25
+0 360 arc
+fill
+newpath
+50400 39800
+25
+0 360 arc
+fill
+newpath
+50400 39800
+25
+0 360 arc
+fill
+newpath
+50400 39400
+25
+0 360 arc
+fill
+newpath
+50400 39400
+25
+0 360 arc
+fill
+newpath
+50400 39000
+25
+0 360 arc
+fill
+newpath
+50400 39000
+25
+0 360 arc
+fill
+newpath
+50400 46600
+25
+0 360 arc
+fill
+newpath
+50400 46200
+25
+0 360 arc
+fill
+newpath
+50400 45800
+25
+0 360 arc
+fill
+newpath
+50400 45400
+25
+0 360 arc
+fill
+newpath
+50400 45000
+25
+0 360 arc
+fill
+newpath
+50400 44600
+25
+0 360 arc
+fill
+newpath
+50400 44200
+25
+0 360 arc
+fill
+newpath
+50400 43800
+25
+0 360 arc
+fill
+newpath
+50400 43400
+25
+0 360 arc
+fill
+newpath
+50500 43400
+25
+0 360 arc
+fill
+newpath
+50400 43400
+25
+0 360 arc
+fill
+newpath
+50400 43000
+25
+0 360 arc
+fill
+newpath
+50400 42600
+25
+0 360 arc
+fill
+newpath
+50400 42200
+25
+0 360 arc
+fill
+newpath
+50400 41800
+25
+0 360 arc
+fill
+newpath
+50400 47400
+25
+0 360 arc
+fill
+newpath
+50400 41000
+25
+0 360 arc
+fill
+newpath
+50400 40600
+25
+0 360 arc
+fill
+newpath
+50400 40200
+25
+0 360 arc
+fill
+newpath
+50400 39800
+25
+0 360 arc
+fill
+newpath
+50400 39400
+25
+0 360 arc
+fill
+newpath
+50400 39000
+25
+0 360 arc
+fill
+newpath
+50400 46600
+25
+0 360 arc
+fill
+newpath
+50400 47000
+25
+0 360 arc
+fill
+newpath
+50500 43400
+25
+0 360 arc
+fill
+newpath
+50400 43400
+25
+0 360 arc
+fill
+newpath
+50500 43400
+25
+0 360 arc
+fill
+newpath
+50400 43400
+25
+0 360 arc
+fill
+newpath
+50400 43000
+25
+0 360 arc
+fill
+newpath
+50400 41800
+25
+0 360 arc
+fill
+newpath
+50400 41400
+25
+0 360 arc
+fill
+newpath
+50400 41400
+25
+0 360 arc
+fill
+newpath
+37100 48200
+25
+0 360 arc
+fill
+newpath
+37100 48200
+25
+0 360 arc
+fill
+newpath
+37100 47800
+25
+0 360 arc
+fill
+newpath
+37100 47800
+25
+0 360 arc
+fill
+newpath
+37100 46200
+25
+0 360 arc
+fill
+newpath
+37100 46200
+25
+0 360 arc
+fill
+newpath
+37100 45800
+25
+0 360 arc
+fill
+newpath
+37100 45800
+25
+0 360 arc
+fill
+newpath
+37100 45400
+25
+0 360 arc
+fill
+newpath
+37100 45400
+25
+0 360 arc
+fill
+newpath
+37100 45000
+25
+0 360 arc
+fill
+newpath
+37100 45000
+25
+0 360 arc
+fill
+newpath
+37100 44600
+25
+0 360 arc
+fill
+newpath
+37100 44600
+25
+0 360 arc
+fill
+newpath
+37100 48200
+25
+0 360 arc
+fill
+newpath
+37100 47800
+25
+0 360 arc
+fill
+newpath
+37100 46200
+25
+0 360 arc
+fill
+newpath
+37100 45800
+25
+0 360 arc
+fill
+newpath
+40200 45400
+25
+0 360 arc
+fill
+newpath
+40200 45400
+25
+0 360 arc
+fill
+newpath
+37100 45400
+25
+0 360 arc
+fill
+newpath
+40500 45000
+25
+0 360 arc
+fill
+newpath
+40500 45000
+25
+0 360 arc
+fill
+newpath
+37100 45000
+25
+0 360 arc
+fill
+newpath
+37100 44600
+25
+0 360 arc
+fill
+newpath
+34800 51100
+25
+0 360 arc
+fill
+newpath
+37800 51100
+25
+0 360 arc
+fill
+newpath
+38600 51100
+25
+0 360 arc
+fill
+newpath
+39400 51100
+25
+0 360 arc
+fill
+newpath
+37000 51100
+25
+0 360 arc
+fill
+newpath
+35800 51100
+25
+0 360 arc
+fill
+newpath
+34800 51100
+25
+0 360 arc
+fill
+newpath
+37000 51100
+25
+0 360 arc
+fill
+newpath
+37000 51100
+25
+0 360 arc
+fill
+newpath
+35800 51100
+25
+0 360 arc
+fill
+newpath
+35800 51100
+25
+0 360 arc
+fill
+newpath
+34800 51100
+25
+0 360 arc
+fill
+newpath
+34800 50100
+25
+0 360 arc
+fill
+newpath
+35800 50100
+25
+0 360 arc
+fill
+newpath
+37000 50100
+25
+0 360 arc
+fill
+newpath
+37800 50100
+25
+0 360 arc
+fill
+newpath
+38600 50100
+25
+0 360 arc
+fill
+newpath
+39400 50100
+25
+0 360 arc
+fill
+newpath
+34800 50100
+25
+0 360 arc
+fill
+showpage
+%%End

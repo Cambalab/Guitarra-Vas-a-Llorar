@@ -1,0 +1,12 @@
+; Kai-Martins project config for gEDA and friends
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(reset-component-library)   ; don't use system symbols
+(reset-source-library)     ; don't use system schematics
+
+; Allow to source symbols from the current working directory
+(define current-working-directory ".")
+(component-library current-working-directory)
+(source-library  current-working-directory)
+
+(component-library (build-path current-working-directory "symbols"))

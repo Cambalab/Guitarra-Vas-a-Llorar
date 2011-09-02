@@ -1,0 +1,14 @@
+refdes:footprint:value:description:qty
+U1,U2:DIP16:74HC595:8-Bit serial-in shift register:2
+R1,R10,R11,R12,R13,R14,R15,R16,R2,R3,R4,R5,R6,R7,R8,R9:res_RM10:100:resistor, wire soldered :16
+U3:DIP16:unknown:power pins for 74** parts in 16 pin package:1
+C4:cap_RM5:10u:capacitor, thru:1
+C1,C2,C3:cap_RM5:100n:capacitor, thru:3
+R17,R18,R19,R20,R21,R22:res_RM10:1k:resistor, wire soldered :6
+Q1,Q2,Q3,Q4,Q5,Q6:TO92_CBE:BC548:generic npn transistor, TUN:6
+CONN1:HEADER26_2:unknown:generic connector:1
+CONN2,CONN3:JUMPER8:unknown:generic connector:2
+CONN4:JUMPER6:unknown:generic connector:1
+CONN5:HEADER10_2:XXXX:generic connector:1
+CONN6:JUMPER10:XXXX:generic connector:1
+CONN7:JUMPER4:unknown:generic connector:1
