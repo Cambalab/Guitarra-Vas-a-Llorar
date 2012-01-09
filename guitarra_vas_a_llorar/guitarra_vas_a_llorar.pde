@@ -297,6 +297,10 @@ unsigned int songMakerLED[8][6];
 
 int keysig = 0; // 0 americano 1 tradicional
 
+const int showtime = 2000;
+FLASH_STRING(logo1, "..:::Crear:::..");
+FLASH_STRING(logo2, "__Guitarra LED__");
+
 //Initialize LCD
 ShiftLCD lcd( LCDSerial, LCDrclk, LCDsrclk);
 
@@ -692,7 +696,8 @@ switch ( menu[0]) {
 void setup(){
   lcd.begin( 16, 2);
   lcd.clear();
-  
+  updateLCD(logo1,logo2); //show logo
+
   //Define pins I/O
   pinMode( left, INPUT);
   pinMode( enter, INPUT);
@@ -712,6 +717,7 @@ void setup(){
 }
 
 void loop(){
+  delay(showtime); // time logo is shown
   for( int x = 0; x < 4; x++){
     menu[ x] = 0;
   }
