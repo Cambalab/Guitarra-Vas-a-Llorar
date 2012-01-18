@@ -139,10 +139,11 @@ public class GDPPlugin extends TGPluginAdapter implements TGPluginSetup, TGExter
 			return;
 		}
 		System.out.println("BEAT idx = " + this.beatIdx);
+
+        //1er byte del 16-9, segundo byte de 8-1
+        ledArray = new int[] { 0,0,0,0,0,0};
+
 		for(int v = 0; v < beat.countVoices(); v ++){
-			muestro = false;
-			//1er byte del 16-9, segundo byte de 8-1
-			ledArray = new int[] { 0,0,0,0,0,0}; 
 			TGVoice voice = beat.getVoice( v );
 			Iterator it = voice.getNotes().iterator();
 			while (it.hasNext()) {
@@ -151,25 +152,25 @@ public class GDPPlugin extends TGPluginAdapter implements TGPluginSetup, TGExter
 				int stringIndex = note.getString() - 1;
 				//el traste 0 es al aire - ahora lo ignoramos
 				System.out.println("cuerda " + stringIndex + " traste " + fretIndex );
-				muestro = true;
 				if(fretIndex != 0) {
 					ledArray[stringIndex] += pows[(fretIndex-1)]; 
 				}
 			}
-			if (serial != null && muestro == true ) {
-				//int pos=0;
-				this.serial.writeData('N'); //N ascii char
-				//for (int l : ledArray) {
-				for(int i = (ledArray.length-1); i>=0; i--) {	
-					//System.out.println((++pos) + ": " +  l);
-					this.serial.writeData((ledArray[i]>>8)); // highbyte
-					this.serial.writeData((ledArray[i] & 0xff)); //lowbyte
-				}
-				//this.serial.writeData(GDPSerialCommunicator.NEW_LINE_ASCII);
-				this.serial.flush();
-			}
+        }
+		if (serial != null) {
+            //int pos=0;
+            this.serial.writeData('N'); //N ascii char
+            //for (int l : ledArray) {
+            for(int i = (ledArray.length-1); i>=0; i--) {
+                //System.out.println((++pos) + ": " +  l);
+                this.serial.writeData((ledArray[i]>>8)); // highbyte
+                this.serial.writeData((ledArray[i] & 0xff)); //lowbyte
+            }
+            //this.serial.writeData(GDPSerialCommunicator.NEW_LINE_ASCII);
+            this.serial.flush();
+        }
 
-		}
+
 		this.beatIdx++;
 	}
 	
