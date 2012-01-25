@@ -233,6 +233,7 @@ PROGMEM prog_uint16_t masterRoots[6] = { 0x0080, 0x1001, 0x0010, 0x0200, 0x4004,
 #define b_minor92  { 0x0000, 0x0002, 0x0002, 0x0000, 0x0002, 0x0000}
 
 //There are 22 chord options total (major,...,maj9)
+//TIPO(mayor/menor/etc) NOTA VARIACION cuerda
 PROGMEM  prog_uint16_t masterChords[6][12][2][6] = {
 {//major
 { c_major1, c_major2},{ db_major1, db_major2},{ d_major1, d_major2},{ eb_major1, eb_major2},
@@ -304,6 +305,8 @@ MenuBackend menu = MenuBackend(menuUsed,menuChanged);
 //initialize menuitems
     MenuItem m0 = MenuItem("0");
       MenuItem m00 = MenuItem("6");
+// MAYORES
+
          MenuItem  m000 = MenuItem("24");
          MenuItem  m001 = MenuItem("25");
          MenuItem  m002 = MenuItem("26");
@@ -346,6 +349,7 @@ MenuBackend menu = MenuBackend(menuUsed,menuChanged);
          MenuItem  m0211 = MenuItem("59");
       
       MenuItem m03 = MenuItem("9");
+// MAYORES
          MenuItem  m030 = MenuItem("60");
          MenuItem  m031 = MenuItem("61");
          MenuItem  m032 = MenuItem("62");
@@ -508,12 +512,16 @@ void setup()
   lcd.begin(16, 2);
 
   //configure menu
-  menu.getRoot().add(m0);
+
 
 //MENU RECURSIVO PARA TODAS LAS OPCIONES
 //  m0.addRight(menu1Item1).addRight(menu1Item2).addRight(menu1Item3).addRight(menu1Item4).addRight(menu1Item5);
   m0.addRight(m1).addRight(m4).addRight(m5);
   m0.addLeft(m5);
+    menu.getRoot().add(m5);
+      menu.getRoot().add(m4);
+          menu.getRoot().add(m1);
+  menu.getRoot().add(m0);          
 
   m0.add(m05);
   m0.add(m04);
@@ -523,7 +531,7 @@ void setup()
   m0.add(m00);
   m00.addRight(m01).addRight(m02).addRight(m03).addRight(m04).addRight(m05);
   m00.addLeft(m05);
-  
+
 
   m00.add(m0011);
   m00.add(m0010);
@@ -626,22 +634,17 @@ void setup()
   m1.add(m10);
   m10.addRight(m11).addRight(m12).addRight(m13).addRight(m14).addRight(m15);
   m10.addLeft(m15);
-/*
-  m10.add(m1011);
-  m10.add(m1010);
-  m10.add(m109);
-  m10.add(m108);
-  m10.add(m107);
-  m10.add(m106);
-  m10.add(m105);
-  m10.add(m104);
-  m10.add(m103);
-  m10.add(m102);
-  m10.add(m101);
-  m10.add(m100);
-  m100.addRight(m101).addRight(m102).addRight(m103).addRight(m104).addRight(m105).addRight(m106).addRight(m107).addRight(m108).addRight(m109).addRight(m1010).addRight(m1011);
-  m100.addLeft(m1011);    
-*/
+
+
+m000.remember_parent=true;
+m10.add(m000);
+m11.add(m000);
+m12.add(m000);
+m13.add(m000);
+m14.add(m000);
+m15.add(m000);
+
+
 
 /* 
   menu1Item3.add(menuItem30);
@@ -661,6 +664,7 @@ void setup()
   lcd.print("__Guitarra Led__");
   
 // Serial.begin( 9600);
+// Serial.print("XXX\n");
 
 }  // setup()...
 
@@ -720,6 +724,7 @@ void menuChanged(MenuChangeEvent changed){
                                );
   MenuItem newMenuItem=changed.to; //get the destination menu
   MenuItem newMenuItemAnt = changed.from; //get the destination menu
+
   if(newMenuItem.getName()==menu.getRoot()){
 
     //ACA HAY QUE IR A L PRIMER ELEMENTO DEL MENU PROBAR SETCURERENT cambiando a public
@@ -729,6 +734,7 @@ void menuChanged(MenuChangeEvent changed){
     
     
   } else {
+    
   
 //    updateLCD(atoi(newMenuItemAnt.getName()),menuLCD);
     updateLCD(atoi(newMenuItem.getName()), atoi(newMenuItem.getBefore()->getName()), menuLCD );
@@ -757,6 +763,9 @@ if(other != -1) {
 }
 
 void showScale(int counter, int other) {
+
+
+
   unsigned int tempLED1[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
   unsigned int tempLED2[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
   unsigned int h = 0x0000;
@@ -794,6 +803,10 @@ void showScale(int counter, int other) {
 
 
 void menuUsed(MenuUseEvent used){
+/*        lcd.setCursor(0,0);
+       lcd.print(used.item.getBefore()->getName());
+      lcd.print(used.item.getName());
+      return;*/
   if( used.item == m40 ){
       pt2Function = &showMessage;
       pt2val = 0;
@@ -804,7 +817,7 @@ void menuUsed(MenuUseEvent used){
       pt2val = 1;
       pt2val2 = -1;
   }
-
+/*
   if( used.item == m10 || used.item == m11 || used.item == m12 || used.item == m13 || used.item == m14 || used.item == m15) {
 //if( used.item == m100 || used.item == m101  || used.item == m102  || used.item == m103  || used.item == m104  || used.item == m105  || used.item == m106  || used.item == m107  || used.item == m108  || used.item == m109  || used.item == m1010   || used.item == m1011) {
   //    MenuItem a = used.item.getLeft()->getName();
@@ -814,7 +827,7 @@ void menuUsed(MenuUseEvent used){
       pt2val = atoi(used.item.getName())-14;
       pt2val2 = atoi(used.item.getBefore()->getName())-24;
   }
-
+*/
 if( used.item == m000 || used.item == m001  || used.item == m002  || used.item == m003  || used.item == m004  || used.item == m005  || used.item == m006  || used.item == m007  || used.item == m008  || used.item == m009  || used.item == m0010   || used.item == m0011 ||
     used.item == m010 || used.item == m011  || used.item == m012  || used.item == m013  || used.item == m014  || used.item == m015  || used.item == m016  || used.item == m017  || used.item == m018  || used.item == m019  || used.item == m0010   || used.item == m0111 ||
     used.item == m020 || used.item == m021  || used.item == m022  || used.item == m023  || used.item == m024  || used.item == m025  || used.item == m026  || used.item == m027  || used.item == m028  || used.item == m029  || used.item == m0210   || used.item == m0211 ||
@@ -822,11 +835,17 @@ if( used.item == m000 || used.item == m001  || used.item == m002  || used.item =
     used.item == m040 || used.item == m041  || used.item == m042  || used.item == m043  || used.item == m044  || used.item == m045  || used.item == m046  || used.item == m047  || used.item == m048  || used.item == m049  || used.item == m0410   || used.item == m0411 ||
     used.item == m050 || used.item == m051  || used.item == m052  || used.item == m053  || used.item == m054  || used.item == m055  || used.item == m056  || used.item == m057  || used.item == m058  || used.item == m059  || used.item == m0510   || used.item == m0511 
     ) {
-//      lcd.setCursor(0,0);
-//      lcd.print(used.item.getBefore()->getName());
-      pt2Function = &showChord;
-      pt2val = atoi(used.item.getName())%12;
-      pt2val2 = atoi(used.item.getBefore()->getName())-6;
+      
+   MenuItem padre = *(used.item.getBefore());  
+   if( padre == m10 || padre == m11 || padre == m12 || padre == m13 || padre == m14 || padre == m15) {
+      pt2Function = &showScale;
+      pt2val = atoi(used.item.getName())-24;
+      pt2val2 = atoi(used.item.getBefore()->getName())-14;
+   } else {
+        pt2Function = &showChord;
+        pt2val = atoi(used.item.getName())%12;
+        pt2val2 = atoi(used.item.getBefore()->getName())-6;
+  }
 }  
 
 
