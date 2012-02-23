@@ -1,1 +1,1 @@
-scons ARDUINO_PORT=/dev/ttyACM0  ARDUINO_HOME=/home/josx/Escritorio/arduino-0022/ $1
+scons ARDUINO_PORT=/dev/ttyACM0  ARDUINO_HOME=/home/josx/Escritorio/arduino-1.0/ ARDUINO_BOARD=uno $1 
