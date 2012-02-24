@@ -56,10 +56,11 @@ IMPORTANT: to use the menubackend library by Alexander Brevig download it at htt
 #define _KEYSIG_ _ALPHABETIC_
 #endif
 
-
+/*
 #define crea { 0x2736, 0x5151, 0x5351, 0x7331, 0x5151, 0x5756 }
 #define puto { 0x0000, 0xE2E7, 0xAE85, 0xAE85, 0xE2EF, 0x0000 }
 PROGMEM prog_uint16_t msg2guitar[2][6] = { crea, puto };
+*/
 
 #define major     { 0x5AD5, 0x5AB5, 0xAB5A, 0x6B56, 0x6AD6, 0x5AD5}
 #define harmonic_minor { 0xD6CD, 0xD9AD, 0x9AD9, 0x5B35, 0x66B6, 0xD6CD}
@@ -400,10 +401,9 @@ MenuBackend menu = MenuBackend(menuUsed,menuChanged);
       MenuItem m13 = MenuItem("17");  
       MenuItem m14 = MenuItem("18");
       MenuItem m15 = MenuItem("19");
-    MenuItem m4 = MenuItem("4");
-      MenuItem m40 = MenuItem("22");
-      MenuItem m41 = MenuItem("23");
-    MenuItem m5 = MenuItem("5");
+//    MenuItem m4 = MenuItem("4");
+  //  MenuItem m41 = MenuItem("23");
+  MenuItem m5 = MenuItem("5");
 
 void setup()
 {
@@ -431,10 +431,10 @@ void setup()
 
 //MENU RECURSIVO PARA TODAS LAS OPCIONES
 //  m0.addRight(menu1Item1).addRight(menu1Item2).addRight(menu1Item3).addRight(menu1Item4).addRight(menu1Item5);
-  m0.addRight(m1).addRight(m4).addRight(m5);
+  m0.addRight(m1).addRight(m5);//addRight(m4).
   m0.addLeft(m5);
     menu.getRoot().add(m5);
-      menu.getRoot().add(m4);
+//      menu.getRoot().add(m4);
           menu.getRoot().add(m1);
   menu.getRoot().add(m0);          
 
@@ -566,22 +566,25 @@ m15.add(m000);
   menuItem30.addRight(menuItem31);
   menuItem30.addLeft(menuItem31);
 */
+/*
   m4.add(m41);
   m4.add(m40);
   m40.addRight(m41);
   m40.addLeft(m41);
-  
+*/  
   menu.toRoot();
 
   lcd.setCursor(0,0);  
   lcd.print(" ..::CREAR::.. ");
   lcd.setCursor(0,1);  
   lcd.print("__Guitarra Led__");
-  
+
+
 // Serial.begin( 9600);
 // Serial.print("XXX\n");
 
 }  // setup()...
+
 
 
 void loop()
@@ -611,13 +614,13 @@ if(other != -1) {
 
 }
 
-
+/*
 void showMessage(int idx, int other) {
     for( int x = 6; x > 0; x--){
       tempLED[ 6-x] = pgm_read_word_near(&(msg2guitar[ idx][ x-1]));
      }
 }
-
+*/
 void showScale(int counter, int other) {
   unsigned int tempLED1[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
   unsigned int tempLED2[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
@@ -758,7 +761,8 @@ void menuUsed(MenuUseEvent used){
        lcd.print(used.item.getBefore()->getName());
       lcd.print(used.item.getName());
       return;*/
-  if( used.item == m40 ){
+/*
+ if( used.item == m40 ){
       pt2Function = &showMessage;
       pt2val = 0;
   }
@@ -768,6 +772,8 @@ void menuUsed(MenuUseEvent used){
       pt2val = 1;
       pt2val2 = -1;
   }
+  
+  */
 /*
   if( used.item == m10 || used.item == m11 || used.item == m12 || used.item == m13 || used.item == m14 || used.item == m15) {
 //if( used.item == m100 || used.item == m101  || used.item == m102  || used.item == m103  || used.item == m104  || used.item == m105  || used.item == m106  || used.item == m107  || used.item == m108  || used.item == m109  || used.item == m1010   || used.item == m1011) {
@@ -846,10 +852,12 @@ void menuChanged(MenuChangeEvent changed){
   if(newMenuItem.getName()==menu.getRoot()){
 
     //ACA HAY QUE IR A L PRIMER ELEMENTO DEL MENU PROBAR SETCURERENT cambiando a public
-    lcd.clear();
-    lcd.setCursor(0,1);
-    lcd.print("Main Menu       ");
-    
+  lcd.setCursor(0,0);  
+  lcd.print(" ..::CREAR::.. ");
+  lcd.setCursor(0,1);  
+  lcd.print("__Guitarra Led__");
+
+
     
   } else {
     
