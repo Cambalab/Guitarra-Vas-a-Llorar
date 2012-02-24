@@ -7,7 +7,7 @@ Copyright 2011
         Mamlook Jendo (mjendo2)
  Adviser: Robert Becker
  
- Fecha: 02/09/2011
+ Fecha: 02/02/2011
  Nuevas modificaciones para Prueba y compilacion 
  Acordes: 7, m7, 9, m9
  Escalas: menor, armonica menor, pentatonica mayor, pentatonica menor
@@ -433,9 +433,9 @@ void setup()
 //  m0.addRight(menu1Item1).addRight(menu1Item2).addRight(menu1Item3).addRight(menu1Item4).addRight(menu1Item5);
   m0.addRight(m1).addRight(m5);//addRight(m4).
   m0.addLeft(m5);
-    menu.getRoot().add(m5);
+  menu.getRoot().add(m5);
 //      menu.getRoot().add(m4);
-          menu.getRoot().add(m1);
+  menu.getRoot().add(m1);
   menu.getRoot().add(m0);          
 
   m0.add(m05);
@@ -574,16 +574,20 @@ m15.add(m000);
 */  
   menu.toRoot();
 
-  lcd.setCursor(0,0);  
-  lcd.print(" ..::CREAR::.. ");
-  lcd.setCursor(0,1);  
-  lcd.print("__Guitarra Led__");
-
+  MainMenu();
 
 // Serial.begin( 9600);
 // Serial.print("XXX\n");
 
 }  // setup()...
+
+
+void MainMenu() {
+  lcd.setCursor(0,0);  
+  lcd.print(" ..::CREAR::.. ");
+  lcd.setCursor(0,1);  
+  lcd.print("__Guitarra Led__");
+}
 
 
 
@@ -882,7 +886,8 @@ void navigateMenus() {
        } 
       break;
     case buttonPinEsc:
-      menu.toRoot();  //back to main
+      menu.moveUp();  //back to father
+//      menu.toRoot();  //back to main
       break;
     case buttonPinRight:
       menu.moveRight();
