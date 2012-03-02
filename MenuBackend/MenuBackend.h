@@ -63,7 +63,7 @@ public:
 
 	MenuItem *moveDown() { 
 		if (after) { after->back = this; }
-		if (after->remember_parent) { 
+		if (after && after->remember_parent) { 
             after->setBefore(this);
             MenuItem *node = after->getRight();
             while(node && (node != after) && (node != this)){
