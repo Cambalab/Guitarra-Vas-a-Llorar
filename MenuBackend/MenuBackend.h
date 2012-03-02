@@ -129,7 +129,6 @@ bool menuTestStrings(short a, short b) {
     if (a==b)
         return true;
     return false;
-	return true;
 }
 bool operator==(MenuItem &lhs, short test) {
 	return menuTestStrings(lhs.getName(),test);
