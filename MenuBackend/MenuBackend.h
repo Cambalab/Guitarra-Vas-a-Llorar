@@ -37,13 +37,13 @@
 */
 class MenuItem {
 public:
-	MenuItem(const char* itemName, char shortKey='\0' ) : name(itemName), shortkey(shortKey) {
+	MenuItem(short itemName, char shortKey='\0' ) : name(itemName), shortkey(shortKey) {
 		before = right = after = left = 0;
         remember_parent = false;
 	}
 
 	//void use(){} //update some internal data / statistics
-	inline const char* getName() const { return name; }
+	inline short getName() const { return name; }
 	inline const char getShortkey() const { return shortkey; }
 	inline const bool hasShortkey() const { return (shortkey!='\0'); }
 	inline void setBefore(MenuItem *mi) { before = mi; }
@@ -114,7 +114,7 @@ public:
     bool remember_parent;
 protected:
 
-	const char* name;
+	short name;
 	const char shortkey;
 
 	MenuItem *before;
@@ -125,14 +125,16 @@ protected:
 };
 
 //no dependant inclusion of string or cstring
-bool menuTestStrings(const char *a, const char *b) {
-	while (*a) { if (*a != *b) { return false; } b++; a++; }
+bool menuTestStrings(short a, short b) {
+    if (a==b)
+        return true;
+    return false;
 	return true;
 }
-bool operator==(MenuItem &lhs, char* test) {
+bool operator==(MenuItem &lhs, short test) {
 	return menuTestStrings(lhs.getName(),test);
 }
-bool operator==(const MenuItem &lhs, char* test) {
+bool operator==(const MenuItem &lhs, short test) {
 	return menuTestStrings(lhs.getName(),test);
 }
 bool operator==(MenuItem &lhs, MenuItem &rhs) {
@@ -157,7 +159,7 @@ typedef void (*cb_use)(MenuUseEvent);
 class MenuBackend {
 public:
 
-	MenuBackend(cb_use menuUse, cb_change menuChange = 0) : root("MenuRoot") {
+	MenuBackend(cb_use menuUse, cb_change menuChange = 0) : root(96)  {
 		current = &root;
 		cb_menuChange = menuChange;
 		cb_menuUse = menuUse;
