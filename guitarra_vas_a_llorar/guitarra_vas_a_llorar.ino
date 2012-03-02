@@ -423,6 +423,7 @@ void setup()
    pinMode( SIPOserial, OUTPUT);
    pinMode( SIPOsrclk, OUTPUT);
 
+  Serial.begin(9600);
 
   lcd.begin(16, 2);
 
@@ -659,9 +660,46 @@ void showScale(int counter, int other) {
 }
 
 void readSongNotes(int counter, int other) {
-//    Serial.print("hola");
-    lcd.setCursor(0,0);
-    lcd.print("edddddd");
+    unsigned int c1=0,c2=0,c3=0,c4=0,c5=0,c6=0,c7=0;
+//    long start_time = millis();
+
+    //while(c1 != 32) {
+    while(1) {
+        tempLED[0] = c1;
+        tempLED[1] = c2;
+        tempLED[2] = c3;
+        tempLED[3] = c4;
+        tempLED[4] = c5;
+        tempLED[5] = c6;
+
+        if(Serial.available()) {
+            if( Serial.available() >= 13 ) {       // wait for 1byte header + 12 bytes
+                if(Serial.read() == 'N') {
+                    c1 = Serial.read();
+                    if(c1 == 32) break;
+                    c1 = word(c1,Serial.read());
+                    c2 = Serial.read();
+                    c2 = word(c2,Serial.read());
+                    c3 = Serial.read();
+                    c3 = word(c3,Serial.read());
+                    c4 = Serial.read();
+                    c4 = word(c4,Serial.read());
+                    c5 = Serial.read();
+                    c5 = word(c5,Serial.read());
+                    c6 = Serial.read();
+                    c6 = word(c6,Serial.read());
+                    Serial.flush();
+                } else {
+                }
+            }else{
+            }
+        } else {
+/*            if( (millis() - start_time) > 10000 )
+                break;
+*/
+        }
+        LEDMatrix();
+    }
 }
 
 void updateLCD( short counter, short prev,_FLASH_STRING_ARRAY textLCD){
