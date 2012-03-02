@@ -576,7 +576,7 @@ m15.add(m000);
 
   MainMenu();
 
-// Serial.begin( 9600);
+//  Serial.begin( 9600);
 // Serial.print("XXX\n");
 
 }  // setup()...
@@ -661,6 +661,11 @@ void showScale(int counter, int other) {
      }
 }
 
+void readSongNotes(int counter, int other) {
+//    Serial.print("hola");
+    lcd.setCursor(0,0);
+    lcd.print("edddddd");
+}
 
 void updateLCD( int counter, int prev,_FLASH_STRING_ARRAY textLCD){
    lcd.clear();
@@ -670,9 +675,9 @@ void updateLCD( int counter, int prev,_FLASH_STRING_ARRAY textLCD){
    textLCD[prev].print(lcd);
    
    lcd.setCursor( 0, 1);
-   FLASH_STRING(izquierda, "<-");
-   izquierda.print(lcd); 
-   lcd.setCursor(((14-textLCD[counter].length())/2)+2,1);
+//   FLASH_STRING(izquierda, "<-");
+//   izquierda.print(lcd); 
+   lcd.setCursor(((16-textLCD[counter].length())/2),1);
    textLCD[counter].print(lcd);
 }
 
@@ -809,6 +814,10 @@ if( used.item == m000 || used.item == m001  || used.item == m002  || used.item =
   }
 }  
 
+if ( used.item == m5) {
+      pt2Function = &readSongNotes;
+      pt2val = 0;
+}
 
   delay(200);  //delay to allow message reading
 //  menu.toRoot();  //back to Main
@@ -816,56 +825,26 @@ if( used.item == m000 || used.item == m001  || used.item == m002  || used.item =
 
 void menuChanged(MenuChangeEvent changed){
   FLASH_STRING_ARRAY( menuLCD, 
-#if (_LANG_ == _ES_)
                                PSTR("Acordes"), PSTR( "Escalas"),  PSTR("Crear Canciones"),  PSTR("Cifrado"),  PSTR("Mensajes"),  PSTR("Conectar PC"), 
                                PSTR("Mayor"),  PSTR("Menor"),  PSTR("Mayor 7"), PSTR("Menor 7"),  PSTR("Mayor 9"),  PSTR("Menor 9"), 
                                PSTR("Variacion 1"),  PSTR("Variacion 2"), 
                                PSTR("Mayor"),  PSTR("Armonica menor"),  PSTR("Melodica Menor"),  PSTR("Pentatonica May"),  PSTR("Menor"),  PSTR("Pentatonica Men"), 
                                PSTR("Americano") ,  PSTR("Tradicional"),
                                PSTR("Crea"), PSTR("Puto"),                              
-#endif              
-#if (_LANG_ == _EN_)
-                               PSTR("Chords"), PSTR( "Scales"),  PSTR("Song Builder"), PSTR("Key Signature"),  PSTR("Messages"),  PSTR("Songs"),
-                               PSTR("Major"),  PSTR("Minor"),  PSTR("Major 7"), PSTR("Minor 7"),  PSTR("Major 9"),  PSTR("Minor 9"),
-                               PSTR("Variation 1"),  PSTR("Variation 2"),
-                               PSTR("Major"),  PSTR("Harmonic minor"),  PSTR("Melodic Minor"),  PSTR("Pentatonic Maj"),  PSTR("Minor"),  PSTR("Pentatonic Min"),
-                               PSTR("Alphabetic") ,  PSTR("Solmization"),
-                               PSTR("Crea"), PSTR("Puto"),               
-
-#endif            
-#if (_KEYSIG_ == _ALPHABETIC_)
                                PSTR("C"), PSTR("C#/Db"), PSTR("D"), PSTR("D#/Eb"), PSTR("E"), PSTR("F"), PSTR("F#/Gb"),PSTR("G"), PSTR("G#/Ab"), PSTR("A"), PSTR("A#/Bb"), PSTR("B"),
                                PSTR("Cm"),  PSTR("C#m/Dbm"),  PSTR("Dm"),  PSTR("D#m/Ebm"), PSTR("Em"),  PSTR("Fm"),  PSTR("F#m/Gbm"), PSTR("Gm"),  PSTR("G#m/Abm"),  PSTR("Am"), PSTR("A#m/Bbm"),  PSTR("Bm"),
                                PSTR("C7"),  PSTR("C#7/Db7"),  PSTR("D7"),  PSTR("D#7/Eb7"), PSTR("E7"),  PSTR("F7"),  PSTR("F#7/Gb7"), PSTR("G7"),  PSTR("G#7/Ab7"),  PSTR("A7"), PSTR("A#7/Bb7"),  PSTR("B7"),
                                PSTR("Cm7"),  PSTR("C#m7/Dbm7"),  PSTR("Dm7"),  PSTR("D#m7/Ebm7"),  PSTR("Em7"),  PSTR("Fm7"),  PSTR("F#m7/Gbm7"), PSTR("Gm7"),  PSTR("G#m7/Abm7"), PSTR("Am7"),  PSTR("A#m7/Bbm7"), PSTR("Bm7"),
                                PSTR("C9"),  PSTR("C#9/Db9"),  PSTR("D9"),  PSTR("D#9/Eb9"), PSTR("E9"),  PSTR("F9"),  PSTR("F#9/Gb9"), PSTR("G9"),  PSTR("G#9/Ab9"),  PSTR("A9"), PSTR("A#9/Bb9"),  PSTR("B9"),
                                PSTR("Cm9"),  PSTR("C#m9/Dbm9"),  PSTR("Dm9"),  PSTR("D#m9/Ebm9"),  PSTR("Em9"),  PSTR("Fm9"),  PSTR("F#m9/Gbm9"), PSTR("Gm9"),  PSTR("G#m9/Abm9"), PSTR("Am9"),  PSTR("A#m9/Bbm9"),  PSTR("Bm9"),
-#endif
-#if (_KEYSIG_ == _SOLMIZATION_)
-                               PSTR("Do"), PSTR("Do#/Reb"), PSTR("Re"), PSTR("Re#/Mib"), PSTR("Mi"), PSTR("Fa"), PSTR("Fa#/Solb"),PSTR("Sol"), PSTR("Sol#/Lab"), PSTR("La"), PSTR("La#/Sib"), PSTR("Si"),
-                               PSTR( "Dom"), PSTR("Do#m/Rebm"), PSTR("Rem"), PSTR("Re#m/Mibm"), PSTR("Mim"), PSTR("Fam"), PSTR("Fa#m/Solbm"),PSTR("Solm"), PSTR("Sol#m/Labm"), PSTR("Lam"), PSTR("La#m/Sibm"), PSTR("Sim"),
-                               PSTR("Do7"), PSTR("Do#7/Reb7"), PSTR("Re7"), PSTR("Re#7/Mib7"), PSTR("Mi7"), PSTR("Fa7"), PSTR("Fa#7/Solb7"),PSTR("Sol7"), PSTR("Sol#7/Lab7"), PSTR("La7"), PSTR("La#7/Sib7"), PSTR("Si7"),
-                               PSTR("Dom7"), PSTR("Do#m7/Rebm7"), PSTR("Rem7"), PSTR("Re#m7/Mibm7"), PSTR("Mim7"), PSTR("Fam7"), PSTR("Fa#m7/Solbm7"),PSTR("Solm7"), PSTR("Sol#m7/Labm7"), PSTR("Lam7"), PSTR("La#m7/Sibm7"), PSTR("Sim7"),
-                               PSTR("Do9"), PSTR("Do#9/Reb9"), PSTR("Re9"), PSTR("Re#9/Mib9"), PSTR("Mi9"), PSTR("Fa9"), PSTR("Fa#9/Solb9"),PSTR("Sol9"), PSTR("Sol#9/Lab9"), PSTR("La9"), PSTR("La#9/Sib9"), PSTR("Si9"),
-                               PSTR("Dom9"), PSTR("Do#m9/Rebm9"), PSTR("Rem9"), PSTR("Re#m9/Mibm9"), PSTR("Mim9"), PSTR("Fam9"), PSTR("Fa#m9/Solbm9"),PSTR("Solm9"), PSTR("Sol#m9/Labm9"), PSTR("Lam9"), PSTR("La#m9/Sibm9"), PSTR("Sim9")
-#endif
                                );
   MenuItem newMenuItem=changed.to; //get the destination menu
   MenuItem newMenuItemAnt = changed.from; //get the destination menu
 
   if(newMenuItem.getName()==menu.getRoot()){
-
     //ACA HAY QUE IR A L PRIMER ELEMENTO DEL MENU PROBAR SETCURERENT cambiando a public
-  lcd.setCursor(0,0);  
-  lcd.print(" ..::CREAR::.. ");
-  lcd.setCursor(0,1);  
-  lcd.print("__Guitarra Led__");
-
-
-    
+    MainMenu();
   } else {
-    
-  
 //    updateLCD(atoi(newMenuItemAnt.getName()),menuLCD);
     updateLCD(atoi(newMenuItem.getName()), atoi(newMenuItem.getBefore()->getName()), menuLCD );
   }
@@ -912,7 +891,7 @@ void LEDMatrix(){
      shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, highByte( tempLED[ y]));
      shiftOut( SIPOserial, SIPOsrclk, MSBFIRST,  lowByte( tempLED[ y]));
      digitalWrite( SIPOrclk, HIGH);
-     delay(1);
+     delay(2);
      digitalWrite( SIPOrclk, LOW);
      shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
      shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
