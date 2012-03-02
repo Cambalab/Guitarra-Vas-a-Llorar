@@ -299,111 +299,111 @@ const int debounceDelay = 200;    // the debounce time
 ShiftLCD lcd( LCDSerial, LCDrclk, LCDsrclk);
 
 void readButtons();
-void updateLCD( int counter, int prev,_FLASH_STRING_ARRAY textLCD);
+void updateLCD( short counter, short prev,_FLASH_STRING_ARRAY textLCD);
 void menuUsed(MenuUseEvent used);
 void menuChanged(MenuChangeEvent changed);
 
 //Menu variables
 MenuBackend menu = MenuBackend(menuUsed,menuChanged);
 //initialize menuitems
-    MenuItem m0 = MenuItem("0");
-      MenuItem m00 = MenuItem("6");
+    MenuItem m0 = MenuItem(0);
+      MenuItem m00 = MenuItem(6);
 // MAYORES
 
-         MenuItem  m000 = MenuItem("24");
-         MenuItem  m001 = MenuItem("25");
-         MenuItem  m002 = MenuItem("26");
-         MenuItem  m003 = MenuItem("27");
-         MenuItem  m004 = MenuItem("28");
-         MenuItem  m005 = MenuItem("29");
-         MenuItem  m006 = MenuItem("30");
-         MenuItem  m007 = MenuItem("31");
-         MenuItem  m008 = MenuItem("32");
-         MenuItem  m009 = MenuItem("33");
-         MenuItem  m0010 = MenuItem("34");
-         MenuItem  m0011 = MenuItem("35");
+         MenuItem  m000 = MenuItem(24);
+         MenuItem  m001 = MenuItem(25);
+         MenuItem  m002 = MenuItem(26);
+         MenuItem  m003 = MenuItem(27);
+         MenuItem  m004 = MenuItem(28);
+         MenuItem  m005 = MenuItem(29);
+         MenuItem  m006 = MenuItem(30);
+         MenuItem  m007 = MenuItem(31);
+         MenuItem  m008 = MenuItem(32);
+         MenuItem  m009 = MenuItem(33);
+         MenuItem  m0010 = MenuItem(34);
+         MenuItem  m0011 = MenuItem(35);
     
-      MenuItem m01 = MenuItem("7");
-         MenuItem  m010 = MenuItem("36");
-         MenuItem  m011 = MenuItem("37");
-         MenuItem  m012 = MenuItem("38");
-         MenuItem  m013 = MenuItem("39");
-         MenuItem  m014 = MenuItem("40");
-         MenuItem  m015 = MenuItem("41");
-         MenuItem  m016 = MenuItem("42");
-         MenuItem  m017 = MenuItem("43");
-         MenuItem  m018 = MenuItem("44");
-         MenuItem  m019 = MenuItem("45");
-         MenuItem  m0110 = MenuItem("46");
-         MenuItem  m0111 = MenuItem("47");
+      MenuItem m01 = MenuItem(7);
+         MenuItem  m010 = MenuItem(36);
+         MenuItem  m011 = MenuItem(37);
+         MenuItem  m012 = MenuItem(38);
+         MenuItem  m013 = MenuItem(39);
+         MenuItem  m014 = MenuItem(40);
+         MenuItem  m015 = MenuItem(41);
+         MenuItem  m016 = MenuItem(42);
+         MenuItem  m017 = MenuItem(43);
+         MenuItem  m018 = MenuItem(44);
+         MenuItem  m019 = MenuItem(45);
+         MenuItem  m0110 = MenuItem(46);
+         MenuItem  m0111 = MenuItem(47);
       
-      MenuItem m02 = MenuItem("8");
-         MenuItem  m020 = MenuItem("48");
-         MenuItem  m021 = MenuItem("49");
-         MenuItem  m022 = MenuItem("50");
-         MenuItem  m023 = MenuItem("51");
-         MenuItem  m024 = MenuItem("52");
-         MenuItem  m025 = MenuItem("53");
-         MenuItem  m026 = MenuItem("54");
-         MenuItem  m027= MenuItem("55");
-         MenuItem  m028 = MenuItem("56");
-         MenuItem  m029 = MenuItem("57");
-         MenuItem  m0210 = MenuItem("58");
-         MenuItem  m0211 = MenuItem("59");
+      MenuItem m02 = MenuItem(8);
+         MenuItem  m020 = MenuItem(48);
+         MenuItem  m021 = MenuItem(49);
+         MenuItem  m022 = MenuItem(50);
+         MenuItem  m023 = MenuItem(51);
+         MenuItem  m024 = MenuItem(52);
+         MenuItem  m025 = MenuItem(53);
+         MenuItem  m026 = MenuItem(54);
+         MenuItem  m027= MenuItem(55);
+         MenuItem  m028 = MenuItem(56);
+         MenuItem  m029 = MenuItem(57);
+         MenuItem  m0210 = MenuItem(58);
+         MenuItem  m0211 = MenuItem(59);
       
-      MenuItem m03 = MenuItem("9");
+      MenuItem m03 = MenuItem(9);
 // MAYORES
-         MenuItem  m030 = MenuItem("60");
-         MenuItem  m031 = MenuItem("61");
-         MenuItem  m032 = MenuItem("62");
-         MenuItem  m033 = MenuItem("63");
-         MenuItem  m034 = MenuItem("64");
-         MenuItem  m035 = MenuItem("65");
-         MenuItem  m036 = MenuItem("66");
-         MenuItem  m037 = MenuItem("67");
-         MenuItem  m038 = MenuItem("68");
-         MenuItem  m039 = MenuItem("69");
-         MenuItem  m0310 = MenuItem("70");
-         MenuItem  m0311 = MenuItem("71");
+         MenuItem  m030 = MenuItem(60);
+         MenuItem  m031 = MenuItem(61);
+         MenuItem  m032 = MenuItem(62);
+         MenuItem  m033 = MenuItem(63);
+         MenuItem  m034 = MenuItem(64);
+         MenuItem  m035 = MenuItem(65);
+         MenuItem  m036 = MenuItem(66);
+         MenuItem  m037 = MenuItem(67);
+         MenuItem  m038 = MenuItem(68);
+         MenuItem  m039 = MenuItem(69);
+         MenuItem  m0310 = MenuItem(70);
+         MenuItem  m0311 = MenuItem(71);
       
-      MenuItem m04 = MenuItem("10");
-         MenuItem  m040 = MenuItem("72");
-         MenuItem  m041 = MenuItem("73");
-         MenuItem  m042 = MenuItem("74");
-         MenuItem  m043 = MenuItem("75");
-         MenuItem  m044 = MenuItem("76");
-         MenuItem  m045 = MenuItem("77");
-         MenuItem  m046 = MenuItem("78");
-         MenuItem  m047 = MenuItem("79");
-         MenuItem  m048 = MenuItem("80");
-         MenuItem  m049 = MenuItem("81");
-         MenuItem  m0410 = MenuItem("82");
-         MenuItem  m0411 = MenuItem("83");
+      MenuItem m04 = MenuItem(10);
+         MenuItem  m040 = MenuItem(72);
+         MenuItem  m041 = MenuItem(73);
+         MenuItem  m042 = MenuItem(74);
+         MenuItem  m043 = MenuItem(75);
+         MenuItem  m044 = MenuItem(76);
+         MenuItem  m045 = MenuItem(77);
+         MenuItem  m046 = MenuItem(78);
+         MenuItem  m047 = MenuItem(79);
+         MenuItem  m048 = MenuItem(80);
+         MenuItem  m049 = MenuItem(81);
+         MenuItem  m0410 = MenuItem(82);
+         MenuItem  m0411 = MenuItem(83);
       
-      MenuItem m05 = MenuItem("11");
-         MenuItem  m050 = MenuItem("84");
-         MenuItem  m051 = MenuItem("85");
-         MenuItem  m052 = MenuItem("86");
-         MenuItem  m053 = MenuItem("87");
-         MenuItem  m054 = MenuItem("88");
-         MenuItem  m055 = MenuItem("89");
-         MenuItem  m056 = MenuItem("90");
-         MenuItem  m057 = MenuItem("91");
-         MenuItem  m058 = MenuItem("92");
-         MenuItem  m059 = MenuItem("93");
-         MenuItem  m0510 = MenuItem("94");
-         MenuItem  m0511 = MenuItem("95");
+      MenuItem m05 = MenuItem(11);
+         MenuItem  m050 = MenuItem(84);
+         MenuItem  m051 = MenuItem(85);
+         MenuItem  m052 = MenuItem(86);
+         MenuItem  m053 = MenuItem(87);
+         MenuItem  m054 = MenuItem(88);
+         MenuItem  m055 = MenuItem(89);
+         MenuItem  m056 = MenuItem(90);
+         MenuItem  m057 = MenuItem(91);
+         MenuItem  m058 = MenuItem(92);
+         MenuItem  m059 = MenuItem(93);
+         MenuItem  m0510 = MenuItem(94);
+         MenuItem  m0511 = MenuItem(95);
 
-    MenuItem m1 = MenuItem("1");
-      MenuItem m10 = MenuItem("14");
-      MenuItem m11 = MenuItem("15");
-      MenuItem m12 = MenuItem("16");
-      MenuItem m13 = MenuItem("17");  
-      MenuItem m14 = MenuItem("18");
-      MenuItem m15 = MenuItem("19");
-//    MenuItem m4 = MenuItem("4");
-  //  MenuItem m41 = MenuItem("23");
-  MenuItem m5 = MenuItem("5");
+    MenuItem m1 = MenuItem(1);
+      MenuItem m10 = MenuItem(14);
+      MenuItem m11 = MenuItem(15);
+      MenuItem m12 = MenuItem(16);
+      MenuItem m13 = MenuItem(17);  
+      MenuItem m14 = MenuItem(18);
+      MenuItem m15 = MenuItem(19);
+//    MenuItem m4 = MenuItem(4);
+  //  MenuItem m41 = MenuItem(23);
+  MenuItem m5 = MenuItem(5);
 
 void setup()
 {
@@ -578,11 +578,7 @@ m15.add(m000);
 */  
   menu.toRoot();
 
-  MainMenu();
-
-//  Serial.begin( 9600);
-// Serial.print("XXX\n");
-
+MainMenu();
 }  // setup()...
 
 
@@ -668,7 +664,7 @@ void readSongNotes(int counter, int other) {
     lcd.print("edddddd");
 }
 
-void updateLCD( int counter, int prev,_FLASH_STRING_ARRAY textLCD){
+void updateLCD( short counter, short prev,_FLASH_STRING_ARRAY textLCD){
    lcd.clear();
 
    lcd.setCursor( 0, 0);
@@ -678,7 +674,7 @@ void updateLCD( int counter, int prev,_FLASH_STRING_ARRAY textLCD){
    lcd.setCursor( 0, 1);
 //   FLASH_STRING(izquierda, "<-");
 //   izquierda.print(lcd); 
-   lcd.setCursor(((16-textLCD[counter].length())/2),1);
+  lcd.setCursor(((16-textLCD[counter].length())/2),1);
    textLCD[counter].print(lcd);
 }
 
@@ -806,16 +802,17 @@ if( used.item == m000 || used.item == m001  || used.item == m002  || used.item =
    MenuItem padre = *(used.item.getBefore());  
    if( padre == m10 || padre == m11 || padre == m12 || padre == m13 || padre == m14 || padre == m15) {
       pt2Function = &showScale;
-      pt2val = atoi(used.item.getName())-24;
-      pt2val2 = atoi(used.item.getBefore()->getName())-14;
+      pt2val = used.item.getName()-24;
+      pt2val2 = used.item.getBefore()->getName()-14;
    } else {
         pt2Function = &showChord;
-        pt2val = atoi(used.item.getName())%12;
-        pt2val2 = atoi(used.item.getBefore()->getName())-6;
+        pt2val = used.item.getName()%12;
+        pt2val2 = used.item.getBefore()->getName()-6;
   }
 }  
 
 if ( used.item == m5) {
+        //Serial.println("m5");
       pt2Function = &readSongNotes;
       pt2val = 0;
 }
@@ -837,7 +834,7 @@ void menuChanged(MenuChangeEvent changed){
                                PSTR("C7"),  PSTR("C#7/Db7"),  PSTR("D7"),  PSTR("D#7/Eb7"), PSTR("E7"),  PSTR("F7"),  PSTR("F#7/Gb7"), PSTR("G7"),  PSTR("G#7/Ab7"),  PSTR("A7"), PSTR("A#7/Bb7"),  PSTR("B7"),
                                PSTR("Cm7"),  PSTR("C#m7/Dbm7"),  PSTR("Dm7"),  PSTR("D#m7/Ebm7"),  PSTR("Em7"),  PSTR("Fm7"),  PSTR("F#m7/Gbm7"), PSTR("Gm7"),  PSTR("G#m7/Abm7"), PSTR("Am7"),  PSTR("A#m7/Bbm7"), PSTR("Bm7"),
                                PSTR("C9"),  PSTR("C#9/Db9"),  PSTR("D9"),  PSTR("D#9/Eb9"), PSTR("E9"),  PSTR("F9"),  PSTR("F#9/Gb9"), PSTR("G9"),  PSTR("G#9/Ab9"),  PSTR("A9"), PSTR("A#9/Bb9"),  PSTR("B9"),
-                               PSTR("Cm9"),  PSTR("C#m9/Dbm9"),  PSTR("Dm9"),  PSTR("D#m9/Ebm9"),  PSTR("Em9"),  PSTR("Fm9"),  PSTR("F#m9/Gbm9"), PSTR("Gm9"),  PSTR("G#m9/Abm9"), PSTR("Am9"),  PSTR("A#m9/Bbm9"),  PSTR("Bm9"),
+                               PSTR("Cm9"),  PSTR("C#m9/Dbm9"),  PSTR("Dm9"),  PSTR("D#m9/Ebm9"),  PSTR("Em9"),  PSTR("Fm9"),  PSTR("F#m9/Gbm9"), PSTR("Gm9"),  PSTR("G#m9/Abm9"), PSTR("Am9"),  PSTR("A#m9/Bbm9"),  PSTR("Bm9"), PSTR("Modo"), 
                                );
   MenuItem newMenuItem=changed.to; //get the destination menu
   MenuItem newMenuItemAnt = changed.from; //get the destination menu
@@ -847,7 +844,7 @@ void menuChanged(MenuChangeEvent changed){
     MainMenu();
   } else {
 //    updateLCD(atoi(newMenuItemAnt.getName()),menuLCD);
-    updateLCD(atoi(newMenuItem.getName()), atoi(newMenuItem.getBefore()->getName()), menuLCD );
+    updateLCD(newMenuItem.getName(), newMenuItem.getBefore()->getName(), menuLCD );
   }
    
    
