@@ -426,6 +426,10 @@ void setup()
 
   lcd.begin(16, 2);
 
+    for( int x = 0; x < 6; x++){
+        tempLED [ x] = 0x0000;
+    }
+
   //configure menu
 
 
@@ -593,9 +597,6 @@ void MainMenu() {
 
 void loop()
 {
-for( int x = 0; x < 6; x++){
-    tempLED [ x] = 0x0000;
-   }
 
   readButtons();  //I splitted button reading and navigation in two procedures because 
   navigateMenus();  //in some situations I want to use the button for other purpose (eg. to change some settings)
