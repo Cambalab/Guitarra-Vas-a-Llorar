@@ -66,7 +66,7 @@ public:
 		if (after->remember_parent) { 
             after->setBefore(this);
             MenuItem *node = after->getRight();
-            while(node && (node != after)){
+            while(node && (node != after) && (node != this)){
                 node->setBefore(this);
                 node = node->getRight();
             }
