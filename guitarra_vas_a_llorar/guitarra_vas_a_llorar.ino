@@ -227,7 +227,7 @@ const int debounceDelay = 200;    // the debounce time
 ShiftLCD lcd( LCDSerial, LCDrclk, LCDsrclk);
 
 void readButtons();
-void updateLCD( short counter, short prev,_FLASH_STRING_ARRAY textLCD);
+void updateLCD( byte counter, byte prev,_FLASH_STRING_ARRAY textLCD);
 void menuUsed(MenuUseEvent used);
 void menuChanged(MenuChangeEvent changed);
 
@@ -615,7 +615,7 @@ void readSongNotes(int counter, int other) {
     }
 }
 
-void updateLCD( short counter, short prev,_FLASH_STRING_ARRAY textLCD) {
+void updateLCD( byte counter, byte prev,_FLASH_STRING_ARRAY textLCD) {
     lcd.clear();
     lcd.setCursor(((16-textLCD[prev].length())/2),0);
     textLCD[prev].print(lcd);

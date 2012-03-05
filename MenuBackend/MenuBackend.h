@@ -37,12 +37,12 @@
 */
 class MenuItem {
 public:
-	MenuItem(short itemName ) : name(itemName) {
+	MenuItem(byte itemName ) : name(itemName) {
 		before = right = after = left = 0;
 	}
 
 	//void use(){} //update some internal data / statistics
-	inline short getName() const { return name; }
+	inline byte getName() const { return name; }
 	inline void setBefore(MenuItem *mi) { before = mi; }
 	inline void setBack(MenuItem *b) { back = b; }
 	inline MenuItem* getBack() const { return back; }
@@ -111,7 +111,7 @@ public:
 //    bool remember_parent;
 protected:
 
-	short name;
+	byte name;
 //	const char shortkey;
 
 	MenuItem *before;
@@ -122,15 +122,15 @@ protected:
 };
 
 //no dependant inclusion of string or cstring
-bool menuTestStrings(short a, short b) {
+bool menuTestStrings(byte a, byte b) {
     if (a==b)
         return true;
     return false;
 }
-bool operator==(MenuItem &lhs, short test) {
+bool operator==(MenuItem &lhs, byte test) {
 	return menuTestStrings(lhs.getName(),test);
 }
-bool operator==(const MenuItem &lhs, short test) {
+bool operator==(const MenuItem &lhs, byte test) {
 	return menuTestStrings(lhs.getName(),test);
 }
 bool operator==(MenuItem &lhs, MenuItem &rhs) {
