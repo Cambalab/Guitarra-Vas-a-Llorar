@@ -42,6 +42,7 @@ IMPORTANT: to use the menubackend library by Alexander Brevig download it at htt
 #include <Flash.h>
 #include <MenuBackend.h>    //MenuBackend library - copyright by Alexander Brevig
 
+/*
 #define _EN_ 0
 #define _ES_ 1
  
@@ -55,6 +56,7 @@ IMPORTANT: to use the menubackend library by Alexander Brevig download it at htt
 #ifndef _KEYSIG_
 #define _KEYSIG_ _ALPHABETIC_
 #endif
+*/
 
 /*
 #define crea { 0x2736, 0x5151, 0x5351, 0x7331, 0x5151, 0x5756 }
@@ -196,28 +198,28 @@ int pt2val2 = -1;
 unsigned int tempLED[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
 unsigned int blinker = 0;
 
-const int DCreset = 8;
-const int DCclk = 9;
+const byte DCreset = 8;
+const byte DCclk = 9;
 
-const int SIPOrclk = 10;
-const int SIPOserial = 11;
-const int SIPOsrclk = 13;
+const byte SIPOrclk = 10;
+const byte SIPOserial = 11;
+const byte SIPOsrclk = 13;
 
-const int LCDSerial = 5;
-const int LCDrclk = 6;
-const int LCDsrclk = 7;
+const byte LCDSerial = 5;
+const byte LCDrclk = 6;
+const byte LCDsrclk = 7;
 
-const int buttonPinLeft = 2;      // pin for the Up button
-const int buttonPinRight = 4;    // pin for the Down button
-const int buttonPinEsc = 12;     // pin for the Esc button
-const int buttonPinEnter = 3;   // pin for the Enter button
+const byte buttonPinLeft = 2;      // pin for the Up button
+const byte buttonPinRight = 4;    // pin for the Down button
+const byte buttonPinEsc = 12;     // pin for the Esc button
+const byte buttonPinEnter = 3;   // pin for the Enter button
 
 
-int lastButtonPushed = 0;
-int lastButtonEnterState = HIGH;   // the previous reading from the Enter input pin
-int lastButtonEscState = HIGH;   // the previous reading from the Esc input pin
-int lastButtonLeftState = HIGH;  // the previous reading from the Left input pin
-int lastButtonRightState = HIGH;   // the previous reading from the Right input pin
+byte lastButtonPushed = 0;
+byte lastButtonEnterState = HIGH;   // the previous reading from the Enter input pin
+byte lastButtonEscState = HIGH;   // the previous reading from the Esc input pin
+byte lastButtonLeftState = HIGH;  // the previous reading from the Left input pin
+byte lastButtonRightState = HIGH;   // the previous reading from the Right input pin
 long lastEnterDebounceTime = 0;  // the last time the output pin was toggled
 long lastEscDebounceTime = 0;  // the last time the output pin was toggled
 long lastLeftDebounceTime = 0;  // the last time the output pin was toggled
@@ -353,6 +355,7 @@ void setup() {
     Serial.begin(9600);
 
     lcd.begin(16, 2);
+
     for( int x = 0; x < 6; x++) {
         tempLED [ x] = 0x0000;
     }
@@ -539,9 +542,9 @@ void showMessage(int idx, int other) {
 */
 
 void showScale(int counter, int other) {
-    unsigned int tempLED1[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
+    //unsigned int tempLED1[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
     unsigned int tempLED2[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
-    unsigned int h = 0x0000;
+    //unsigned int h = 0x0000;
   // menu[1] en vez de 0
     for( int x = 6; x > 0; x--){
         tempLED[ 6-x] = pgm_read_word_near(&(masterScales[ other][ x-1]));
@@ -589,7 +592,7 @@ void readSongNotes(int counter, int other) {
             if( Serial.available() >= 13 ) {       // wait for 1byte header + 12 bytes
                 if(Serial.read() == 'N') {
                     c1 = Serial.read();
-                    if(c1 == 32) break;
+//                    if(c1 == 32) break;
                     c1 = word(c1,Serial.read());
                     c2 = Serial.read();
                     c2 = word(c2,Serial.read());
@@ -625,10 +628,10 @@ void updateLCD( byte counter, byte prev,_FLASH_STRING_ARRAY textLCD) {
 
 void  readButtons(){  //read buttons status
     int reading;
-    int buttonEnterState=HIGH;             // the current reading from the Enter input pin
-    int buttonEscState=HIGH;             // the current reading from the input pin
-    int buttonLeftState=HIGH;             // the current reading from the input pin
-    int buttonRightState=HIGH;             // the current reading from the input pin
+    byte buttonEnterState=HIGH;             // the current reading from the Enter input pin
+    byte buttonEscState=HIGH;             // the current reading from the input pin
+    byte buttonLeftState=HIGH;             // the current reading from the input pin
+    byte buttonRightState=HIGH;             // the current reading from the input pin
 
     //Enter button
     // read the state of the switch into a local variable:
