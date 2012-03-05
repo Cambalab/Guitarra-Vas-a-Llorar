@@ -480,7 +480,7 @@ void setup() {
     m10.addRight(m11).addRight(m12).addRight(m13).addRight(m14).addRight(m15);
     m10.addLeft(m15);
 
-    m000.remember_parent=true;
+//    m000.remember_parent=true;
     m10.add(m000);
     m11.add(m000);
     m12.add(m000);

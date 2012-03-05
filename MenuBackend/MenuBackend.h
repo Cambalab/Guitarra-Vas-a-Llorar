@@ -37,15 +37,12 @@
 */
 class MenuItem {
 public:
-	MenuItem(short itemName, char shortKey='\0' ) : name(itemName), shortkey(shortKey) {
+	MenuItem(short itemName ) : name(itemName) {
 		before = right = after = left = 0;
-        remember_parent = false;
 	}
 
 	//void use(){} //update some internal data / statistics
 	inline short getName() const { return name; }
-	inline const char getShortkey() const { return shortkey; }
-	inline const bool hasShortkey() const { return (shortkey!='\0'); }
 	inline void setBefore(MenuItem *mi) { before = mi; }
 	inline void setBack(MenuItem *b) { back = b; }
 	inline MenuItem* getBack() const { return back; }
@@ -62,8 +59,8 @@ public:
 	}
 
 	MenuItem *moveDown() { 
-		if (after) { after->back = this; }
-		if (after && after->remember_parent) { 
+//		if (after) { after->back = this; }
+		if (after) { 
             after->setBefore(this);
             MenuItem *node = after->getRight();
             while(node && (node != after) && (node != this)){
@@ -111,11 +108,11 @@ public:
 		if ( !mi.back ) mi.back = back;
 		return mi;
 	}
-    bool remember_parent;
+//    bool remember_parent;
 protected:
 
 	short name;
-	const char shortkey;
+//	const char shortkey;
 
 	MenuItem *before;
 	MenuItem *right;
@@ -190,13 +187,13 @@ public:
 	void moveRight() {
 		setCurrent(current->moveRight());
 	}
-
+/*
 	void use(char shortkey)
 	{
 		recursiveSearch(shortkey,&root);
 		use();
 	}
-	
+*/	
 	void use() {
 		//current->use();
 		if (cb_menuUse) {
@@ -223,6 +220,8 @@ private:
 		mi->setBack(current);
 		current = mi;
 	}
+
+    /*
 	char canSearch(const char shortkey, MenuItem *m) {
 		if (m==0) { return 0; }
 		else  {
@@ -269,7 +268,7 @@ private:
 			rSBefore(shortkey, m->getBefore());
 		}
 	}
-	
+	*/
 	MenuItem root;
 	MenuItem *current;
 
