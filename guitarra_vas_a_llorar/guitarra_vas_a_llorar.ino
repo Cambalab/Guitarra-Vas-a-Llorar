@@ -401,33 +401,32 @@ MenuBackend menu = MenuBackend(menuUsed,menuChanged);
       MenuItem m13 = MenuItem(17);  
       MenuItem m14 = MenuItem(18);
       MenuItem m15 = MenuItem(19);
-//    MenuItem m4 = MenuItem(4);
-  //  MenuItem m41 = MenuItem(23);
+//      MenuItem m4 = MenuItem(4);
+//      MenuItem  MenuItem m41 = MenuItem(23);
   MenuItem m5 = MenuItem(5);
 
-void setup()
-{
-  pinMode(buttonPinLeft, INPUT);
-  pinMode(buttonPinRight, INPUT);
-  pinMode(buttonPinEnter, INPUT);
-  pinMode(buttonPinEsc, INPUT);
+void setup() {
+    pinMode(buttonPinLeft, INPUT);
+    pinMode(buttonPinRight, INPUT);
+    pinMode(buttonPinEnter, INPUT);
+    pinMode(buttonPinEsc, INPUT);
 
-  digitalWrite(buttonPinLeft,1);
-  digitalWrite(buttonPinRight,1);
-  digitalWrite(buttonPinEnter,1);
-  digitalWrite(buttonPinEsc,1);
+    digitalWrite(buttonPinLeft,1);
+    digitalWrite(buttonPinRight,1);
+    digitalWrite(buttonPinEnter,1);
+    digitalWrite(buttonPinEsc,1);
 
-   pinMode( DCreset, OUTPUT);
-   pinMode( DCclk, OUTPUT);
-   pinMode( SIPOrclk, OUTPUT);
-   pinMode( SIPOserial, OUTPUT);
-   pinMode( SIPOsrclk, OUTPUT);
+    pinMode( DCreset, OUTPUT);
+    pinMode( DCclk, OUTPUT);
+    pinMode( SIPOrclk, OUTPUT);
+    pinMode( SIPOserial, OUTPUT);
+    pinMode( SIPOsrclk, OUTPUT);
 
-  Serial.begin(9600);
+    Serial.begin(9600);
 
-  lcd.begin(16, 2);
+    lcd.begin(16, 2);
 
-    for( int x = 0; x < 6; x++){
+    for( int x = 0; x < 6; x++) {
         tempLED [ x] = 0x0000;
     }
 
@@ -436,146 +435,140 @@ void setup()
 
 //MENU RECURSIVO PARA TODAS LAS OPCIONES
 //  m0.addRight(menu1Item1).addRight(menu1Item2).addRight(menu1Item3).addRight(menu1Item4).addRight(menu1Item5);
-  m0.addRight(m1).addRight(m5);//addRight(m4).
-  m0.addLeft(m5);
-  menu.getRoot().add(m5);
+    m0.addRight(m1).addRight(m5);//addRight(m4).
+    m0.addLeft(m5);
+    menu.getRoot().add(m5);
 //      menu.getRoot().add(m4);
-  menu.getRoot().add(m1);
-  menu.getRoot().add(m0);          
+    menu.getRoot().add(m1);
+    menu.getRoot().add(m0);          
 
-  m0.add(m05);
-  m0.add(m04);
-  m0.add(m03);
-  m0.add(m02);
-  m0.add(m01);
-  m0.add(m00);
-  m00.addRight(m01).addRight(m02).addRight(m03).addRight(m04).addRight(m05);
-  m00.addLeft(m05);
+    m0.add(m05);
+    m0.add(m04);
+    m0.add(m03);
+    m0.add(m02);
+    m0.add(m01);
+    m0.add(m00);
+    m00.addRight(m01).addRight(m02).addRight(m03).addRight(m04).addRight(m05);
+    m00.addLeft(m05);
+ 
+ 
+    m00.add(m0011);
+    m00.add(m0010);
+    m00.add(m009);
+    m00.add(m008);
+    m00.add(m007);
+    m00.add(m006);
+    m00.add(m005);
+    m00.add(m004);
+    m00.add(m003);
+    m00.add(m002);
+    m00.add(m001);
+    m00.add(m000);
+    m000.addRight(m001).addRight(m002).addRight(m003).addRight(m004).addRight(m005).addRight(m006).addRight(m007).addRight(m008).addRight(m009).addRight(m0010).addRight(m0011);
+    m000.addLeft(m0011);    
+    
+    m01.add(m0111);
+    m01.add(m0110);
+    m01.add(m019);
+    m01.add(m018);
+    m01.add(m017);
+    m01.add(m016);
+    m01.add(m015);
+    m01.add(m014);
+    m01.add(m013);
+    m01.add(m012);
+    m01.add(m011);
+    m01.add(m010);
+    m010.addRight(m011).addRight(m012).addRight(m013).addRight(m014).addRight(m015).addRight(m016).addRight(m017).addRight(m018).addRight(m019).addRight(m0110).addRight(m0111);
+    m010.addLeft(m0111);    
+ 
+ 
+    m02.add(m0211);
+    m02.add(m0210);
+    m02.add(m029);
+    m02.add(m028);
+    m02.add(m027);
+    m02.add(m026);
+    m02.add(m025);
+    m02.add(m024);
+    m02.add(m023);
+    m02.add(m022);
+    m02.add(m021);
+    m02.add(m020);
+    m020.addRight(m021).addRight(m022).addRight(m023).addRight(m024).addRight(m025).addRight(m026).addRight(m027).addRight(m028).addRight(m029).addRight(m0210).addRight(m0211);
+    m020.addLeft(m0211);    
+ 
+    m03.add(m0311);
+    m03.add(m0310);
+    m03.add(m039);
+    m03.add(m038);
+    m03.add(m037);
+    m03.add(m036);
+    m03.add(m035);
+    m03.add(m034);
+    m03.add(m033);
+    m03.add(m032);
+    m03.add(m031);
+    m03.add(m030);
+    m030.addRight(m031).addRight(m032).addRight(m033).addRight(m034).addRight(m035).addRight(m036).addRight(m037).addRight(m038).addRight(m039).addRight(m0310).addRight(m0311);
+    m030.addLeft(m0311);    
+ 
+    m04.add(m0411);
+    m04.add(m0410);
+    m04.add(m049);
+    m04.add(m048);
+    m04.add(m047);
+    m04.add(m046);
+    m04.add(m045);
+    m04.add(m044);
+    m04.add(m043);
+    m04.add(m042);
+    m04.add(m041);
+    m04.add(m040);
+    m040.addRight(m041).addRight(m042).addRight(m043).addRight(m044).addRight(m045).addRight(m046).addRight(m047).addRight(m048).addRight(m049).addRight(m0410).addRight(m0411);    
+    m040.addLeft(m0411);    
+ 
+ 
+    m05.add(m0511);
+    m05.add(m0510);
+    m05.add(m059);
+    m05.add(m058);
+    m05.add(m057);
+    m05.add(m056);
+    m05.add(m055);
+    m05.add(m054);
+    m05.add(m053);
+    m05.add(m052);
+    m05.add(m051);
+    m05.add(m050);
+    m050.addRight(m051).addRight(m052).addRight(m053).addRight(m054).addRight(m055).addRight(m056).addRight(m057).addRight(m058).addRight(m059).addRight(m0510).addRight(m0511);
+    m050.addLeft(m0511);    
+ 
+    m1.add(m15);
+    m1.add(m14);
+    m1.add(m13);
+    m1.add(m12);
+    m1.add(m11);
+    m1.add(m10);
+    m10.addRight(m11).addRight(m12).addRight(m13).addRight(m14).addRight(m15);
+    m10.addLeft(m15);
 
-
-  m00.add(m0011);
-  m00.add(m0010);
-  m00.add(m009);
-  m00.add(m008);
-  m00.add(m007);
-  m00.add(m006);
-  m00.add(m005);
-  m00.add(m004);
-  m00.add(m003);
-  m00.add(m002);
-  m00.add(m001);
-  m00.add(m000);
-  m000.addRight(m001).addRight(m002).addRight(m003).addRight(m004).addRight(m005).addRight(m006).addRight(m007).addRight(m008).addRight(m009).addRight(m0010).addRight(m0011);
-  m000.addLeft(m0011);    
-  
-  m01.add(m0111);
-  m01.add(m0110);
-  m01.add(m019);
-  m01.add(m018);
-  m01.add(m017);
-  m01.add(m016);
-  m01.add(m015);
-  m01.add(m014);
-  m01.add(m013);
-  m01.add(m012);
-  m01.add(m011);
-  m01.add(m010);
-  m010.addRight(m011).addRight(m012).addRight(m013).addRight(m014).addRight(m015).addRight(m016).addRight(m017).addRight(m018).addRight(m019).addRight(m0110).addRight(m0111);
-  m010.addLeft(m0111);    
-
-
-  m02.add(m0211);
-  m02.add(m0210);
-  m02.add(m029);
-  m02.add(m028);
-  m02.add(m027);
-  m02.add(m026);
-  m02.add(m025);
-  m02.add(m024);
-  m02.add(m023);
-  m02.add(m022);
-  m02.add(m021);
-  m02.add(m020);
-  m020.addRight(m021).addRight(m022).addRight(m023).addRight(m024).addRight(m025).addRight(m026).addRight(m027).addRight(m028).addRight(m029).addRight(m0210).addRight(m0211);
-  m020.addLeft(m0211);    
-
-  m03.add(m0311);
-  m03.add(m0310);
-  m03.add(m039);
-  m03.add(m038);
-  m03.add(m037);
-  m03.add(m036);
-  m03.add(m035);
-  m03.add(m034);
-  m03.add(m033);
-  m03.add(m032);
-  m03.add(m031);
-  m03.add(m030);
-  m030.addRight(m031).addRight(m032).addRight(m033).addRight(m034).addRight(m035).addRight(m036).addRight(m037).addRight(m038).addRight(m039).addRight(m0310).addRight(m0311);
-  m030.addLeft(m0311);    
-
-  m04.add(m0411);
-  m04.add(m0410);
-  m04.add(m049);
-  m04.add(m048);
-  m04.add(m047);
-  m04.add(m046);
-  m04.add(m045);
-  m04.add(m044);
-  m04.add(m043);
-  m04.add(m042);
-  m04.add(m041);
-  m04.add(m040);
-  m040.addRight(m041).addRight(m042).addRight(m043).addRight(m044).addRight(m045).addRight(m046).addRight(m047).addRight(m048).addRight(m049).addRight(m0410).addRight(m0411);    
-  m040.addLeft(m0411);    
-
-
-  m05.add(m0511);
-  m05.add(m0510);
-  m05.add(m059);
-  m05.add(m058);
-  m05.add(m057);
-  m05.add(m056);
-  m05.add(m055);
-  m05.add(m054);
-  m05.add(m053);
-  m05.add(m052);
-  m05.add(m051);
-  m05.add(m050);
-  m050.addRight(m051).addRight(m052).addRight(m053).addRight(m054).addRight(m055).addRight(m056).addRight(m057).addRight(m058).addRight(m059).addRight(m0510).addRight(m0511);
-  m050.addLeft(m0511);    
-
-
-  m1.add(m15);
-  m1.add(m14);
-  m1.add(m13);
-  m1.add(m12);
-  m1.add(m11);
-  m1.add(m10);
-  m10.addRight(m11).addRight(m12).addRight(m13).addRight(m14).addRight(m15);
-  m10.addLeft(m15);
-
-
-m000.remember_parent=true;
-m10.add(m000);
-m11.add(m000);
-m12.add(m000);
-m13.add(m000);
-m14.add(m000);
-m15.add(m000);
-
-
+    m000.remember_parent=true;
+    m10.add(m000);
+    m11.add(m000);
+    m12.add(m000);
+    m13.add(m000);
+    m14.add(m000);
+    m15.add(m000);
 
 /* 
-  menu1Item3.add(menuItem30);
-  menuItem30.addRight(menuItem31);
-  menuItem30.addLeft(menuItem31);
-*/
-/*
-  m4.add(m41);
-  m4.add(m40);
-  m40.addRight(m41);
-  m40.addLeft(m41);
+    menu1Item3.add(menuItem30);
+    menuItem30.addRight(menuItem31);
+    menuItem30.addLeft(menuItem31);
+    m4.add(m41);
+    m4.add(m40);
+    m40.addRight(m41);
+    m40.addLeft(m41);
 */  
   menu.toRoot();
 
@@ -592,78 +585,72 @@ void MainMenu() {
 
 
 
-void loop()
-{
-
-  readButtons();  //I splitted button reading and navigation in two procedures because 
-  navigateMenus();  //in some situations I want to use the button for other purpose (eg. to change some settings)
-
-if (pt2val != -1 && pt2Function != NULL) {
-    pt2Function(pt2val,pt2val2);
-}
-     
-  LEDMatrix();              
-} //loop()... 
+void loop() {
+    readButtons(); 
+    navigateMenus();
+    if (pt2val != -1 && pt2Function != NULL) {
+        pt2Function(pt2val,pt2val2);
+    }
+    LEDMatrix();              
+}  
 
 void showChord(int idx, int other) {
-if(other != -1) {
-  for( int x = 6; x > 0; x--){
-         tempLED[ 6-x] = pgm_read_word_near(&(masterChords[ other ][ idx][ 0][ x-1]));
-//       tempLED[ 6-x] = pgm_read_word_near(&(masterChords[ grupo/tipo ][ acorde][ variacion][ x-1]));
+    if(other != -1) {
+        for( int x = 6; x > 0; x--){
+            tempLED[ 6-x] = pgm_read_word_near(&(masterChords[ other ][ idx][ 0][ x-1]));
+//       masterChords[ grupo/tipo ][ acorde][ variacion][ x-1])
 //       masterChords[6][12][2][6]
-       }
-}
-
+        }
+    }
 }
 
 /*
 void showMessage(int idx, int other) {
     for( int x = 6; x > 0; x--){
-      tempLED[ 6-x] = pgm_read_word_near(&(msg2guitar[ idx][ x-1]));
-     }
+        tempLED[ 6-x] = pgm_read_word_near(&(msg2guitar[ idx][ x-1]));
+    }
 }
 */
+
 void showScale(int counter, int other) {
-  unsigned int tempLED1[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
-  unsigned int tempLED2[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
-  unsigned int h = 0x0000;
+    unsigned int tempLED1[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
+    unsigned int tempLED2[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
+    unsigned int h = 0x0000;
   // menu[1] en vez de 0
-  for( int x = 6; x > 0; x--){
-       tempLED[ 6-x] = pgm_read_word_near(&(masterScales[ other][ x-1]));
-       if( counter < 4){
-         tempLED[ 6-x]  = ((((tempLED[ 6-x]<< counter) & 0xF000) >> 12) | ((tempLED[ 6-x]<< counter) & 0xFFF0));
-       }else if(counter < 8){
-         tempLED[ 6-x]  = ((((tempLED[ 6-x]<< (counter-4)) & 0xFF00) >> 8) | ((tempLED[ 6-x]<< counter) & 0xFF00));
-       }else{
-         tempLED[ 6-x]  = ((((tempLED[ 6-x]<< (counter-8)) & 0xFFF0) >> 4) | ((tempLED[ 6-x]<< counter) & 0xFFF0));
-       }
+    for( int x = 6; x > 0; x--){
+        tempLED[ 6-x] = pgm_read_word_near(&(masterScales[ other][ x-1]));
+        if( counter < 4){
+            tempLED[ 6-x]  = ((((tempLED[ 6-x]<< counter) & 0xF000) >> 12) | ((tempLED[ 6-x]<< counter) & 0xFFF0));
+        } else if(counter < 8){
+            tempLED[ 6-x]  = ((((tempLED[ 6-x]<< (counter-4)) & 0xFF00) >> 8) | ((tempLED[ 6-x]<< counter) & 0xFF00));
+        }else{
+            tempLED[ 6-x]  = ((((tempLED[ 6-x]<< (counter-8)) & 0xFFF0) >> 4) | ((tempLED[ 6-x]<< counter) & 0xFFF0));
+        }
  
-       tempLED2[ 6-x] = pgm_read_word_near(&(masterRoots[ x-1]));
-       if( counter < 4){
-         tempLED2[ 6-x]  = ((((tempLED2[ 6-x]<< counter) & 0xF000) >> 12) | ((tempLED2[ 6-x]<< counter) & 0xFFF0));
-       }else if(counter < 8){
-         tempLED2[ 6-x]  = ((((tempLED2[ 6-x]<< (counter-4)) & 0xFF00) >> 8) | ((tempLED2[ 6-x]<< counter) & 0xFF00));
-       }else{
-        tempLED2[ 6-x]  = ((((tempLED2[ 6-x]<< (counter-8)) & 0xFFF0) >> 4) | ((tempLED2[ 6-x]<< counter) & 0xFFF0));
-       }
+        tempLED2[ 6-x] = pgm_read_word_near(&(masterRoots[ x-1]));
+        if( counter < 4){
+            tempLED2[ 6-x]  = ((((tempLED2[ 6-x]<< counter) & 0xF000) >> 12) | ((tempLED2[ 6-x]<< counter) & 0xFFF0));
+        } else if(counter < 8){
+            tempLED2[ 6-x]  = ((((tempLED2[ 6-x]<< (counter-4)) & 0xFF00) >> 8) | ((tempLED2[ 6-x]<< counter) & 0xFF00));
+        } else {
+            tempLED2[ 6-x]  = ((((tempLED2[ 6-x]<< (counter-8)) & 0xFFF0) >> 4) | ((tempLED2[ 6-x]<< counter) & 0xFFF0));
+        }
  
-       blinker++;
-       if( blinker < 1000){
-         tempLED[ 6-x] = tempLED[ 6-x] - tempLED2[ 6-x];
-       }else{
-         tempLED[ 6-x] = tempLED[ 6-x];
-         if( blinker > 2000){
-          blinker = 0;
-         }
-       }
-     }
+        blinker++;
+        if( blinker < 1000){
+            tempLED[ 6-x] = tempLED[ 6-x] - tempLED2[ 6-x];
+        } else {
+            tempLED[ 6-x] = tempLED[ 6-x];
+            if( blinker > 2000) {
+                blinker = 0;
+            }
+        }
+    }
 }
 
 void readSongNotes(int counter, int other) {
     unsigned int c1=0,c2=0,c3=0,c4=0,c5=0,c6=0,c7=0;
 //    long start_time = millis();
-
-    //while(c1 != 32) {
     while(1) {
         tempLED[0] = c1;
         tempLED[1] = c2;
@@ -702,122 +689,111 @@ void readSongNotes(int counter, int other) {
     }
 }
 
-void updateLCD( short counter, short prev,_FLASH_STRING_ARRAY textLCD){
-   lcd.clear();
-
-   lcd.setCursor( 0, 0);
-   lcd.setCursor(((16-textLCD[prev].length())/2),0);
-   textLCD[prev].print(lcd);
-   
-   lcd.setCursor( 0, 1);
+void updateLCD( short counter, short prev,_FLASH_STRING_ARRAY textLCD) {
+    lcd.clear();
+    lcd.setCursor( 0, 0);
+    lcd.setCursor(((16-textLCD[prev].length())/2),0);
+    textLCD[prev].print(lcd);
+    lcd.setCursor( 0, 1);
 //   FLASH_STRING(izquierda, "<-");
 //   izquierda.print(lcd); 
-  lcd.setCursor(((16-textLCD[counter].length())/2),1);
-   textLCD[counter].print(lcd);
+    lcd.setCursor(((16-textLCD[counter].length())/2),1);
+    textLCD[counter].print(lcd);
 }
 
 void  readButtons(){  //read buttons status
-  int reading;
-  int buttonEnterState=HIGH;             // the current reading from the Enter input pin
-  int buttonEscState=HIGH;             // the current reading from the input pin
-  int buttonLeftState=HIGH;             // the current reading from the input pin
-  int buttonRightState=HIGH;             // the current reading from the input pin
+    int reading;
+    int buttonEnterState=HIGH;             // the current reading from the Enter input pin
+    int buttonEscState=HIGH;             // the current reading from the input pin
+    int buttonLeftState=HIGH;             // the current reading from the input pin
+    int buttonRightState=HIGH;             // the current reading from the input pin
 
-  //Enter button
-                  // read the state of the switch into a local variable:
-                  reading = digitalRead(buttonPinEnter);
+    //Enter button
+    // read the state of the switch into a local variable:
+    reading = digitalRead(buttonPinEnter);
 
-                  // check to see if you just pressed the enter button 
-                  // (i.e. the input went from LOW to HIGH),  and you've waited 
-                  // long enough since the last press to ignore any noise:  
+    // check to see if you just pressed the enter button 
+    // (i.e. the input went from LOW to HIGH),  and you've waited 
+    // long enough since the last press to ignore any noise:  
                 
-                  // If the switch changed, due to noise or pressing:
-                  if (reading != lastButtonEnterState) {
-                    // reset the debouncing timer
-                    lastEnterDebounceTime = millis();
-                  } 
+    // If the switch changed, due to noise or pressing:
+    if (reading != lastButtonEnterState) {
+    // reset the debouncing timer
+        lastEnterDebounceTime = millis();
+    } 
                   
-                  if ((millis() - lastEnterDebounceTime) > debounceDelay) {
-                    // whatever the reading is at, it's been there for longer
-                    // than the debounce delay, so take it as the actual current state:
-                    buttonEnterState=reading;
-                    lastEnterDebounceTime=millis();
-                  }
-                  
-                  // save the reading.  Next time through the loop,
-                  // it'll be the lastButtonState:
-                  lastButtonEnterState = reading;
-                  
+    if ((millis() - lastEnterDebounceTime) > debounceDelay) {
+    // whatever the reading is at, it's been there for longer
+    // than the debounce delay, so take it as the actual current state:
+        buttonEnterState=reading;
+        lastEnterDebounceTime=millis();
+    }
+          
+    // save the reading.  Next time through the loop,
+    // it'll be the lastButtonState:
+    lastButtonEnterState = reading;
+          
 
     //Esc button                 
-                  reading = digitalRead(buttonPinEsc);
-                  if (reading != lastButtonEscState) {
-                    lastEscDebounceTime = millis();
-                  } 
-                  if ((millis() - lastEscDebounceTime) > debounceDelay) {
-                    buttonEscState = reading;
-                    lastEscDebounceTime=millis();
-                  }
-                  lastButtonEscState = reading; 
-                  
-                 
-   //Down button               
-                  reading = digitalRead(buttonPinRight);
-                  if (reading != lastButtonRightState) {
-                    lastRightDebounceTime = millis();
-                  } 
-                  if ((millis() - lastRightDebounceTime) > debounceDelay) {
-                    buttonRightState = reading;
-                   lastRightDebounceTime =millis();
-                  }
-                  lastButtonRightState = reading;                  
-                  
-                  
+    reading = digitalRead(buttonPinEsc);
+    if (reading != lastButtonEscState) {
+        lastEscDebounceTime = millis();
+    } 
+    if ((millis() - lastEscDebounceTime) > debounceDelay) {
+        buttonEscState = reading;
+        lastEscDebounceTime=millis();
+    }
+    lastButtonEscState = reading; 
+               
+    //Down button               
+    reading = digitalRead(buttonPinRight);
+    if (reading != lastButtonRightState) {
+      lastRightDebounceTime = millis();
+    } 
+    if ((millis() - lastRightDebounceTime) > debounceDelay) {
+      buttonRightState = reading;
+     lastRightDebounceTime =millis();
+    }
+    lastButtonRightState = reading;                  
+    
+    
     //Up button               
-                  reading = digitalRead(buttonPinLeft);
-                  if (reading != lastButtonLeftState) {
-                    lastLeftDebounceTime = millis();
-                  } 
-                  if ((millis() - lastLeftDebounceTime) > debounceDelay) {
-                    buttonLeftState = reading;
-                    lastLeftDebounceTime=millis();;
-                  }
-                  lastButtonLeftState = reading;  
+    reading = digitalRead(buttonPinLeft);
+    if (reading != lastButtonLeftState) {
+        lastLeftDebounceTime = millis();
+    } 
+    if ((millis() - lastLeftDebounceTime) > debounceDelay) {
+        buttonLeftState = reading;
+        lastLeftDebounceTime=millis();;
+    }
+    lastButtonLeftState = reading;  
 
-                  if (buttonEnterState==LOW){
-                    lastButtonPushed=buttonPinEnter;
-
-                  }else if(buttonEscState==LOW){
-                    lastButtonPushed=buttonPinEsc;
-
-                  }else if(buttonRightState==LOW){
-                    lastButtonPushed=buttonPinRight;
-
-                  }else if(buttonLeftState==LOW){
-                    lastButtonPushed=buttonPinLeft;
-
-                  }else{
-                    lastButtonPushed=0;
-                  }   
+    if (buttonEnterState==LOW){
+        lastButtonPushed=buttonPinEnter;
+    }else if(buttonEscState==LOW){
+      lastButtonPushed=buttonPinEsc;
+    }else if(buttonRightState==LOW){
+      lastButtonPushed=buttonPinRight;
+    }else if(buttonLeftState==LOW){
+      lastButtonPushed=buttonPinLeft;
+    }else{
+      lastButtonPushed=0;
+    }   
 }
 void menuUsed(MenuUseEvent used){
-/*        lcd.setCursor(0,0);
-       lcd.print(used.item.getBefore()->getName());
-      lcd.print(used.item.getName());
-      return;*/
 /*
- if( used.item == m40 ){
-      pt2Function = &showMessage;
-      pt2val = 0;
-  }
+    if( used.item == m40 ){
+        pt2Function = &showMessage;
+        pt2val = 0;
+    }
    
-  if( used.item == m41 ){
-      pt2Function = &showMessage;
-      pt2val = 1;
-      pt2val2 = -1;
-  }
+    if( used.item == m41 ){
+        pt2Function = &showMessage;
+        pt2val = 1;
+        pt2val2 = -1;
+    }
   
-  */
+*/
 /*
   if( used.item == m10 || used.item == m11 || used.item == m12 || used.item == m13 || used.item == m14 || used.item == m15) {
 //if( used.item == m100 || used.item == m101  || used.item == m102  || used.item == m103  || used.item == m104  || used.item == m105  || used.item == m106  || used.item == m107  || used.item == m108  || used.item == m109  || used.item == m1010   || used.item == m1011) {
@@ -829,19 +805,18 @@ void menuUsed(MenuUseEvent used){
       pt2val2 = atoi(used.item.getBefore()->getName())-24;
   }
 */
-if( used.item == m000 || used.item == m001  || used.item == m002  || used.item == m003  || used.item == m004  || used.item == m005  || used.item == m006  || used.item == m007  || used.item == m008  || used.item == m009  || used.item == m0010   || used.item == m0011 ||
+    if( used.item == m000 || used.item == m001  || used.item == m002  || used.item == m003  || used.item == m004  || used.item == m005  || used.item == m006  || used.item == m007  || used.item == m008  || used.item == m009  || used.item == m0010   || used.item == m0011 ||
     used.item == m010 || used.item == m011  || used.item == m012  || used.item == m013  || used.item == m014  || used.item == m015  || used.item == m016  || used.item == m017  || used.item == m018  || used.item == m019  || used.item == m0010   || used.item == m0111 ||
     used.item == m020 || used.item == m021  || used.item == m022  || used.item == m023  || used.item == m024  || used.item == m025  || used.item == m026  || used.item == m027  || used.item == m028  || used.item == m029  || used.item == m0210   || used.item == m0211 ||
     used.item == m030 || used.item == m031  || used.item == m032  || used.item == m033  || used.item == m034  || used.item == m035  || used.item == m036  || used.item == m037  || used.item == m038  || used.item == m039  || used.item == m0310   || used.item == m0311 ||
     used.item == m040 || used.item == m041  || used.item == m042  || used.item == m043  || used.item == m044  || used.item == m045  || used.item == m046  || used.item == m047  || used.item == m048  || used.item == m049  || used.item == m0410   || used.item == m0411 ||
     used.item == m050 || used.item == m051  || used.item == m052  || used.item == m053  || used.item == m054  || used.item == m055  || used.item == m056  || used.item == m057  || used.item == m058  || used.item == m059  || used.item == m0510   || used.item == m0511 
     ) {
-      
-   MenuItem padre = *(used.item.getBefore());  
-   if( padre == m10 || padre == m11 || padre == m12 || padre == m13 || padre == m14 || padre == m15) {
-      pt2Function = &showScale;
-      pt2val = used.item.getName()-24;
-      pt2val2 = used.item.getBefore()->getName()-14;
+    MenuItem padre = *(used.item.getBefore());  
+    if( padre == m10 || padre == m11 || padre == m12 || padre == m13 || padre == m14 || padre == m15) {
+        pt2Function = &showScale;
+        pt2val = used.item.getName()-24;
+        pt2val2 = used.item.getBefore()->getName()-14;
    } else {
         pt2Function = &showChord;
         pt2val = used.item.getName()%12;
@@ -849,18 +824,17 @@ if( used.item == m000 || used.item == m001  || used.item == m002  || used.item =
   }
 }  
 
-if ( used.item == m5) {
-        //Serial.println("m5");
-      pt2Function = &readSongNotes;
-      pt2val = 0;
-}
+    if ( used.item == m5) {
+        pt2Function = &readSongNotes;
+        pt2val = 0;
+    }
 
   delay(200);  //delay to allow message reading
 //  menu.toRoot();  //back to Main
 }
 
 void menuChanged(MenuChangeEvent changed){
-  FLASH_STRING_ARRAY( menuLCD, 
+    FLASH_STRING_ARRAY( menuLCD, 
                                PSTR("Acordes"), PSTR( "Escalas"),  PSTR("Crear Canciones"),  PSTR("Cifrado"),  PSTR("Mensajes"),  PSTR("Conectar PC"), 
                                PSTR("Mayor"),  PSTR("Menor"),  PSTR("Mayor 7"), PSTR("Menor 7"),  PSTR("Mayor 9"),  PSTR("Menor 9"), 
                                PSTR("Variacion 1"),  PSTR("Variacion 2"), 
@@ -874,66 +848,59 @@ void menuChanged(MenuChangeEvent changed){
                                PSTR("C9"),  PSTR("C#9/Db9"),  PSTR("D9"),  PSTR("D#9/Eb9"), PSTR("E9"),  PSTR("F9"),  PSTR("F#9/Gb9"), PSTR("G9"),  PSTR("G#9/Ab9"),  PSTR("A9"), PSTR("A#9/Bb9"),  PSTR("B9"),
                                PSTR("Cm9"),  PSTR("C#m9/Dbm9"),  PSTR("Dm9"),  PSTR("D#m9/Ebm9"),  PSTR("Em9"),  PSTR("Fm9"),  PSTR("F#m9/Gbm9"), PSTR("Gm9"),  PSTR("G#m9/Abm9"), PSTR("Am9"),  PSTR("A#m9/Bbm9"),  PSTR("Bm9"), PSTR("Modo"), 
                                );
-  MenuItem newMenuItem=changed.to; //get the destination menu
-  MenuItem newMenuItemAnt = changed.from; //get the destination menu
+    MenuItem newMenuItem=changed.to; //get the destination menu
+    MenuItem newMenuItemAnt = changed.from; //get the destination menu
 
-  if(newMenuItem.getName()==menu.getRoot()){
+    if(newMenuItem.getName()==menu.getRoot()){
     //ACA HAY QUE IR A L PRIMER ELEMENTO DEL MENU PROBAR SETCURERENT cambiando a public
-    MainMenu();
-  } else {
-//    updateLCD(atoi(newMenuItemAnt.getName()),menuLCD);
-    updateLCD(newMenuItem.getName(), newMenuItem.getBefore()->getName(), menuLCD );
-  }
-   
-   
+        MainMenu();
+    } else {
+        updateLCD(newMenuItem.getName(), newMenuItem.getBefore()->getName(), menuLCD );
+    }
 }
 
-
 void navigateMenus() {
-  MenuItem currentMenu=menu.getCurrent();
+    MenuItem currentMenu=menu.getCurrent();
 
-  switch (lastButtonPushed){
-    case buttonPinEnter:
-      if(!(currentMenu.moveDown())){  //if the current menu has a child and has been pressed enter then menu navigate to item below
-        menu.use();
-      }else{  //otherwise, if menu has no child and has been pressed enter the current menu is used
-        menu.moveDown();
-       } 
-      break;
-    case buttonPinEsc:
-      menu.moveUp();  //back to father
-//      menu.toRoot();  //back to main
-      break;
-    case buttonPinRight:
-      menu.moveRight();
-      break;      
-    case buttonPinLeft:
-      menu.moveLeft();
-      break;      
-  }
+    switch (lastButtonPushed){
+        case buttonPinEnter:
+            if(!(currentMenu.moveDown())){  //if the current menu has a child and has been pressed enter then menu navigate to item below
+                menu.use();
+            }else{  //otherwise, if menu has no child and has been pressed enter the current menu is used
+                menu.moveDown();
+            } 
+            break;
+        case buttonPinEsc:
+            menu.moveUp();  //back to father
+            break;
+        case buttonPinRight:
+            menu.moveRight();
+            break;      
+        case buttonPinLeft:
+            menu.moveLeft();
+            break;      
+    }
   
-  lastButtonPushed=0; //reset the lastButtonPushed variable
+    lastButtonPushed=0; //reset the lastButtonPushed variable
 }
 
 
 void LEDMatrix(){
-   digitalWrite( DCreset, HIGH);
-   digitalWrite( DCreset, LOW);
- 
-   for( int y = 5; y >= 0; y--){
- //  for( int y = 0; y < 6; y++){
-     //send to LED Matrix
-     digitalWrite( SIPOrclk, LOW);
-     shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, highByte( tempLED[ y]));
-     shiftOut( SIPOserial, SIPOsrclk, MSBFIRST,  lowByte( tempLED[ y]));
-     digitalWrite( SIPOrclk, HIGH);
-     delay(2);
-     digitalWrite( SIPOrclk, LOW);
-     shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
-     shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
-     digitalWrite( SIPOrclk, HIGH);
-     digitalWrite( DCclk, HIGH);
-     digitalWrite( DCclk, LOW);
+    digitalWrite( DCreset, HIGH);
+    digitalWrite( DCreset, LOW);
+    for( int y = 5; y >= 0; y--){
+        //send to LED Matrix
+        digitalWrite( SIPOrclk, LOW);
+        shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, highByte( tempLED[ y]));
+        shiftOut( SIPOserial, SIPOsrclk, MSBFIRST,  lowByte( tempLED[ y]));
+        digitalWrite( SIPOrclk, HIGH);
+        delay(2);
+        digitalWrite( SIPOrclk, LOW);
+        shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
+        shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
+        digitalWrite( SIPOrclk, HIGH);
+        digitalWrite( DCclk, HIGH);
+        digitalWrite( DCclk, LOW);
    }
 }
 
