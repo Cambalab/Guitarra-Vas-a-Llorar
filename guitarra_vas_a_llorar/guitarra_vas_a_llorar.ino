@@ -617,10 +617,8 @@ void readSongNotes(int counter, int other) {
 
 void updateLCD( short counter, short prev,_FLASH_STRING_ARRAY textLCD) {
     lcd.clear();
-    lcd.setCursor( 0, 0);
     lcd.setCursor(((16-textLCD[prev].length())/2),0);
     textLCD[prev].print(lcd);
-    lcd.setCursor( 0, 1);
     lcd.setCursor(((16-textLCD[counter].length())/2),1);
     textLCD[counter].print(lcd);
 }
