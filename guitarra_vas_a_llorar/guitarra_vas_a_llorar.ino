@@ -42,7 +42,7 @@ IMPORTANT: to use the menubackend library by Alexander Brevig download it at htt
 #include <Flash.h>
 #include <MenuBackend.h>    //MenuBackend library - copyright by Alexander Brevig
 
-/*
+
 #define _EN_ 0
 #define _ES_ 1
  
@@ -54,9 +54,8 @@ IMPORTANT: to use the menubackend library by Alexander Brevig download it at htt
 #define _SOLMIZATION_ 1
 
 #ifndef _KEYSIG_
-#define _KEYSIG_ _ALPHABETIC_
+#define _KEYSIG_ _SOLMIZATION_
 #endif
-*/
 
 /*
 #define crea { 0x2736, 0x5151, 0x5351, 0x7331, 0x5151, 0x5756 }
@@ -227,6 +226,9 @@ long lastRightDebounceTime = 0;  // the last time the output pin was toggled
 const int debounceDelay = 200;    // the debounce time
 
 ShiftLCD lcd( LCDSerial, LCDrclk, LCDsrclk);
+byte flecha_izquierda[8] = { B00000, B00010, B00110, B01110, B00110,B00010, B00000,B00000};
+byte flecha_derecha[8] = { B00000, B01000, B01100, B01110, B01100,B01000, B00000,B00000};
+
 
 void readButtons();
 void updateLCD( byte counter, byte prev,_FLASH_STRING_ARRAY textLCD);
@@ -354,8 +356,10 @@ void setup() {
 
     Serial.begin(9600);
 
+    lcd.createChar(0, flecha_izquierda);     
+    lcd.createChar(1, flecha_derecha);     
     lcd.begin(16, 2);
-
+            
     for( int x = 0; x < 6; x++) {
         tempLED [ x] = 0x0000;
     }
@@ -501,7 +505,6 @@ void setup() {
     m40.addLeft(m41);
 */  
     menu.toRoot();
-
     MainMenu();
 }  // setup()...
 
@@ -511,6 +514,10 @@ void MainMenu() {
     lcd.print(" ..::CREAR::.. ");
     lcd.setCursor(0,1);  
     lcd.print("__Guitarra Led__");
+/*    delay(1000);
+    menu.moveDown();
+    lastButtonPushed = 0; 
+*/    
 }
 
 
@@ -614,16 +621,26 @@ void readSongNotes(int counter, int other) {
                 break;
 */
         }
+
+//        lastButtonEscState = digitalRead(buttonPinEsc);
+//        if(lastButtonEscState == HIGH) break;
+        
         LEDMatrix();
     }
 }
 
 void updateLCD( byte counter, byte prev,_FLASH_STRING_ARRAY textLCD) {
     lcd.clear();
-    lcd.setCursor(((16-textLCD[prev].length())/2),0);
+//    lcd.setCursor(((16-(textLCD[prev].length()+1))/2),0);
+    lcd.setCursor(0,0);
     textLCD[prev].print(lcd);
-    lcd.setCursor(((16-textLCD[counter].length())/2),1);
+
+    lcd.setCursor( (16-textLCD[counter].length())/2 ,1);
     textLCD[counter].print(lcd);
+    lcd.setCursor(0,1);
+    lcd.write(0);
+    lcd.setCursor(15,1);
+    lcd.write(1);
 }
 
 void  readButtons(){  //read buttons status
@@ -760,19 +777,31 @@ void menuUsed(MenuUseEvent used){
 
 void menuChanged(MenuChangeEvent changed){
     FLASH_STRING_ARRAY( menuLCD, 
-                               PSTR("Acordes"), PSTR( "Escalas"),  PSTR("Crear Canciones"),  PSTR("Cifrado"),  PSTR("Mensajes"),  PSTR("Conectar PC"), 
-                               PSTR("Mayor"),  PSTR("Menor"),  PSTR("Mayor 7"), PSTR("Menor 7"),  PSTR("Mayor 9"),  PSTR("Menor 9"), 
-                               PSTR("Variacion 1"),  PSTR("Variacion 2"), 
-                               PSTR("Mayor"),  PSTR("Armonica menor"),  PSTR("Melodica Menor"),  PSTR("Pentatonica May"),  PSTR("Menor"),  PSTR("Pentatonica Men"), 
-                               PSTR("Americano") ,  PSTR("Tradicional"),
-                               PSTR("Crea"), PSTR("Puto"),                              
-                               PSTR("C"), PSTR("C#/Db"), PSTR("D"), PSTR("D#/Eb"), PSTR("E"), PSTR("F"), PSTR("F#/Gb"),PSTR("G"), PSTR("G#/Ab"), PSTR("A"), PSTR("A#/Bb"), PSTR("B"),
-                               PSTR("Cm"),  PSTR("C#m/Dbm"),  PSTR("Dm"),  PSTR("D#m/Ebm"), PSTR("Em"),  PSTR("Fm"),  PSTR("F#m/Gbm"), PSTR("Gm"),  PSTR("G#m/Abm"),  PSTR("Am"), PSTR("A#m/Bbm"),  PSTR("Bm"),
-                               PSTR("C7"),  PSTR("C#7/Db7"),  PSTR("D7"),  PSTR("D#7/Eb7"), PSTR("E7"),  PSTR("F7"),  PSTR("F#7/Gb7"), PSTR("G7"),  PSTR("G#7/Ab7"),  PSTR("A7"), PSTR("A#7/Bb7"),  PSTR("B7"),
-                               PSTR("Cm7"),  PSTR("C#m7/Dbm7"),  PSTR("Dm7"),  PSTR("D#m7/Ebm7"),  PSTR("Em7"),  PSTR("Fm7"),  PSTR("F#m7/Gbm7"), PSTR("Gm7"),  PSTR("G#m7/Abm7"), PSTR("Am7"),  PSTR("A#m7/Bbm7"), PSTR("Bm7"),
-                               PSTR("C9"),  PSTR("C#9/Db9"),  PSTR("D9"),  PSTR("D#9/Eb9"), PSTR("E9"),  PSTR("F9"),  PSTR("F#9/Gb9"), PSTR("G9"),  PSTR("G#9/Ab9"),  PSTR("A9"), PSTR("A#9/Bb9"),  PSTR("B9"),
-                               PSTR("Cm9"),  PSTR("C#m9/Dbm9"),  PSTR("Dm9"),  PSTR("D#m9/Ebm9"),  PSTR("Em9"),  PSTR("Fm9"),  PSTR("F#m9/Gbm9"), PSTR("Gm9"),  PSTR("G#m9/Abm9"), PSTR("Am9"),  PSTR("A#m9/Bbm9"),  PSTR("Bm9"), PSTR("Modo"), 
-                               );
+PSTR("Acordes"), PSTR( "Escalas"),  PSTR("Crear Canciones"),  PSTR("Cifrado"),  PSTR("Mensajes"),  PSTR("Conectar PC"), 
+PSTR("Mayor"),  PSTR("Menor"),  PSTR("Mayor 7"), PSTR("Menor 7"),  PSTR("Mayor 9"),  PSTR("Menor 9"), 
+PSTR("Variacion 1"),  PSTR("Variacion 2"), 
+PSTR("Mayor"),  PSTR("Armonica menor"),  PSTR("Melodica Menor"),  PSTR("Pentatonica M"),  PSTR("Menor"),  PSTR("Pentatonica m"), 
+PSTR("Americano") ,  PSTR("Tradicional"),
+PSTR("Crea"), PSTR("Puto"),                              
+#if (_KEYSIG_ == _ALPHABETIC_)
+PSTR("C"), PSTR("C#/Db"), PSTR("D"), PSTR("D#/Eb"), PSTR("E"), PSTR("F"), PSTR("F#/Gb"),PSTR("G"), PSTR("G#/Ab"), PSTR("A"), PSTR("A#/Bb"), PSTR("B"),
+PSTR("Cm"),  PSTR("C#m/Dbm"),  PSTR("Dm"),  PSTR("D#m/Ebm"), PSTR("Em"),  PSTR("Fm"),  PSTR("F#m/Gbm"), PSTR("Gm"),  PSTR("G#m/Abm"),  PSTR("Am"), PSTR("A#m/Bbm"),  PSTR("Bm"),
+PSTR("C7"),  PSTR("C#7/Db7"),  PSTR("D7"),  PSTR("D#7/Eb7"), PSTR("E7"),  PSTR("F7"),  PSTR("F#7/Gb7"), PSTR("G7"),  PSTR("G#7/Ab7"),  PSTR("A7"), PSTR("A#7/Bb7"),  PSTR("B7"),
+PSTR("Cm7"),  PSTR("C#m7/Dbm7"),  PSTR("Dm7"),  PSTR("D#m7/Ebm7"),  PSTR("Em7"),  PSTR("Fm7"),  PSTR("F#m7/Gbm7"), PSTR("Gm7"),  PSTR("G#m7/Abm7"), PSTR("Am7"),  PSTR("A#m7/Bbm7"), PSTR("Bm7"),
+PSTR("C9"),  PSTR("C#9/Db9"),  PSTR("D9"),  PSTR("D#9/Eb9"), PSTR("E9"),  PSTR("F9"),  PSTR("F#9/Gb9"), PSTR("G9"),  PSTR("G#9/Ab9"),  PSTR("A9"), PSTR("A#9/Bb9"),  PSTR("B9"),
+PSTR("Cm9"),  PSTR("C#m9/Dbm9"),  PSTR("Dm9"),  PSTR("D#m9/Ebm9"),  PSTR("Em9"),  PSTR("Fm9"),  PSTR("F#m9/Gbm9"), PSTR("Gm9"),  PSTR("G#m9/Abm9"), PSTR("Am9"),  PSTR("A#m9/Bbm9"),  PSTR("Bm9"), PSTR("Menu"), 
+#endif
+#if (_KEYSIG_ == _SOLMIZATION_)
+PSTR("Do"), PSTR("Do#/Reb"), PSTR("Re"), PSTR("Re#/Mib"), PSTR("Mi"), PSTR("Fa"), PSTR("Fa#/Solb"),PSTR("Sol"), PSTR("Sol#/Lab"), PSTR("La"), PSTR("La#/Sib"), PSTR("Si"),
+PSTR( "Dom"), PSTR("Do#m/Rebm"), PSTR("Rem"), PSTR("Re#m/Mibm"), PSTR("Mim"), PSTR("Fam"), PSTR("Fa#m/Solbm"),PSTR("Solm"), PSTR("Sol#m/Labm"), PSTR("Lam"), PSTR("La#m/Sibm"), PSTR("Sim"),
+PSTR("Do7"), PSTR("Do#7/Reb7"), PSTR("Re7"), PSTR("Re#7/Mib7"), PSTR("Mi7"), PSTR("Fa7"), PSTR("Fa#7/Solb7"),PSTR("Sol7"), PSTR("Sol#7/Lab7"), PSTR("La7"), PSTR("La#7/Sib7"), PSTR("Si7"),
+PSTR("Dom7"), PSTR("Do#m7/Rebm7"), PSTR("Rem7"), PSTR("Re#m7/Mibm7"), PSTR("Mim7"), PSTR("Fam7"), PSTR("Fa#m7/Solbm7"),PSTR("Solm7"), PSTR("Sol#m7/Labm7"), PSTR("Lam7"), PSTR("La#m7/Sibm7"), PSTR("Sim7"),
+PSTR("Do9"), PSTR("Do#9/Reb9"), PSTR("Re9"), PSTR("Re#9/Mib9"), PSTR("Mi9"), PSTR("Fa9"), PSTR("Fa#9/Solb9"),PSTR("Sol9"), PSTR("Sol#9/Lab9"), PSTR("La9"), PSTR("La#9/Sib9"), PSTR("Si9"),
+PSTR("Dom9"), PSTR("Do#m9/Rebm9"), PSTR("Rem9"), PSTR("Re#m9/Mibm9"), PSTR("Mim9"), PSTR("Fam9"), PSTR("Fa#m9/Solbm9"),PSTR("Solm9"), PSTR("Sol#m9/Labm9"), PSTR("Lam9"), PSTR("La#m9/Sibm9"), PSTR("Sim9"),
+#endif
+PSTR("Menu"),);
+
+
     MenuItem newMenuItem=changed.to; //get the destination menu
     MenuItem newMenuItemAnt = changed.from; //get the destination menu
 
