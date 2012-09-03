@@ -1,0 +1,16 @@
+========================================
+db-musica - Script en python hecho para sacar informacion de la pagina lacuerda.net
+autor: @Nickcis ( github.com/nickcis )
+
+=======================================
+
+Modo de uso:
+Se crea una nueva instancia de LaCuerda
+.getArtist(letra) -> devuelve una lista de artistas que comienzan con `letra` (las letras validas son las de LaCuerda.LETRAS_ARTISTA )
+.getArtistas() -> devuelve una lista con todos los artistas
+.getCanciones(artista) -> devuelve todas las canciones de un artista (`artista` es un diccionario como los devueltos por getArtista )
+.getLetra(cancion) -> devuelve los acordes de una cancion ( devuelve una lista de listas, se supone que la separacion es por linea de cancion, osea, compas; `cancion` es un diccionario de cancion como los devueltos por .getCanciones()[]['tipos'][] )
+
+Para mas explicacion ver el codigo. Por defecto al correr ./db-musica busca todos los artistas con 'a', y pide la letra de la primera opcion de la primera cancion. Despues busca a todos los autores.
+
+Licencia: gnu gpl v3
