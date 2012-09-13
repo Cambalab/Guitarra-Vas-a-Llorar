@@ -131,45 +131,42 @@ public class GDPPlugin extends TGPluginAdapter implements TGPluginSetup, TGExter
 	
 	
 	private void dumpBeats(TGBeat beat) {
-		int[] ledArray =  {}; //12 bytes, 2 por cuerda
-		int pows[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 
-						512, 1024, 2048, 4096, 8192, 16384, 32768 };
-		boolean muestro = false;
+		long[] ledArray =  {}; //18 bytes, 3 por cuerda
+		long pows[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 
+				8192, 16384, 32768, 65536, 131072, 262144, 
+				524288, 1048576, 2097152, 4194304, 8388608};
+ 		boolean muestro = false;
 		if (beat == null){
 			return;
 		}
 		System.out.println("BEAT idx = " + this.beatIdx);
+
+        //tercero de 17 a 21, segundo byte del 16-9, tercer byte de 8-1 (aire)
+        ledArray = new long[] { 0,0,0,0,0,0};
+
 		for(int v = 0; v < beat.countVoices(); v ++){
-			muestro = false;
-			//1er byte del 16-9, segundo byte de 8-1
-			ledArray = new int[] { 0,0,0,0,0,0}; 
 			TGVoice voice = beat.getVoice( v );
 			Iterator it = voice.getNotes().iterator();
 			while (it.hasNext()) {
 				TGNote note = (TGNote) it.next();
 				int fretIndex = note.getValue();
 				int stringIndex = note.getString() - 1;
-				//el traste 0 es al aire - ahora lo ignoramos
 				System.out.println("cuerda " + stringIndex + " traste " + fretIndex );
-				muestro = true;
-				if(fretIndex != 0) {
-					ledArray[stringIndex] += pows[(fretIndex-1)]; 
-				}
+					ledArray[stringIndex] += pows[(fretIndex)]; 
 			}
-			if (serial != null && muestro == true ) {
-				//int pos=0;
-				this.serial.writeData('N'); //N ascii char
-				//for (int l : ledArray) {
-				for(int i = (ledArray.length-1); i>=0; i--) {	
-					//System.out.println((++pos) + ": " +  l);
-					this.serial.writeData((ledArray[i]>>8)); // highbyte
-					this.serial.writeData((ledArray[i] & 0xff)); //lowbyte
-				}
-				//this.serial.writeData(GDPSerialCommunicator.NEW_LINE_ASCII);
-				this.serial.flush();
-			}
+        }
+		if (serial != null) {
+            this.serial.writeData('N'); //N ascii char
+            for(int i = (ledArray.length-1); i>=0; i--) {
+                this.serial.writeData((int)((ledArray[i]>>16) & 0xff)); // highbyte
+                this.serial.writeData((int)((ledArray[i]>>8) & 0xff)); // midbyte
+                this.serial.writeData((int)(ledArray[i] & 0xff)); //lowbyte
+            }
+            //this.serial.writeData(GDPSerialCommunicator.NEW_LINE_ASCII);
+            this.serial.flush();
+        }
 
-		}
+
 		this.beatIdx++;
 	}
 	
