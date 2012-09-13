@@ -194,24 +194,22 @@ void (*pt2Function)(int,int) = NULL;
 int pt2val = -1;
 int pt2val2 = -1;
 
-unsigned int tempLED[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
+unsigned long tempLED[6] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000};
 unsigned int blinker = 0;
 
-const byte DCreset = 8;
-const byte DCclk = 9;
+const byte SIPOdata = 9; //DS   pin 14
+const byte SIPOlatch = 10;//STCP pin 12
+const byte SIPOclk = 11;  //SHCP pin 11
+const byte SIPOclear = 12;//MR   pin 10
 
-const byte SIPOrclk = 10;
-const byte SIPOserial = 11;
-const byte SIPOsrclk = 13;
-
-const byte LCDSerial = 5;
-const byte LCDrclk = 6;
+const byte LCDSerial = 6;
+const byte LCDrclk = 8;
 const byte LCDsrclk = 7;
 
-const byte buttonPinLeft = 2;      // pin for the Up button
-const byte buttonPinRight = 4;    // pin for the Down button
-const byte buttonPinEsc = 12;     // pin for the Esc button
-const byte buttonPinEnter = 3;   // pin for the Enter button
+const byte buttonPinLeft = 3;      // pin for the Up button
+const byte buttonPinRight = 5;    // pin for the Down button
+const byte buttonPinEsc = 2;     // pin for the Esc button
+const byte buttonPinEnter = 4;   // pin for the Enter button
 
 
 byte lastButtonPushed = 0;
@@ -348,11 +346,11 @@ void setup() {
     digitalWrite(buttonPinEnter,1);
     digitalWrite(buttonPinEsc,1);
 
-    pinMode( DCreset, OUTPUT);
-    pinMode( DCclk, OUTPUT);
-    pinMode( SIPOrclk, OUTPUT);
-    pinMode( SIPOserial, OUTPUT);
-    pinMode( SIPOsrclk, OUTPUT);
+    pinMode(SIPOclk, OUTPUT);
+    pinMode(SIPOdata , OUTPUT);
+    pinMode(SIPOlatch, OUTPUT);
+    pinMode(SIPOclear, OUTPUT);
+    digitalWrite( SIPOclear, HIGH);
 
     Serial.begin(9600);
 
@@ -585,9 +583,12 @@ void showScale(int counter, int other) {
 }
 
 void readSongNotes(int counter, int other) {
-    unsigned int c1=0,c2=0,c3=0,c4=0,c5=0,c6=0,c7=0;
+    int i=0;
+    unsigned long c1=0,c2=0,c3=0,c4=0,c5=0,c6=0,c7=0;
 //    long start_time = millis();
-    while(1) {
+    c1 = c2 = c3 = c4 = c5 = c6 = c7 = 0xFFFFFF;
+
+    while(c1 != 0xFF000000) {
         tempLED[0] = c1;
         tempLED[1] = c2;
         tempLED[2] = c3;
@@ -596,35 +597,42 @@ void readSongNotes(int counter, int other) {
         tempLED[5] = c6;
 
         if(Serial.available()) {
-            if( Serial.available() >= 13 ) {       // wait for 1byte header + 12 bytes
+            if( Serial.available() >= 19 ) {       // wait for 1byte header + 18 bytes
                 if(Serial.read() == 'N') {
-                    c1 = Serial.read();
-//                    if(c1 == 32) break;
-                    c1 = word(c1,Serial.read());
-                    c2 = Serial.read();
-                    c2 = word(c2,Serial.read());
-                    c3 = Serial.read();
-                    c3 = word(c3,Serial.read());
-                    c4 = Serial.read();
-                    c4 = word(c4,Serial.read());
-                    c5 = Serial.read();
-                    c5 = word(c5,Serial.read());
-                    c6 = Serial.read();
-                    c6 = word(c6,Serial.read());
+                    c1  = long(Serial.read()) << 16;
+                    c1 |= long(Serial.read()) << 8;
+                    c1 |= Serial.read();
+
+                    c2  = long(Serial.read()) << 16;
+                    c2 |= long(Serial.read()) << 8;
+                    c2 |= Serial.read();
+
+                    c3  = long(Serial.read()) << 16;
+                    c3 |= long(Serial.read()) << 8;
+                    c3 |= Serial.read();
+
+                    c4  = long(Serial.read()) << 16;
+                    c4 |= long(Serial.read()) << 8;
+                    c4 |= Serial.read();
+
+                    c5  = long(Serial.read()) << 16;
+                    c5 |= long(Serial.read()) << 8;
+                    c5 |= Serial.read();
+
+                    c6  = long(Serial.read()) << 16;
+                    c6 |= long(Serial.read()) << 8;
+                    c6 |= Serial.read();
+
                     Serial.flush();
                 } else {
+                    Serial.println("ERROR");
                 }
-            }else{
             }
         } else {
 /*            if( (millis() - start_time) > 10000 )
                 break;
 */
         }
-
-//        lastButtonEscState = digitalRead(buttonPinEsc);
-//        if(lastButtonEscState == HIGH) break;
-        
         LEDMatrix();
     }
 }
@@ -840,21 +848,15 @@ void navigateMenus() {
 
 
 void LEDMatrix(){
-    digitalWrite( DCreset, HIGH);
-    digitalWrite( DCreset, LOW);
-    for( int y = 5; y >= 0; y--){
-        //send to LED Matrix
-        digitalWrite( SIPOrclk, LOW);
-        shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, highByte( tempLED[ y]));
-        shiftOut( SIPOserial, SIPOsrclk, MSBFIRST,  lowByte( tempLED[ y]));
-        digitalWrite( SIPOrclk, HIGH);
-        delay(2);
-        digitalWrite( SIPOrclk, LOW);
-        shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
-        shiftOut( SIPOserial, SIPOsrclk, MSBFIRST, 0);
-        digitalWrite( SIPOrclk, HIGH);
-        digitalWrite( DCclk, HIGH);
-        digitalWrite( DCclk, LOW);
-   }
+  for( int y = 0; y < 6; y++){
+    digitalWrite( SIPOclk, LOW);
+    shiftOut( SIPOdata, SIPOclk, MSBFIRST, (tempLED[y] >> 16) );
+    shiftOut( SIPOdata, SIPOclk, MSBFIRST, (tempLED[y] >> 8) );
+    shiftOut( SIPOdata, SIPOclk, LSBFIRST,  tempLED[y] & 0xFF);
+    shiftOut( SIPOdata, SIPOclk, MSBFIRST, 1<<(y+1));
+    digitalWrite( SIPOlatch, LOW);
+    delay(1);
+    digitalWrite( SIPOlatch, HIGH);
+  }
 }
 
