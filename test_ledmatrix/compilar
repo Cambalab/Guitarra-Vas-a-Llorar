@@ -1,0 +1,1 @@
+scons ARDUINO_PORT=/dev/ttyACM0  ARDUINO_HOME=/media/datos/programas/arduino-1.0.1/ ARDUINO_BOARD=nano328 $1 
