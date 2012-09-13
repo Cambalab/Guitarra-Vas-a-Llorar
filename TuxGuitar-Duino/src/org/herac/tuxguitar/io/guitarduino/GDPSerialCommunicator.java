@@ -52,23 +52,23 @@ public class GDPSerialCommunicator implements SerialPortEventListener {
 
     public void searchForPorts()
     {
-    	String fp = File.pathSeparator;
-    	String tmpl = "/dev/ttyACM0";
-    	tmpl += fp + "/dev/ttyUSB0";
-    	tmpl += fp + "/dev/ttyUSB1";
-    	tmpl += fp + "/dev/ttyACM1";
-    	// podria hacerse segun SO
+//    	String fp = File.pathSeparator;
+//    	String tmpl = "/dev/ttyACM0";
+//    	tmpl += fp + "/dev/ttyUSB0";
+//    	tmpl += fp + "/dev/ttyUSB1";
+//    	tmpl += fp + "/dev/ttyACM1";
+//    	// podria hacerse segun SO
     	// Acordarse de poner los puertos de windows y mac COM1..5 etc 
     	//XXX acordarse de sacar los pts! 
-    	tmpl += fp + "/dev/pts/1";
-    	tmpl += fp + "/dev/pts/6";
-    	tmpl += fp + "/dev/pts/7";
-    	tmpl += fp + "/dev/pts/8";
+//    	tmpl += fp + "/dev/pts/1";
+//    	tmpl += fp + "/dev/pts/6";
+//    	tmpl += fp + "/dev/pts/7";
+//    	tmpl += fp + "/dev/pts/8";
 
-    	System.clearProperty("gnu.io.rxtx.SerialPorts");
-    	fillPortList();
+//    	System.clearProperty("gnu.io.rxtx.SerialPorts");
+//    	fillPortList();
     	//Ignora los puertos del SO si hacemos esto antes:
-    	System.setProperty("gnu.io.rxtx.SerialPorts", tmpl);
+//    	System.setProperty("gnu.io.rxtx.SerialPorts", tmpl);
     	fillPortList();
     }
     
@@ -240,7 +240,7 @@ public class GDPSerialCommunicator implements SerialPortEventListener {
                 if (singleData != NEW_LINE_ASCII)
                 {
                     logText = new String(new byte[] {singleData});
-                    System.out.println(logText);
+                    System.out.print(logText);
                 }
                 else
                 {
