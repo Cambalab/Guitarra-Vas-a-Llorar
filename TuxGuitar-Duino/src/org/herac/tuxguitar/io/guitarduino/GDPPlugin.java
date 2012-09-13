@@ -78,7 +78,7 @@ public class GDPPlugin extends TGPluginAdapter implements TGPluginSetup, TGExter
 	}
 	
 	public String getVersion() {
-		return "1.0";
+		return "2.0";
 	}
 	
 	public void hideExternalBeat() {
