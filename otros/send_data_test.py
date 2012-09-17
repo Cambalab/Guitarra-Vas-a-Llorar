@@ -1,23 +1,29 @@
 import serial
 import time
+import struct
 
+def packIntegerAsULong(value):
+    """Packs a python 4 byte unsigned integer to an arduino unsigned long"""
+    return struct.pack('I', value)    #should check bounds
 
-end_time = time.time() + 10 # time() is calculated in seconds
-arduino = serial.Serial('/dev/ttyACM0', 9600)
+segundos = 10
+end_time = time.time() + segundos # time() is calculated in seconds
+arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 time.sleep(3)
 
-l = [0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x04, 0x00, 0x00]
-d = "".join([chr(x) for x in l])
-    
-#while time.time() < end_time:
-while True:
-    input = raw_input(">> ")
-    if input == 'exit':
-        arduino.close()
-        exit()
-    else:
-        arduino.write('N')
-        time.sleep(1)
-        for i in l:
-            arduino.write(str(i))
-            time.sleep(1)
+#19bytes por vez (header + 18) bytes
+todo = [ '\xff\xff\xff', '\xff\xff\xff', '\xff\xff\xff', '\xff\xff\xff', '\xff\xff\xff', '\xff\xff\xff', ]
+nada = [ '\x00\x00\x00',  '\x00\x00\x00',  '\x00\x00\x00',  '\x00\x00\x00',  '\x00\x00\x00',  '\x00\x00\x00',  ]
+encabezado = 'N'
+
+while time.time() < end_time:
+    arduino.write(encabezado)
+    for cuerda in todo:
+        arduino.write(cuerda)
+    arduino.write(encabezado)
+    for cuerda in nada:
+        arduino.write(cuerda)
+
+arduino.close()
+exit()
+
