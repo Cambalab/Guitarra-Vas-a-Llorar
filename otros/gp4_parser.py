@@ -6,11 +6,27 @@
 import sys
 archivo=''
 
-def bytes_to_int(n):
+def readbyte():
+	global archivo
+	n = ord(archivo[0])
+	del(archivo[0])
+	return n
+
+def readstr():
+	global archivo
+	length = ord(archivo[0])
+	del(archivo[0])
+	ret = archivo[:length]
+	del(archivo[:length])
+	return ''.join(ret)
+
+def readint():
+	global archivo
 	ret = 0
-	n = list(n)
+	n = archivo[:4]
+	archivo = archivo[4:]
 	for i in range(len(n)):
-		ret += ord(n[i]) * 16**i
+		ret += ord(n[i]) * 256**i
 	return ret
 
 def calcular_meta():
@@ -20,7 +36,7 @@ def calcular_meta():
 	archivo = archivo[1:]
 	ret = archivo[:length]
 	archivo = archivo[length:]
-	return ret
+	return ''.join(ret)
 
 def main():
 	global archivo
@@ -31,6 +47,7 @@ def main():
 	#Cargamos el archivo
 	try:
 		archivo = open(sys.argv[1]).read()
+		archivo = list(archivo)
 	except IOError:
 		print 'No se puede leer el archivo %s' % sys.argv[1]
 		exit()
@@ -40,6 +57,7 @@ def main():
 	#Versión
 	version_length = ord(archivo[0])
 	version = archivo[1 : version_length+1]
+	version = ''.join(version)
 	archivo = archivo[31:] #Descartamos información de la versión
 	if version != 'FICHIER GUITAR PRO v4.06':
 		print 'El formato de archivo no coincide con la versión 4.06 de Guitar Pro'
@@ -58,7 +76,40 @@ def main():
 	titulo, subtitulo, interprete, album, autor, copyright, autor_tab, acerca = calcular_meta(), calcular_meta(), calcular_meta(), calcular_meta(), calcular_meta(), calcular_meta(), calcular_meta(), calcular_meta() 
 	print titulo, subtitulo, interprete, album, autor, copyright, autor_tab, acerca
 
-	print archivo[:10].encode('hex')
+	n_notices =  readint()
+	instances = readint()
+	tripletfeel = readbyte()
+	print n_notices, instances, tripletfeel
+
+	#Lyrics
+	track = readint()
+	lyrics = [readstr() for i in range(5)]
+	print track, lyrics
+
+	#Otros datos
+	tempo, key, octave = readint(), readbyte(), readbyte()
+	print tempo, key, octave
+
+	#Midichannels
+	ports = []
+	for i in range(4):
+		# Puertos
+		ports.append([])
+		for j in range(16):
+			# Canales
+			channel = {} 
+			channel['instrument'] = readint()
+			channel['volume'] = readbyte()
+			channel['balance'] = readbyte()
+			channel['chorus'] = readbyte()
+			channel['reverb'] = readbyte()
+			channel['phaser'] = readbyte()
+			channel['tremolo'] = readbyte()
+			channel['blank1'] = readbyte()
+			channel['blank2'] = readbyte()
+			ports[i].append(channel)
+	measures, tracks = readint(), readint()
+	print ports, measures, tracks
 
 if __name__ == '__main__':
 	main()
