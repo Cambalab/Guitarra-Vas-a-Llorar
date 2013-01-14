@@ -531,7 +531,7 @@ void loop() {
 void showChord(int idx, int other) {
     if(other != -1) {
         for( int x = 6; x > 0; x--){
-            tempLED[ 6-x] = pgm_read_word_near(&(masterChords[ other ][ idx][ 0][ x-1]));
+            tempLED[ 6-x] = pgm_read_word_near(&(masterChords[ other ][ idx][ 0][ x-1])) << 1;
 //       masterChords[ grupo/tipo ][ acorde][ variacion][ x-1])
 //       masterChords[6][12][2][6]
         }
@@ -569,6 +569,9 @@ void showScale(int counter, int other) {
         } else {
             tempLED2[ 6-x]  = ((((tempLED2[ 6-x]<< (counter-8)) & 0xFFF0) >> 4) | ((tempLED2[ 6-x]<< counter) & 0xFFF0));
         }
+
+        tempLED2[ 6-x] = tempLED2[6-x] << 1;
+        tempLED[ 6-x] = tempLED[6-x] << 1;
  
         blinker++;
         if( blinker < 1000){
