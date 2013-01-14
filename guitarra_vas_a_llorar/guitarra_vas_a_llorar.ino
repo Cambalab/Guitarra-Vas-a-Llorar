@@ -636,6 +636,11 @@ void readSongNotes(int counter, int other) {
                 break;
 */
         }
+        readButtons();
+        navigateMenus();
+        if (pt2Function != readSongNotes){
+            return;
+        }
         LEDMatrix();
     }
 }
