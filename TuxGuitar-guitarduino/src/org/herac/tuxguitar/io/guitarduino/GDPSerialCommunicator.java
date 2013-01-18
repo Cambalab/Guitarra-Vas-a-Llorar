@@ -186,9 +186,6 @@ public class GDPSerialCommunicator implements SerialPortEventListener {
     	
         try
         {
-            writeData('N');
-            writeData(SPACE_ASCII);
-
             serialPort.removeEventListener();
             serialPort.close();
             input.close();
