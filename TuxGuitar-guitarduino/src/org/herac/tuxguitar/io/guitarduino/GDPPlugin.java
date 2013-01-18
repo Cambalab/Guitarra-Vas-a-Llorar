@@ -152,7 +152,7 @@ public class GDPPlugin extends TGPluginAdapter implements TGPluginSetup, TGExter
 				int fretIndex = note.getValue();
 				int stringIndex = note.getString() - 1;
 				System.out.println("cuerda " + stringIndex + " traste " + fretIndex );
-					ledArray[stringIndex] += pows[(fretIndex)]; 
+                ledArray[stringIndex] += pows[(fretIndex)];
 			}
         }
 		if (serial != null) {
