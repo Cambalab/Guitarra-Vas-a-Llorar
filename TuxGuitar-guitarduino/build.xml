@@ -24,6 +24,15 @@
 	
 	<target name="init" depends="clean">
 		<mkdir dir="${build.path}" />
+
+        <replaceregexp byline="true">
+            <regexp pattern="app\." />
+            <substitution expression="gui." />
+            <fileset dir="${build.src.path}">
+                <include name="**/*.java"/>
+            </fileset>
+        </replaceregexp>
+
 	</target>
 	
 	<target name="clean">
