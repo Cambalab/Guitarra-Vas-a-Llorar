@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-PACKAGE?=tuxguitar-fluidsynth
+PACKAGE?=tuxguitar-guitarduino
 LIBRARY?=lib$(PACKAGE).so
 LIBRARY_JNI?=lib$(PACKAGE)-jni.so
 
