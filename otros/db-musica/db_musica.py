@@ -71,6 +71,14 @@ class LaCuerda:
         else:
             pass #TBD
 
+    def getSoloLetra(self, cancion):
+        ''' Cancion tiene que ser un diccionario como devuelve el getAutor '''
+        pag = self.downloader.downloadPage(cancion['href'])
+        if cancion['tipo'] == 'R': #Son acordes
+            return self.__parseSoloLetraR(cancion, pag)
+        else:
+            pass #TBD
+
     def __parseArtistas(self, html):
         As = BeautifulSoup(html).find(id='i_main').find_all('a')
         artistas = []
@@ -118,6 +126,27 @@ class LaCuerda:
 
         return canciones
 
+    def __parseSoloLetraR(self, cancion, html):
+        '''Parsea una pagina de una letra del tipo R, devuelve una lista con todos los acordes'''
+        soup = BeautifulSoup(html)
+        main = soup.find(id='t_body').pre
+        #FIXME: muy cabeza, creo que se podria reemplazar con .pritify (o algo asi)
+        txt = repr(main).split('\n')
+        acordes = []
+        #FIXME: Se podria ir intercalando acordes con letra, aca solo estamos guardando los acordes
+        for i in range(0, len(txt)):
+            pText = BeautifulSoup(txt[i])
+            #Escapamos las lineas que no tienen acordes (los acordes estan siempre en un tag a)
+            if pText.a:
+                continue
+            data = []
+            next = False
+            for linea in pText.stripped_strings:
+                if linea.strip() == '':
+                    continue
+                acordes.append(linea)
+
+        return acordes
     def __parseLetraR(self, cancion, html):
         '''Parsea una pagina de una letra del tipo R, devuelve una lista con todos los acordes'''
         soup = BeautifulSoup(html)
@@ -156,7 +185,7 @@ if __name__ == '__main__':
     #print autor[0]['tipos'][0]
     acordes = lc.getLetra(canciones[0]['tipos'][0])
 
-    print "Artista: %s"  % artistas[0]['nombre']
+    print "Artista: %s" % artistas[0]['nombre']
     print "Cancion: %s"% canciones[0]['tipos'][0]['titulo']
     for linea in acordes:
         acord = ''
@@ -164,12 +193,13 @@ if __name__ == '__main__':
             acord = "%s %s" % (acord, a)
         print "\t %s" % acord
     print "Obteniendo todos los artistas, puede tardar mucho"
-    tartistas =  lc.getAllArtistas()
+    tartistas = lc.getAllArtistas()
     print "Hay %s artistas en total" % len(tartistas)
     yn = raw_input('Desea mostrarlos? y/n')
     if yn.strip() == 'y':
         for i in range(0, len(tartistas)):
             print i+1, tartistas[i]
+
 
 
 
