@@ -504,6 +504,9 @@ void setup() {
 */  
     menu.toRoot();
     MainMenu();
+    pt2Function = readSongNotes;
+    pt2val = 0;
+    pt2val2 = 0;
 }  // setup()...
 
 
