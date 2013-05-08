@@ -18,7 +18,7 @@
 	<path id="class.path">
 		<pathelement location="${path.tuxguitar}"/>
 		<pathelement location="${path.swt}"/>
-		<pathelement location="../TuxGuitar/lib/RXTXcomm.jar"/>
+        <pathelement location="/usr/share/java/RXTXcomm.jar"/>
 		<pathelement location="../TuxGuitar/tuxguitar.jar"/>
 	</path >
 	
