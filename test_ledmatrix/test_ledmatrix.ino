@@ -49,7 +49,7 @@ void readSongNotes() {
 //    long start_time = millis();
     c1 = c2 = c3 = c4 = c5 = c6 = c7 = 0xFFFFFF;
 
-    while(c1 != 32) { 
+    while(c1 != 0xFF) { 
         tempLED[0] = c1;
         tempLED[1] = c2;
         tempLED[2] = c3;
@@ -62,26 +62,32 @@ void readSongNotes() {
                 if(Serial.read() == 'N') {
                     c1  = long(Serial.read()) << 16;
 //                    if(c1 == 32) break;
+                    //c1 = 0x0000;
                     c1 |= long(Serial.read()) << 8;
                     c1 |= Serial.read();
                     
                     c2  = long(Serial.read()) << 16;
+                    //c2 = 0x0000;
                     c2 |= long(Serial.read()) << 8;
                     c2 |= Serial.read();
 
                     c3  = long(Serial.read()) << 16;
+                    //c3 = 0x0000;
                     c3 |= long(Serial.read()) << 8;
                     c3 |= Serial.read();
 
                     c4  = long(Serial.read()) << 16;
+                    //c4 = 0x0000;
                     c4 |= long(Serial.read()) << 8;
                     c4 |= Serial.read();
 
                     c5  = long(Serial.read()) << 16;
+                    //c5 = 0x0000;
                     c5 |= long(Serial.read()) << 8;
                     c5 |= Serial.read();
 
                     c6  = long(Serial.read()) << 16;
+                    //c6 = 0x0000;
                     c6 |= long(Serial.read()) << 8;
                     c6 |= Serial.read();
 
