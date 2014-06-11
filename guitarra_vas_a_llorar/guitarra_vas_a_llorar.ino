@@ -38,9 +38,11 @@ IMPORTANT: to use the menubackend library by Alexander Brevig download it at htt
 		setCurrent( &getRoot() );
 	}
 */
+
 #include <ShiftLCD.h>
 #include <Flash.h>
 #include <MenuBackend.h>    //MenuBackend library - copyright by Alexander Brevig
+#include <SoftwareSerial.h>
 
 
 #define _EN_ 0
@@ -228,6 +230,8 @@ byte flecha_izquierda[8] = { B00000, B00010, B00110, B01110, B00110,B00010, B000
 byte flecha_derecha[8] = { B00000, B01000, B01100, B01110, B01100,B01000, B00000,B00000};
 
 
+SoftwareSerial BluetoothSerial(A5, A4); // RX, TX
+
 void readButtons();
 void updateLCD( byte counter, byte prev,_FLASH_STRING_ARRAY textLCD);
 void menuUsed(MenuUseEvent used);
@@ -353,6 +357,8 @@ void setup() {
     digitalWrite( SIPOclear, HIGH);
 
     Serial.begin(9600);
+    BluetoothSerial.begin(9600);
+    BluetoothSerial.listen();
 
     lcd.createChar(0, flecha_izquierda);     
     lcd.createChar(1, flecha_derecha);     
@@ -649,6 +655,8 @@ void readSongNotes(int counter, int other) {
     while(1) {
 
         readSerialPort(Serial);
+
+        readSerialPort(BluetoothSerial);
 
         readButtons();
         navigateMenus();
