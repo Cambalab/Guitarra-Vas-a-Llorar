@@ -588,57 +588,68 @@ void showScale(int counter, int other) {
     }
 }
 
-void readSongNotes(int counter, int other) {
-    int i=0;
+/*
+ * Takes a Stream-like object and tries to read note data from it.
+ * If successful, updates the led matrix with the new values.
+ */
+void readSerialPort(Stream &serial) {
     unsigned long c1=0,c2=0,c3=0,c4=0,c5=0,c6=0,c7=0;
 //    long start_time = millis();
     c1 = c2 = c3 = c4 = c5 = c6 = c7 = 0xFFFFFF;
 
-    while(c1 != 0xFF000000) {
-        tempLED[0] = c1;
-        tempLED[1] = c2;
-        tempLED[2] = c3;
-        tempLED[3] = c4;
-        tempLED[4] = c5;
-        tempLED[5] = c6;
+    if(serial.available()) {
+        if( serial.available() >= 19 ) {       // wait for 1byte header + 18 bytes
+            if(serial.read() == 'N') {
+                c1  = long(serial.read()) << 16;
+                c1 |= long(serial.read()) << 8;
+                c1 |= serial.read();
 
-        if(Serial.available()) {
-            if( Serial.available() >= 19 ) {       // wait for 1byte header + 18 bytes
-                if(Serial.read() == 'N') {
-                    c1  = long(Serial.read()) << 16;
-                    c1 |= long(Serial.read()) << 8;
-                    c1 |= Serial.read();
+                c2  = long(serial.read()) << 16;
+                c2 |= long(serial.read()) << 8;
+                c2 |= serial.read();
 
-                    c2  = long(Serial.read()) << 16;
-                    c2 |= long(Serial.read()) << 8;
-                    c2 |= Serial.read();
+                c3  = long(serial.read()) << 16;
+                c3 |= long(serial.read()) << 8;
+                c3 |= serial.read();
 
-                    c3  = long(Serial.read()) << 16;
-                    c3 |= long(Serial.read()) << 8;
-                    c3 |= Serial.read();
+                c4  = long(serial.read()) << 16;
+                c4 |= long(serial.read()) << 8;
+                c4 |= serial.read();
 
-                    c4  = long(Serial.read()) << 16;
-                    c4 |= long(Serial.read()) << 8;
-                    c4 |= Serial.read();
+                c5  = long(serial.read()) << 16;
+                c5 |= long(serial.read()) << 8;
+                c5 |= serial.read();
 
-                    c5  = long(Serial.read()) << 16;
-                    c5 |= long(Serial.read()) << 8;
-                    c5 |= Serial.read();
+                c6  = long(serial.read()) << 16;
+                c6 |= long(serial.read()) << 8;
+                c6 |= serial.read();
 
-                    c6  = long(Serial.read()) << 16;
-                    c6 |= long(Serial.read()) << 8;
-                    c6 |= Serial.read();
+                serial.flush();
 
-                    Serial.flush();
-                } else {
-                    Serial.println("ERROR");
-                }
+                tempLED[0] = c1;
+                tempLED[1] = c2;
+                tempLED[2] = c3;
+                tempLED[3] = c4;
+                tempLED[4] = c5;
+                tempLED[5] = c6;
+
+            } else {
+                serial.println("ERROR");
             }
-        } else {
-/*            if( (millis() - start_time) > 10000 )
-                break;
-*/
         }
+    } else {
+
+    }
+}
+
+void readSongNotes(int counter, int other) {
+    int i=0;
+//    long start_time = millis();
+
+    while(1) {
+
+        readSerialPort(Serial);
+
         readButtons();
         navigateMenus();
         if (pt2Function != readSongNotes){
