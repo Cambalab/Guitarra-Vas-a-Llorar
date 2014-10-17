@@ -365,7 +365,8 @@ void setup() {
     lcd.begin(16, 2);
             
     for( int x = 0; x < 6; x++) {
-        tempLED [ x] = 0x0000;
+        //tempLED [ x] = 0x0000;
+        tempLED [ x] = 0xFFFF;
     }
 
    //configure menu
