@@ -605,7 +605,9 @@ void readSerialPort(Stream &serial) {
 
     if(serial.available()) {
         if( serial.available() >= 19 ) {       // wait for 1byte header + 18 bytes
-            if(serial.read() == 'N') {
+            while( serial.available() >= 19 && serial.read() != 'N') {
+            };
+            if(1) {
                 c1  = long(serial.read()) << 16;
                 c1 |= long(serial.read()) << 8;
                 c1 |= serial.read();
@@ -630,7 +632,7 @@ void readSerialPort(Stream &serial) {
                 c6 |= long(serial.read()) << 8;
                 c6 |= serial.read();
 
-                serial.flush();
+                //serial.flush();
 
                 tempLED[0] = c1;
                 tempLED[1] = c2;
